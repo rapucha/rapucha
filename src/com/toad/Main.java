@@ -19,6 +19,7 @@ class Main {
         System.setProperty("java.net.useSystemProxies", "true");
         URL velo = new URL("http://spb.velogorod.org/");
         URLConnection uc = velo.openConnection();
+        uc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 uc.getInputStream()));
         String inputLine;
