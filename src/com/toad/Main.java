@@ -16,6 +16,7 @@ class Main {
     public static void main(String[] args) throws Exception {
         Pattern pattern = Pattern.compile("var stationsData = "+ PATTERN);
 
+        System.setProperty("java.net.useSystemProxies", "true");
         URL velo = new URL("http://spb.velogorod.org/");
         URLConnection uc = velo.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
