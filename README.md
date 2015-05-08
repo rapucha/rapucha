@@ -1,11 +1,10 @@
 # rapucha
-Small statistics service to monitor free bikes in St-Petersburg municipal bicycle sharing system.
+Small statistics service to monitor available bikes in St-Petersburg municipal bicycle sharing system.
 
 Curren version:
-each run reads the data from server and exits
+Collects data each 15 minutes and stores them on local fs.
 
-Todo:
-run as a timer task each 10 minutes
-add some nice User-Agent
+Major Todo:
 store data in the DB
-implement web view fro collected stat.
+implement web view for collected stats.
+split the service to make crawler a separate process running on another machine (with county local 3G operator IP address)
