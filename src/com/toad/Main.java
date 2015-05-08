@@ -18,7 +18,7 @@ class Main {
     static int SECOND = 1000;
     static int MINUTE = 60 * SECOND;
     static long delay = SECOND;
-    static long period =   MINUTE/10;
+    static long period =  15* MINUTE;
     public static void main(String[] args) throws Exception {
         Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);
         while(true) {
