@@ -32,6 +32,7 @@ class Main {
      static final String PATTERN = "\\[([^\\]]+)];";
      public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
      public static final char CSV_SEPARATOR = ';';
+     private static final String NAME = "Name",LAT="Latitude",LON="Longitude",LOCKS="TotalLocks", TOTAL_BIKES ="TotalAvailableBikes";
      static final File file = new File("log.csv");
 
     Crawler(){
@@ -52,6 +53,7 @@ class Main {
              e.printStackTrace();
          }
      }
+
 
     static String crawl()  {
         Pattern pattern = Pattern.compile("var stationsData = "+ PATTERN);
@@ -78,17 +80,26 @@ class Main {
             e.printStackTrace();
         }
         String inputLine;
-        int total=0;
+        int totalBikes=0;
+        int stations=0;
         try {
             while ((inputLine = in.readLine()) != null){
                 Matcher m = pattern.matcher(inputLine);
                 if(m.find()){
                     JSONArray jarr = new JSONArray("["+m.group(1)+"];");
+                    stations = jarr.length();
                     for (int i = 0; i < jarr.length(); i++) {
                         JSONObject jsonobject = jarr.getJSONObject(i);
-                        String name = jsonobject.getString("Name");
-                        int subTotal = jsonobject.getInt("TotalAvailableBikes");
-                        total = total + subTotal;
+                        String name = jsonobject.getString(NAME);
+                        double lat = jsonobject.getDouble(LAT);
+                        double lon = jsonobject.getDouble(LON);
+                        int locks = jsonobject.getInt(LOCKS);
+                        int subTotal = jsonobject.getInt(TOTAL_BIKES);
+                        totalBikes = totalBikes + subTotal;
+                        sb.append(lat);
+                        sb.append(CSV_SEPARATOR);
+                        sb.append(lon);
+                        sb.append(CSV_SEPARATOR);
                         sb.append(name);
                         sb.append(CSV_SEPARATOR);
                         sb.append(subTotal);
@@ -100,7 +111,9 @@ class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sb.append(total);
+        sb.append(stations);
+        sb.append(CSV_SEPARATOR);
+        sb.append(totalBikes);
         try {
             in.close();
         } catch (IOException e) {
