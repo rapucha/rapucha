@@ -1,8 +1,6 @@
 package com.toad;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -17,10 +15,12 @@ import org.json.*;
 
 /*    /\[([^\]]+)]/ */
 class Main {
-
-
+    static int SECOND = 1000;
+    static int MINUTE = 60 * SECOND;
+    static long delay = SECOND;
+    static long period =  10 * MINUTE;
     public static void main(String[] args) throws Exception {
-        Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), 500, 600); //delay in milliseconds
+        Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);
         while(true) {
             Thread.sleep(100);
         }
@@ -31,7 +31,18 @@ class Main {
      static Timer timer = new Timer();
      static final String PATTERN = "\\[([^\\]]+)];";
      public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+     static final File file = new File("log.txt");
 
+    Crawler(){
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     static void crawl() throws IOException {
         Pattern pattern = Pattern.compile("var stationsData = "+ PATTERN);
@@ -84,8 +95,14 @@ class CrawlerTask extends TimerTask {
     public void run() {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd HH:mm:ss");
         Date date = new Date();
-        System.out.println(dateFormat.format(date));
-        //Crawler.timer.cancel();
+
+        dateFormat.format(date);
+
+        try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(Crawler.file, true)))) {
+            out.println(dateFormat.format(date));
+        }catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
 
     }
 }
