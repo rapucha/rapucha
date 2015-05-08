@@ -31,7 +31,8 @@ class Main {
      static Timer timer = new Timer();
      static final String PATTERN = "\\[([^\\]]+)];";
      public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
-     static final File file = new File("log.txt");
+     public static final char CSV_SEPARATOR = ';';
+     static final File file = new File("log.csv");
 
     Crawler(){
         if (!file.exists()) {
@@ -89,9 +90,9 @@ class Main {
                         int subTotal = jsonobject.getInt("TotalAvailableBikes");
                         total = total + subTotal;
                         sb.append(name);
-                        sb.append(';');
+                        sb.append(CSV_SEPARATOR);
                         sb.append(subTotal);
-                        sb.append(';');
+                        sb.append(CSV_SEPARATOR);
                     }
 
                 }
@@ -116,6 +117,6 @@ class CrawlerTask extends TimerTask {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         String data = Crawler.crawl();
-        Crawler.printFile(dateFormat.format(date)+';'+data);
+        Crawler.printFile(dateFormat.format(date)+Crawler.CSV_SEPARATOR+data);
     }
 }
