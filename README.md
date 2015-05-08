@@ -2,7 +2,7 @@
 Small statistics service to monitor available bikes in St-Petersburg municipal bicycle sharing system.
 
 Curren version:
-Collets data each 15 minutes and stores them on local fs.
+Collects data each 15 minutes and stores them on local fs.
 
 Major Todo:
 store data in the DB
