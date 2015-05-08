@@ -1,5 +1,5 @@
 # rapucha
-Small statistics service to monitor free bikes in St-Petersburg municipal bicycle sharing system.
+Small statistics service to monitor available bikes in St-Petersburg municipal bicycle sharing system.
 
 Curren version:
 each run reads the data from server and exits
