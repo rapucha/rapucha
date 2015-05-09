@@ -63,6 +63,10 @@ class Main {
 
     static String crawl()  {
         Pattern pattern = Pattern.compile("var stationsData = "+ PATTERN);
+        /**
+         * disabled for a Gnome dependency, caused an error in a non-GUI Linux
+         * https://java.net/jira/browse/GLASSFISH-18527
+         */
         //System.setProperty("java.net.useSystemProxies", "true");
         URL velo = null;
         StringBuilder sb = new StringBuilder();
