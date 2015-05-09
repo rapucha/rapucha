@@ -18,7 +18,7 @@ class Main {
     static int SECOND = 1000;
     static int MINUTE = 60 * SECOND;
     static long delay = SECOND;
-    static long period =  15* MINUTE;
+    static long period =  15 * MINUTE;
     public static void main(String[] args) throws Exception {
         Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);
         while(true) {
@@ -33,7 +33,7 @@ class Main {
      public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
      public static final char CSV_SEPARATOR = ';';
      private static final String NAME = "Name",LAT="Latitude",LON="Longitude",LOCKS="TotalLocks", TOTAL_BIKES ="TotalAvailableBikes";
-     static final File file = new File("log.csv");
+     static final File file = new File("log2.csv");
 
     Crawler(){
         if (!file.exists()) {
@@ -47,17 +47,23 @@ class Main {
     }
 
     static void printFile (String s){
-         try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(Crawler.file, true)))) {
-             out.println(s);
-         }catch (IOException e) {
-             e.printStackTrace();
-         }
+        try {
+            try {
+                PrintStream ps = new PrintStream(new FileOutputStream(Crawler.file, true), true, "UTF-8");
+                ps.append(s);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
      }
 
 
     static String crawl()  {
         Pattern pattern = Pattern.compile("var stationsData = "+ PATTERN);
-        System.setProperty("java.net.useSystemProxies", "true");
+        //System.setProperty("java.net.useSystemProxies", "true");
         URL velo = null;
         StringBuilder sb = new StringBuilder();
         try {
@@ -102,6 +108,8 @@ class Main {
                         sb.append(CSV_SEPARATOR);
                         sb.append(name);
                         sb.append(CSV_SEPARATOR);
+                        sb.append(locks);
+                        sb.append(CSV_SEPARATOR);
                         sb.append(subTotal);
                         sb.append(CSV_SEPARATOR);
                     }
@@ -130,6 +138,6 @@ class CrawlerTask extends TimerTask {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         String data = Crawler.crawl();
-        Crawler.printFile(dateFormat.format(date)+Crawler.CSV_SEPARATOR+data);
+        Crawler.printFile(dateFormat.format(date)+Crawler.CSV_SEPARATOR+data+'\n'+'\r');
     }
 }
