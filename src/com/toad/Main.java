@@ -142,6 +142,6 @@ class CrawlerTask extends TimerTask {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         String data = Crawler.crawl();
-        Crawler.printFile(dateFormat.format(date)+Crawler.CSV_SEPARATOR+data+'\n'+'\r');
+        Crawler.printFile(dateFormat.format(date)+Crawler.CSV_SEPARATOR+data+'\r'+'\n');
     }
 }
