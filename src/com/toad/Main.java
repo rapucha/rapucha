@@ -29,11 +29,14 @@ class Main {
 }
  class Crawler{
      static Timer timer = new Timer();
-     static final String PATTERN = "\\[([^\\]]+)];";
+     static final String NAME_PATTERN = "\\[([^\\]]+)];";
+     static final Pattern namePattern = Pattern.compile("var stationsData = "+ NAME_PATTERN);
+     static final String NUMBER_PATTERN = "[0-9][0-9]{1,3}\\.";
+     static final Pattern numberPattern = Pattern.compile(NUMBER_PATTERN);
      public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
-     public static final char CSV_SEPARATOR = ';';
+     public static final char CSV_SEPARATOR = '\t';
      private static final String NAME = "Name",LAT="Latitude",LON="Longitude",LOCKS="TotalLocks", TOTAL_BIKES ="TotalAvailableBikes";
-     static final File file = new File("log2.csv");
+     static final File file = new File("log4.csv");
 
     Crawler(){
         if (!file.exists()) {
@@ -62,7 +65,8 @@ class Main {
 
 
     static String crawl()  {
-        Pattern pattern = Pattern.compile("var stationsData = "+ PATTERN);
+
+
         /**
          * disabled for a Gnome dependency, caused an error in a non-GUI Linux
          * https://java.net/jira/browse/GLASSFISH-18527
@@ -94,7 +98,7 @@ class Main {
         int stations=0;
         try {
             while ((inputLine = in.readLine()) != null){
-                Matcher m = pattern.matcher(inputLine);
+                Matcher m = namePattern.matcher(inputLine);
                 if(m.find()){
                     JSONArray jarr = new JSONArray("["+m.group(1)+"];");
                     stations = jarr.length();
@@ -106,14 +110,14 @@ class Main {
                         int locks = jsonobject.getInt(LOCKS);
                         int subTotal = jsonobject.getInt(TOTAL_BIKES);
                         totalBikes = totalBikes + subTotal;
-                        sb.append(lat);
+                        //sb.append(lat);
+                        //sb.append(CSV_SEPARATOR);
+                        //sb.append(lon);
+                        //sb.append(CSV_SEPARATOR);
+                        sb.append(getNumber(name));
                         sb.append(CSV_SEPARATOR);
-                        sb.append(lon);
-                        sb.append(CSV_SEPARATOR);
-                        sb.append(name);
-                        sb.append(CSV_SEPARATOR);
-                        sb.append(locks);
-                        sb.append(CSV_SEPARATOR);
+                        //sb.append(locks);
+                        //sb.append(CSV_SEPARATOR);
                         sb.append(subTotal);
                         sb.append(CSV_SEPARATOR);
                     }
@@ -123,8 +127,8 @@ class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sb.append(stations);
-        sb.append(CSV_SEPARATOR);
+        //sb.append(stations);
+        //sb.append(CSV_SEPARATOR);
         sb.append(totalBikes);
         try {
             in.close();
@@ -133,6 +137,14 @@ class Main {
         }
         return sb.toString();
     }
+
+     private static String getNumber(String name) {
+         Matcher m = Crawler.numberPattern.matcher(name);
+         if(m.find()){
+             m.toString();
+             return m.group();
+         } else return null; //throw some exception
+     }
 
  }
 class CrawlerTask extends TimerTask {
