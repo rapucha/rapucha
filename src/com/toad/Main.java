@@ -1,6 +1,7 @@
 package com.toad;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -11,18 +12,39 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 import org.json.*;
 
 /*    /\[([^\]]+)]/ */
 class Main {
-    static int SECOND = 1000;
-    static int MINUTE = 60 * SECOND;
-    static long delay = SECOND;
-    static long period =  15 * MINUTE;
+    static final int SECOND = 1000;
+    static final int MINUTE = 60 * SECOND;
+    static final long delay = SECOND;
+    static final long period =  15 * MINUTE;
+
+
     public static void main(String[] args) throws Exception {
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(8888), 0);
+        server.createContext("/", new MyHandler());
+        server.setExecutor(null);
+        server.start();
+
         Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);
         while(true) {
             Thread.sleep(100);
+        }
+    }
+    static class MyHandler implements HttpHandler {
+        public void handle(HttpExchange t) throws IOException {
+            String response = "Total free bikes: "+Crawler.FREE_BIKES;
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
         }
     }
 
@@ -35,9 +57,14 @@ class Main {
      static final Pattern numberPattern = Pattern.compile(NUMBER_PATTERN);
      public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
      public static final char CSV_SEPARATOR = '\t';
-     private static final String NAME = "Name",LAT="Latitude",LON="Longitude",LOCKS="TotalLocks", TOTAL_BIKES ="TotalAvailableBikes";
-     static final File file = new File("log4.csv");
+     private static final String NAME = "Name";
+     private static final String LAT="Latitude";
+     private static final String LON="Longitude";
+     private static final String LOCKS="TotalLocks";
+     private static final String TOTAL_BIKES ="TotalAvailableBikes";
+     static final File file = new File("log5.csv");
 
+     static String FREE_BIKES="unknown";
     Crawler(){
         if (!file.exists()) {
             try {
@@ -130,6 +157,7 @@ class Main {
         //sb.append(stations);
         //sb.append(CSV_SEPARATOR);
         sb.append(totalBikes);
+        FREE_BIKES = ""+totalBikes;
         try {
             in.close();
         } catch (IOException e) {
@@ -154,6 +182,7 @@ class CrawlerTask extends TimerTask {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         String data = Crawler.crawl();
+        System.out.println(data);
         Crawler.printFile(dateFormat.format(date)+Crawler.CSV_SEPARATOR+data+'\r'+'\n');
     }
 }
