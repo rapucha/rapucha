@@ -41,9 +41,11 @@ class Main {
     }
     static class MyHandler implements HttpHandler {
         public void handle(HttpExchange t) throws IOException {
-            Crawler.printFile(Crawler.accessLog,"------------------------"+new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date())+"--------------------------------" + System.lineSeparator());
+            Crawler.printFile(Crawler.accessLog, "------------------------" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()) + "--------------------------------" + System.lineSeparator());
             Crawler.printFile(Crawler.accessLog, "Request from " + t.getRemoteAddress() + System.lineSeparator());
+            long time = System.currentTimeMillis();
             Crawler.crawl();
+            time = System.currentTimeMillis() - time;
             String response = "Total free bikes: "+Crawler.FREE_BIKES;
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
@@ -51,7 +53,8 @@ class Main {
             os.close();
             Headers h = t.getRequestHeaders();
             Crawler.printFile(Crawler.accessLog,"Total free bikes: "+Crawler.FREE_BIKES+System.lineSeparator());
-                    Crawler.printFile(Crawler.accessLog, "--=====Headers=====--"+System.lineSeparator());
+            Crawler.printFile(Crawler.accessLog,"Processing time: "+time+System.lineSeparator());
+            Crawler.printFile(Crawler.accessLog, "--=====Headers=====--"+System.lineSeparator());
 
             for (String s : h.keySet()) {
                 Crawler.printFile(Crawler.accessLog,s+" : "+ String.valueOf(h.get(s))+System.lineSeparator());
