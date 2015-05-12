@@ -13,6 +13,7 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -40,11 +41,23 @@ class Main {
     }
     static class MyHandler implements HttpHandler {
         public void handle(HttpExchange t) throws IOException {
+            Crawler.printFile(Crawler.accessLog,"------------------------"+new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date())+"--------------------------------" + System.lineSeparator());
+            Crawler.printFile(Crawler.accessLog, "Request from " + t.getRemoteAddress() + System.lineSeparator());
+            Crawler.crawl();
             String response = "Total free bikes: "+Crawler.FREE_BIKES;
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();
+            Headers h = t.getRequestHeaders();
+            Crawler.printFile(Crawler.accessLog,"Total free bikes: "+Crawler.FREE_BIKES+System.lineSeparator());
+                    Crawler.printFile(Crawler.accessLog, "--=====Headers=====--"+System.lineSeparator());
+
+            for (String s : h.keySet()) {
+                Crawler.printFile(Crawler.accessLog,s+" : "+ String.valueOf(h.get(s))+System.lineSeparator());
+            }
+            Crawler.printFile(Crawler.accessLog, System.lineSeparator());
+
         }
     }
 
@@ -62,32 +75,19 @@ class Main {
      private static final String LON="Longitude";
      private static final String LOCKS="TotalLocks";
      private static final String TOTAL_BIKES ="TotalAvailableBikes";
-     static final File file = new File("log5.csv");
+     static final File dataFile = new File("datalog.csv");
+     static final File accessLog = new File("accesslog.csv");
 
      static String FREE_BIKES="unknown";
-    Crawler(){
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
-    }
+    static void printFile (File f, String s){
 
-    static void printFile (String s){
-        try {
-            try {
-                PrintStream ps = new PrintStream(new FileOutputStream(Crawler.file, true), true, "UTF-8");
-                ps.append(s);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } catch (UnsupportedEncodingException e) {
+        try (PrintStream ps = new PrintStream(new FileOutputStream(f, true), true, "UTF-8")) {
+            ps.append(s);
+            ps.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
      }
 
 
@@ -137,26 +137,28 @@ class Main {
                         int locks = jsonobject.getInt(LOCKS);
                         int subTotal = jsonobject.getInt(TOTAL_BIKES);
                         totalBikes = totalBikes + subTotal;
-                        //sb.append(lat);
-                        //sb.append(CSV_SEPARATOR);
-                        //sb.append(lon);
-                        //sb.append(CSV_SEPARATOR);
-                        sb.append(getNumber(name));
+                        sb.append("Station: "+getNumber(name));
                         sb.append(CSV_SEPARATOR);
-                        //sb.append(locks);
-                        //sb.append(CSV_SEPARATOR);
-                        sb.append(subTotal);
+                        sb.append("at lat "+lat);
+                        sb.append(CSV_SEPARATOR);
+                        sb.append("lon "+lon);
+                        sb.append(CSV_SEPARATOR);
+
+                        sb.append("has "+locks+" locks");
+                        sb.append(CSV_SEPARATOR);
+                        sb.append("and "+subTotal+" bikes");
                         sb.append(CSV_SEPARATOR);
                     }
-
+                    break;
                 }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //sb.append(stations);
-        //sb.append(CSV_SEPARATOR);
-        sb.append(totalBikes);
+        sb.append("Total stations: "+stations);
+        sb.append(CSV_SEPARATOR);
+        sb.append("Total bikes: "+totalBikes);
         FREE_BIKES = ""+totalBikes;
         try {
             in.close();
@@ -182,7 +184,6 @@ class CrawlerTask extends TimerTask {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         String data = Crawler.crawl();
-        System.out.println(data);
-        Crawler.printFile(dateFormat.format(date)+Crawler.CSV_SEPARATOR+data+'\r'+'\n');
+        Crawler.printFile(Crawler.dataFile, dateFormat.format(date) + Crawler.CSV_SEPARATOR + data + '\r' + '\n');
     }
 }
