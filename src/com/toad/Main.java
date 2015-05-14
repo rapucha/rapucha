@@ -28,13 +28,20 @@ class Main {
 
 
     public static void main(String[] args) throws Exception {
+        int port;
+        if(args.length == 0){
+            System.out.println("Pls specify port as a cl arg, ie java -xxx.jar 80");
+            return;
+        } else {
+            port = Integer.parseInt(args[0]);
+        }
 
-        HttpServer server = HttpServer.create(new InetSocketAddress(8888), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new MyHandler());
         server.setExecutor(null);
         server.start();
 
-        Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);
+        //Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);
         while(true) {
             Thread.sleep(100);
         }
