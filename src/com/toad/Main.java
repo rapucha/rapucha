@@ -19,12 +19,18 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.json.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 /*    /\[([^\]]+)]/ */
 class Main {
     static final int SECOND = 1000;
     static final int MINUTE = 60 * SECOND;
     static final long delay = SECOND;
     static final long period =  15 * MINUTE;
+    static Connection conn = null;
+
 
 
     public static void main(String[] args) throws Exception {
@@ -34,6 +40,23 @@ class Main {
             return;
         } else {
             port = Integer.parseInt(args[0]);
+        }
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/rapucha?" +
+                            "user=rapuchay&password=DrinhoifaucKuOd3");
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
         }
 
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -101,7 +124,7 @@ class Main {
      }
 
 
-    static String crawl()  {
+    static void crawl()  {
 
 
         /**
@@ -132,13 +155,11 @@ class Main {
         }
         String inputLine;
         int totalBikes=0;
-        int stations=0;
         try {
             while ((inputLine = in.readLine()) != null){
                 Matcher m = namePattern.matcher(inputLine);
                 if(m.find()){
                     JSONArray jarr = new JSONArray("["+m.group(1)+"];");
-                    stations = jarr.length();
                     for (int i = 0; i < jarr.length(); i++) {
                         JSONObject jsonobject = jarr.getJSONObject(i);
                         String name = jsonobject.getString(NAME);
@@ -147,17 +168,7 @@ class Main {
                         int locks = jsonobject.getInt(LOCKS);
                         int subTotal = jsonobject.getInt(TOTAL_BIKES);
                         totalBikes = totalBikes + subTotal;
-                        sb.append("Station: "+getNumber(name));
-                        sb.append(CSV_SEPARATOR);
-                        sb.append("at lat "+lat);
-                        sb.append(CSV_SEPARATOR);
-                        sb.append("lon "+lon);
-                        sb.append(CSV_SEPARATOR);
-
-                        sb.append("has "+locks+" locks");
-                        sb.append(CSV_SEPARATOR);
-                        sb.append("and "+subTotal+" bikes");
-                        sb.append(CSV_SEPARATOR);
+                        updateDBState(name,lat,lon,locks,subTotal);
                     }
                     break;
                 }
@@ -166,17 +177,17 @@ class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sb.append("Total stations: "+stations);
-        sb.append(CSV_SEPARATOR);
-        sb.append("Total bikes: "+totalBikes);
         FREE_BIKES = ""+totalBikes;
         try {
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return sb.toString();
     }
+
+     private static void updateDBState(String name, double lat, double lon, int locks, int subTotal) {
+            // do database stuff
+     }
 
      private static String getNumber(String name) {
          Matcher m = Crawler.numberPattern.matcher(name);
@@ -193,7 +204,7 @@ class CrawlerTask extends TimerTask {
     public void run() {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
-        String data = Crawler.crawl();
-        Crawler.printFile(Crawler.dataFile, dateFormat.format(date) + Crawler.CSV_SEPARATOR + data + '\r' + '\n');
+        Crawler.crawl();
+        //Crawler.printFile(Crawler.dataFile, dateFormat.format(date) + Crawler.CSV_SEPARATOR + data + '\r' + '\n');
     }
 }
