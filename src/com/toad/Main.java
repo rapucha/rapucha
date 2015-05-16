@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +30,10 @@ class Main {
     static final int MINUTE = 60 * SECOND;
     static final long delay = SECOND;
     static final long period =  15 * MINUTE;
+    static final String JDBC_DRIVER="com.mysql.jdbc.Driver",
+                        DB_URL="jdbc:mysql://localhost/rapucha",
+                        DB_USER ="rapucha",
+                        DB_PASSWORD ="DrinhoifaucKuOd3";
     static Connection conn = null;
 
 
@@ -43,15 +48,14 @@ class Main {
         }
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName(JDBC_DRIVER).newInstance();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         try {
             conn =
-                    DriverManager.getConnection("jdbc:mysql://localhost/rapucha?" +
-                            "user=rapuchay&password=DrinhoifaucKuOd3");
+                    DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
@@ -74,7 +78,11 @@ class Main {
             Crawler.printFile(Crawler.accessLog, "------------------------" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()) + "--------------------------------" + System.lineSeparator());
             Crawler.printFile(Crawler.accessLog, "Request from " + t.getRemoteAddress() + System.lineSeparator());
             long time = System.currentTimeMillis();
-            Crawler.crawl();
+            try {
+                Crawler.crawl();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             time = System.currentTimeMillis() - time;
             String response = "Total free bikes: "+Crawler.FREE_BIKES;
             t.sendResponseHeaders(200, response.length());
@@ -124,7 +132,7 @@ class Main {
      }
 
 
-    static void crawl()  {
+    static void crawl() throws Exception {
 
 
         /**
@@ -185,16 +193,19 @@ class Main {
         }
     }
 
-     private static void updateDBState(String name, double lat, double lon, int locks, int subTotal) {
-            // do database stuff
+     private static void updateDBState(String name, double lat, double lon, int locks, int subTotal) throws Exception {
+         int id = getNumber(name);
+         Statement stmt = Main.conn.createStatement();
+         //http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements.html
      }
 
-     private static String getNumber(String name) {
+     private static int getNumber(String name) throws Exception {
          Matcher m = Crawler.numberPattern.matcher(name);
          if(m.find()){
-             m.toString();
-             return m.group();
-         } else return null; //throw some exception
+             return Integer.parseInt(m.group());
+         } else {
+             throw new Exception("No number found in station name "+name);
+         }
      }
 
  }
@@ -204,7 +215,11 @@ class CrawlerTask extends TimerTask {
     public void run() {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
-        Crawler.crawl();
+        try {
+            Crawler.crawl();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //Crawler.printFile(Crawler.dataFile, dateFormat.format(date) + Crawler.CSV_SEPARATOR + data + '\r' + '\n');
     }
 }
