@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Timestamp;
 import java.util.Timer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,6 +75,8 @@ class Crawler{
        }
        String inputLine;
        int totalBikes=0;
+       JSONArray bikesStatus= new JSONArray();
+       Timestamp ts = new Timestamp(new java.util.Date().getTime());
        try {
            while ((inputLine = in.readLine()) != null){
                Matcher m = namePattern.matcher(inputLine);
@@ -87,16 +90,24 @@ class Crawler{
                        int locks = jsonobject.getInt(LOCKS);
                        int subTotal = jsonobject.getInt(TOTAL_BIKES);
                        totalBikes = totalBikes + subTotal;
-                       DBUpdater.updateDBState(name, lat, lon, locks, subTotal);
+                       DBUpdater.updateStations(name, lat, lon, locks, subTotal, ts);
+                       JSONObject id = new JSONObject().put("id",getNumber(name));
+                       JSONObject bikes = new JSONObject().put("bikes",subTotal);
+                       JSONArray station = new JSONArray();
+                       station.put(id);
+                       station.put(bikes);
+                       bikesStatus.put(station);
                    }
                    break;
                }
 
            }
+           DBUpdater.updateBikesHistory(bikesStatus, ts);
        } catch (IOException e) {
            e.printStackTrace();
        }
        FREE_BIKES = ""+totalBikes;
+       System.out.println(FREE_BIKES);
        try {
            in.close();
        } catch (IOException e) {
