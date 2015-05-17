@@ -13,6 +13,7 @@ import java.sql.SQLException;
     private static final String DB_USER ="rapucha";
     private static final String DB_URL="jdbc:mysql://localhost/rapucha";
     private static Connection conn;
+    public static final DBManager DBMANAGER = new DBManager();
 
     private DBManager() {
 
