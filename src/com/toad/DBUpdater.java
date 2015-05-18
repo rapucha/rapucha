@@ -66,16 +66,17 @@ public class DBUpdater {
         }
     }
 
-    public static void updateBikesHistory(JSONArray bikes, Timestamp ts) {
+    public static void updateBikesHistory(JSONArray bikes, JSONArray weather, Timestamp ts) {
         {
             String addHistoryBikes = "INSERT INTO " + BIKES_HISTORY
-                    + " ( " + BIKES_ARRAY + " , " + WHEN_UPDATED + " ) "
-                    + "VALUES (? , ? )";
+                    + " ( " +WHEN_UPDATED + " , " + BIKES_ARRAY + " , weather_array ) "
+                    + "VALUES (? , ? , ?)";
             logger.log(Level.INFO, "Updating history of bikes:  \n" + addHistoryBikes);
 
             try (PreparedStatement ps = conn.prepareStatement(addHistoryBikes);) {
-                ps.setString(1, bikes.toString());
-                ps.setTimestamp(2,ts);
+                ps.setTimestamp(1, ts);
+                ps.setString(2, bikes.toString());
+                ps.setString(3, weather.toString());
                 ps.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

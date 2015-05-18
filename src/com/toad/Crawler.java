@@ -1,6 +1,7 @@
 package com.toad;
 
 import org.json.JSONArray;
+import org.json.JSONML;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -15,7 +16,8 @@ import java.util.regex.Pattern;
 /**
 * Created by Morta on 17-May-15.
 */
-class Crawler{
+class Crawler extends AbstarctCrawler{
+    private static final String VELOGOROD = "http://spb.velogorod.org/";
     static Timer timer = new Timer();
     static final String NAME_PATTERN = "\\[([^\\]]+)];";
     static final Pattern namePattern = Pattern.compile("var stationsData = "+ NAME_PATTERN);
@@ -55,7 +57,7 @@ class Crawler{
        URL velo = null;
        StringBuilder sb = new StringBuilder();
        try {
-           velo = new URL("http://spb.velogorod.org/");
+           velo = new URL(VELOGOROD);
        } catch (MalformedURLException e) {
            e.printStackTrace();
        }
@@ -100,9 +102,8 @@ class Crawler{
                    }
                    break;
                }
-
            }
-           DBUpdater.updateBikesHistory(bikesStatus, ts);
+           //DBUpdater.updateBikesHistory(bikesStatus, ts);
        } catch (IOException e) {
            e.printStackTrace();
        }
@@ -113,6 +114,32 @@ class Crawler{
        } catch (IOException e) {
            e.printStackTrace();
        }
+
+       URL weather = new URL("http://api.wunderground.com/weatherstation/WXDailyHistory.asp?ID=I966&format=XML");
+       uc = weather.openConnection();
+       uc.setRequestProperty("User-Agent", generateUserAgent());
+           String inp, text = "";
+           try (BufferedReader br = new BufferedReader(new InputStreamReader(uc.getInputStream()));) {
+
+               while ((inp = br.readLine()) != null) {
+                   text = text + inp;
+               }
+           }
+
+       JSONArray jarr = JSONML.toJSONArray(text);
+       JSONArray last = jarr.getJSONArray(jarr.length() - 1);
+       JSONArray pure = new JSONArray();
+       pure.put(last.getJSONArray(8));
+       pure.put(last.getJSONArray(12));
+       pure.put(last.getJSONArray(13));
+       pure.put(last.getJSONArray(14));
+       pure.put(last.getJSONArray(15));
+       pure.put(last.getJSONArray(16));
+       pure.put(last.getJSONArray(20));
+       pure.put(last.getJSONArray(24));
+
+       DBUpdater.updateBikesHistory(bikesStatus, pure, ts);
+
    }
 
     private static String generateUserAgent() {
