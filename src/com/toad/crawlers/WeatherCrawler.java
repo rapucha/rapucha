@@ -1,11 +1,10 @@
-package com.toad;
+package com.toad.crawlers;
 
-import org.json.JSONObject;
+import com.toad.SettingsManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,9 +12,9 @@ import java.util.logging.Logger;
  * Created by Morta on 19-May-15.
  */
 public class WeatherCrawler extends ACrawler {
-    private final static String url = "http://api.wunderground.com/api/"+Main.WeatherAPIkey+"/conditions/q/59.935571,30.308397.json";
-    private static final int repeatMinutes = 15;
-    static WeatherCrawler INSTANCE = new WeatherCrawler();
+    private final static String url = "http://api.wunderground.com/api/"+ SettingsManager.WeatherAPIkey+"/conditions/q/59.935571,30.308397.json";
+    private static final int repeatMinutes = 5;
+    public static WeatherCrawler INSTANCE = new WeatherCrawler();
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
 

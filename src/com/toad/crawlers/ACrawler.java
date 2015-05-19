@@ -1,4 +1,4 @@
-package com.toad;
+package com.toad.crawlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,54 +1,38 @@
 package com.toad;
 
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import com.toad.crawlers.BikesCrawler;
+import com.toad.crawlers.WeatherCrawler;
+import com.toad.observers.BikesObserver;
+import com.toad.observers.WeatherObserver;
 
 /*    /\[([^\]]+)]/ */
-class Main {
-
-    static int port;
-    static String  dbuser, dbpass, dbschema, dburl, WeatherAPIkey;
+public class Main {
 
     static Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws Exception {
 
-        Properties prop = new Properties();
-        try(InputStream input  = new FileInputStream("config.properties");) {
-            prop.load(input);
-            dbuser = prop.getProperty("dbuser");
-            dbpass = prop.getProperty("dbpass");
-            dbschema = prop.getProperty("dbschema");
-            dburl = prop.getProperty("dburl");
-            port = Integer.parseInt(prop.getProperty("serverPort"));
-            WeatherAPIkey = prop.getProperty("WeatherAPIkey");
-        }
-        catch (IOException | NumberFormatException e){
-            logger.log(Level.SEVERE,"Error initializing from properties");
-            e.printStackTrace();
-        }
+    SettingsManager.INSTANCE.loadDefaultSettings();
 
       //  HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
       //  server.createContext("/", new MyHandler());
       //  server.setExecutor(null);
         //server.start();
 
-        TestObserver to = new TestObserver();
-
-        WeatherCrawler.INSTANCE.addObserver(to);
-        BikesCrawler.INSTANCE.addObserver(to);
+        WeatherObserver wo = new WeatherObserver();
+        BikesObserver bo = new BikesObserver();
+        WeatherCrawler.INSTANCE.addObserver(wo);
+        BikesCrawler.INSTANCE.addObserver(bo);
 
         WeatherCrawler.INSTANCE.start();
         BikesCrawler.INSTANCE.start();
