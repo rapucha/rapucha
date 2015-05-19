@@ -2,49 +2,57 @@ package com.toad;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
+import java.util.Properties;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.json.*;
 
 /*    /\[([^\]]+)]/ */
 class Main {
-    static final int SECOND = 1000;
-    static final int MINUTE = 60 * SECOND;
-    static final long delay = SECOND;
-    static final long period =  15 * MINUTE;
 
+    static int port;
+    static String  dbuser, dbpass, dbschema, dburl, WeatherAPIkey;
 
+    static Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws Exception {
-        int port;
-        if(args.length == 0){
-            System.out.println("Pls specify port as a cl arg, ie java -xxx.jar 80");
-            return;
-        } else {
-            port = Integer.parseInt(args[0]);
+
+        Properties prop = new Properties();
+        try(InputStream input  = new FileInputStream("config.properties");) {
+            prop.load(input);
+            dbuser = prop.getProperty("dbuser");
+            dbpass = prop.getProperty("dbpass");
+            dbschema = prop.getProperty("dbschema");
+            dburl = prop.getProperty("dburl");
+            port = Integer.parseInt(prop.getProperty("serverPort"));
+            WeatherAPIkey = prop.getProperty("WeatherAPIkey");
+        }
+        catch (IOException | NumberFormatException e){
+            logger.log(Level.SEVERE,"Error initializing from properties");
+            e.printStackTrace();
         }
 
+      //  HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+      //  server.createContext("/", new MyHandler());
+      //  server.setExecutor(null);
+        //server.start();
 
+        TestObserver to = new TestObserver();
 
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-        server.createContext("/", new MyHandler());
-        server.setExecutor(null);
-        server.start();
+        WeatherCrawler.INSTANCE.addObserver(to);
+        BikesCrawler.INSTANCE.addObserver(to);
 
-        Crawler.timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);
+        WeatherCrawler.INSTANCE.start();
+        BikesCrawler.INSTANCE.start();
+
         while(true) {
             Thread.sleep(100);
         }
@@ -55,7 +63,7 @@ class Main {
             Crawler.printFile(Crawler.accessLog, "Request from " + t.getRemoteAddress() + System.lineSeparator());
             long time = System.currentTimeMillis();
             try {
-                Crawler.crawl();
+                //Crawler.crawl();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,17 +88,5 @@ class Main {
 
 }
 
-class CrawlerTask extends TimerTask {
 
-    @Override
-    public void run() {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        Date date = new Date();
-        try {
-            Crawler.crawl();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //Crawler.printFile(Crawler.dataFile, dateFormat.format(date) + Crawler.CSV_SEPARATOR + data + '\r' + '\n');
-    }
-}
+

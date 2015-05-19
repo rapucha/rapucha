@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
 * Created by Morta on 17-May-15.
 */
-class Crawler extends AbstarctCrawler{
+class Crawler  {
     private static final String VELOGOROD = "http://spb.velogorod.org/";
     static Timer timer = new Timer();
     static final String NAME_PATTERN = "\\[([^\\]]+)];";
