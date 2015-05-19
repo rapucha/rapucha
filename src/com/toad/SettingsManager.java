@@ -12,10 +12,10 @@ import java.util.logging.Logger;
  */
 public class SettingsManager {
     public static String WeatherAPIkey;
-    private static String dburl;
-    private static String dbschema;
-    private static String dbpass;
-    private static String  dbuser;
+    public static String dburl;
+    public static String dbschema;
+    public static String dbpass;
+    public static String  dbuser;
     private static int port;
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
