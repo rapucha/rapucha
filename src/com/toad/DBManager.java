@@ -12,29 +12,32 @@ import java.util.logging.Logger;
     static final String JDBC_DRIVER="com.mysql.jdbc.Driver";
     private static Connection conn;
     public static final DBManager DBMANAGER = new DBManager();
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static Logger logger = Logger.getLogger(DBManager.class.getName());
 
     private DBManager() {
 
         try {
             Class.forName(JDBC_DRIVER).newInstance();
         } catch (Exception ex) {
-            logger.severe("Cannot connect to DB "+ex);
+            logger.severe("Cannot connect to DB " + ex);
             ex.printStackTrace();
-        }
-        try {
-            conn =
-                    DriverManager.getConnection(SettingsManager.dburl, SettingsManager.dbuser, SettingsManager.dbpass);
-
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
         }
 
     }
 
     public static Connection getConn(){
+
+        try {
+            if( conn == null || ! conn.isValid(10) ){
+                conn =
+                        DriverManager.getConnection(SettingsManager.dburl+"/"+SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
+            }
+        } catch (SQLException e) {
+            logger.severe("Cannot check connection health "+e);
+            conn = null;
+            e.printStackTrace();
+        }
+
         return conn;
     }
 }
