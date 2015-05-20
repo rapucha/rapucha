@@ -41,11 +41,11 @@ public class WeatherObserver implements Observer {
         String icon = safeString(jo, "icon");
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
 
-        String addHistoryBikes = "INSERT INTO bikes_history (timestamp, observation_epoch, weather_string," +
+        String addObservation = "INSERT INTO observations (timestamp, observation_epoch, weather_string," +
                 "temp_c, relative_humidity, wind_degrees, wind_kph, pressure_mb, pressure_trend, dewpoint_c" +
                 "heat_index_c, windchill_c, feelslike_c, visibility_km, icon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, " +
                 "?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(addHistoryBikes);) {
+        try (PreparedStatement ps = conn.prepareStatement(addObservation);) {
             ps.setTimestamp(1, ts);
             ps.setInt(2, observation_epoch);
             ps.setString(3, weather_string);
@@ -63,13 +63,14 @@ public class WeatherObserver implements Observer {
             ps.setString(15, icon);
             ps.executeUpdate();
         } catch (SQLException e) {
+            logger.severe("cannot paste "+e.getMessage());
             e.printStackTrace();
         }
 
     }
 
     private int safeInt(JSONObject jo, String s) {
-        int i = Short.MAX_VALUE;
+        int i = 0;
         try{
              i = jo.getInt(s);
         }
