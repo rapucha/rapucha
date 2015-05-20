@@ -34,9 +34,7 @@ public class WeatherCrawler extends ACrawler {
             logger.log(Level.SEVERE,"Cannot read API response");
             e.printStackTrace();
         }
-
         setChanged();
         notifyObservers(text);
-
     }
 }

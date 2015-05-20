@@ -16,7 +16,8 @@ public class WeatherObserver implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         JSONObject jo = new JSONObject((String) arg);
-        logger.log(Level.INFO, "Weather: "+jo.get("current_observation"));
+        jo = jo.getJSONObject("current_observation");
+
 
     }
 }

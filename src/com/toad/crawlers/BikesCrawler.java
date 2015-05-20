@@ -27,7 +27,6 @@ public class BikesCrawler extends ACrawler {
     @Override
     protected void processInput(BufferedReader br) {
 
-        JSONArray bikesStatus= new JSONArray();
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
         try(BufferedReader in =new BufferedReader(new InputStreamReader(uc.getInputStream()));) {
             String inputLine;
@@ -42,7 +41,6 @@ public class BikesCrawler extends ACrawler {
 
             }
         }
-
          catch (IOException e) {
             e.printStackTrace();
         }
