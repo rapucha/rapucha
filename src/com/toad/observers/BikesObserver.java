@@ -11,6 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static com.toad.Util.safeDouble;
+import static com.toad.Util.safeInt;
+import static com.toad.Util.safeString;
 
 /**
  * Created by Morta on 19-May-15.
@@ -44,14 +47,14 @@ public class BikesObserver  implements Observer {
         JSONArray jarr = new JSONArray((String) arg);
         for (int i = 0; i < jarr.length(); i++) {
             JSONObject jsonobject = jarr.getJSONObject(i);
-            String name = jsonobject.getString(JSON_NAME);
-            double lat = jsonobject.getDouble(LAT);
-            double lon = jsonobject.getDouble(LON);
-            int locks = jsonobject.getInt(TOTAL_LOCKS);
-            int subTotal = jsonobject.getInt(TOTAL_BIKES);
+            String name = safeString(jsonobject, JSON_NAME);
+            double lat = safeDouble(jsonobject, LAT);
+            double lon = safeDouble(jsonobject, LON);
+            System.out.println(lat+","+lon);
+            int locks = safeInt(jsonobject, TOTAL_LOCKS);
+            int subTotal = safeInt(jsonobject, TOTAL_BIKES);
             updateStationState(name, lat, lon, locks, subTotal, ts);
         }
-
     }
 
 
@@ -69,7 +72,7 @@ public class BikesObserver  implements Observer {
             ResultSet rs = stmt.executeQuery(selectStationById); )
         {
             if (!rs.isBeforeFirst() ) {
-                logger.log(Level.INFO,"no record for station"+name+ "in STATIONS table");
+                logger.info("no record for station"+name+ "in STATIONS table");
 //TODO implement history update if something changed
 /*              {   logger.log(Level.INFO,"Creating history for "+name);
                 String createStationInHistory = "INSERT INTO " + STATIONS_HISTORY_TABLE
@@ -78,7 +81,7 @@ public class BikesObserver  implements Observer {
                           + "' , GeomFromText( 'POINT(" + lat + " " + lon + ")' ), " + locks + " , '" + ts + "' )";
                   stmt.executeUpdate(createStationInHistory);
               }     */
-                { logger.log(Level.INFO,"Creating actual record for "+name);
+                { logger.fine("Creating actual record for "+name);
                     String createStation = "INSERT INTO " + STATIONS_TABLE
                             + " ( " + STATION_NUMBER + " , " + NAME + " , " + LOCATON + " , " + LOCKS + " ) "
                             + " VALUES ( " + id + " , '" + name
@@ -86,7 +89,7 @@ public class BikesObserver  implements Observer {
                             + locks + " )";
                     stmt.executeUpdate(createStation); }
             } else{
-                logger.log(Level.INFO, "Station " + name + " is already present, updating history");
+                logger.fine("Station " + name + " is already present, updating history");
                 String addHistoryBikes = "INSERT INTO " + BIKES_HISTORY
                         + " ( " + TIMESTAMP + " , " + STATION_NUMBER + " , "+ BIKES+" ) "
                         + "VALUES (? , ? , ?)";

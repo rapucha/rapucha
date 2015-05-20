@@ -1,11 +1,8 @@
 package com.toad.crawlers;
 
-import org.json.JSONArray;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Timestamp;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +10,7 @@ import java.util.regex.Pattern;
  * Created by Morta on 19-May-15.
  */
 public class BikesCrawler extends ACrawler {
-    private final static String url = "http://spb.velogorod.org";
+    private static final String address = "http://spb.velogorod.org";
     private static final int repeatMinutes = 10;
     public static BikesCrawler INSTANCE = new BikesCrawler();
 
@@ -21,13 +18,12 @@ public class BikesCrawler extends ACrawler {
     static final Pattern namePattern = Pattern.compile("var stationsData = "+ NAME_PATTERN);
 
     private BikesCrawler()  {
-        super(repeatMinutes,url,true);
+        super(repeatMinutes, address,true);
     }
 
     @Override
     protected void processInput(BufferedReader br) {
 
-        Timestamp ts = new Timestamp(new java.util.Date().getTime());
         try(BufferedReader in =new BufferedReader(new InputStreamReader(uc.getInputStream()));) {
             String inputLine;
             while ((inputLine = in.readLine()) != null){
@@ -38,7 +34,6 @@ public class BikesCrawler extends ACrawler {
                     notifyObservers(s);
                     break;//abort reading to save some traffic
                 }
-
             }
         }
          catch (IOException e) {

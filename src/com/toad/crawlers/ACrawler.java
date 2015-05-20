@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +20,8 @@ public abstract class ACrawler extends Observable {
     private static final long delay = SECOND;
     private static final int MINUTE = 60 * SECOND;
     private final long period;// =  15 * MINUTE;
-    private  URL url;
+    private URL url;
+
     protected URLConnection uc;
     private final boolean beRandom;
     private final Random rnd = new Random();
@@ -89,7 +88,7 @@ public abstract class ACrawler extends Observable {
 
     private String getUserAgent(){
         String ua = userAgents[rnd.nextInt(userAgents.length-1)];
-        logger.log(Level.INFO, "User-Agent is "+ua);
+        logger.fine("Setting User-Agent " + ua);
         return ua;
     }
 

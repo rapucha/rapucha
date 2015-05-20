@@ -1,6 +1,6 @@
 package com.toad.crawlers;
 
-import com.toad.SettingsManager;
+    import com.toad.SettingsManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * Created by Morta on 19-May-15.
  */
 public class WeatherCrawler extends ACrawler {
-    private final static String url = "http://api.wunderground.com/api/"+ SettingsManager.WeatherAPIkey+"/conditions/q/59.935571,30.308397.json";
+    private static final String url = "http://api.wunderground.com/api/"+ SettingsManager.WeatherAPIkey+"/conditions/q/59.935571,30.308397.json";
     private static final int repeatMinutes = 5;
     public static WeatherCrawler INSTANCE = new WeatherCrawler();
     private Logger logger = Logger.getLogger(this.getClass().getName());

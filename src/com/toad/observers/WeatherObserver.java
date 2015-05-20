@@ -10,9 +10,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import java.util.logging.Logger;
+import static com.toad.Util.safeInt;
+import static com.toad.Util.safeString;
 /**
  * Created by Morta on 19-May-15.
  */
@@ -23,8 +24,9 @@ public class WeatherObserver implements Observer {
     public void update(Observable o, Object arg) {
 
         conn = DBManager.getConn();
-        JSONObject jo = new JSONObject((String) arg);
-        jo = jo.getJSONObject("current_observation");
+
+        JSONObject jo = (new JSONObject((String) arg)).getJSONObject("current_observation");
+
         int observation_epoch = safeInt(jo, "observation_epoch");
         String weather_string = safeString(jo, "weather");
         int temp_c = safeInt(jo, "temp_c");
@@ -41,8 +43,8 @@ public class WeatherObserver implements Observer {
         String icon = safeString(jo, "icon");
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
 
-        String addObservation = "INSERT INTO observations (timestamp, observation_epoch, weather_string," +
-                "temp_c, relative_humidity, wind_degrees, wind_kph, pressure_mb, pressure_trend, dewpoint_c" +
+        String addObservation = "INSERT INTO observations (timestamp, observation_epoch, weather_string, " +
+                "temp_c, relative_humidity, wind_degrees, wind_kph, pressure_mb, pressure_trend, dewpoint_c, " +
                 "heat_index_c, windchill_c, feelslike_c, visibility_km, icon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, " +
                 "?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(addObservation);) {
@@ -69,28 +71,6 @@ public class WeatherObserver implements Observer {
 
     }
 
-    private int safeInt(JSONObject jo, String s) {
-        int i = 0;
-        try{
-             i = jo.getInt(s);
-        }
-            catch (JSONException j){
-                logger.info("No parameter in JSON strinig "+s);
-            }
-
-        return i;
-    }
-    private String safeString(JSONObject jo, String s) {
-        String r = "ERROR";
-        try{
-            r = jo.getString(s);
-        }
-        catch (JSONException j){
-            logger.info("No parameter in JSON strinig "+s);
-        }
-
-        return r;
-    }
 
 
 }
