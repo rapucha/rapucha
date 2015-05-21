@@ -71,6 +71,13 @@ public class WeatherObserver implements Observer {
             e.printStackTrace();
         }
 
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            logger.severe("Cannot close connection "+e);
+            e.printStackTrace();
+        }
+
     }
 
 
