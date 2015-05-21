@@ -13,56 +13,53 @@ import java.util.logging.Logger;
 
 /**
  * Created by Morta on 21-May-15.
-
+*/
 public class TrafficCrawler extends ACrawler {
 
     private static final String address = "http://static-maps.yandex.ru/1.x/?ll=30.329246,59.943055&z=12&size=600,450&l=map";
     private static final int repeatMinutes = 20;
 
-    private static ACrawler INSTANCE = new TrafficCrawler(repeatMinutes, address);
+    public static ACrawler INSTANCE = new TrafficCrawler(repeatMinutes, address);
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     private  TrafficCrawler(int time, String address) {
         super(time, address, true);
     }
-/*
+
     @Override
     protected void processInput(InputStream is) {
 
        // URL pic = new URL(place+",trf");
        // URLConnection uc = pic.openConnection();
        // uc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
-
+        BufferedImage imageNoTraff = null, imageTraff = null;
         try{
-            BufferedImage image0 = ImageIO.read(is);
+            imageNoTraff = ImageIO.read(is);
         } catch (IOException ioe){
-            logger.severe("Cannot reda image form stream "+ioe);
+            logger.severe("Cannot read image form stream "+ioe);
             ioe.printStackTrace();
         }
-        try( URLConnection uc = new URL(address+",trf").openConnection();
-        uc.setRequestProperty("User-Agent", getUserAgent());
 
-        try (InputStream is = uc.getInputStream();) {
-            processInput(is);
+        try{
+            URLConnection uc = new URL(address+",trf").openConnection();
+            uc.setRequestProperty("User-Agent", getUserAgent());
+            try (InputStream is2 = uc.getInputStream();) {
+                imageTraff = ImageIO.read(is2);
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        BufferedImage image1 = ImageIO.read(uc);
+
+        BufferedImage delta = new BufferedImage(imageTraff.getWidth(), imageTraff.getHeight(), imageTraff.getType());
+
+        for(int x = 0; x < imageTraff.getWidth(); x++)
+            for(int y = 0; y < imageTraff.getHeight(); y++) {
 
 
-        pic = new URL(place);
-        uc = pic.openConnection();
-        uc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
-        BufferedImage image1 = ImageIO.read(pic);
-        ImageIO.write(image1, "png", new File("image10.png"));
-
-        BufferedImage image6 = new BufferedImage(image1.getWidth(), image1.getHeight(), image1.getType());
-
-        for(int x = 0; x < image1.getWidth(); x++)
-            for(int y = 0; y < image1.getHeight(); y++) {
-
-
-                int argb0 = image0.getRGB(x, y);
-                int argb1 = image1.getRGB(x, y);
+                int argb0 = imageNoTraff.getRGB(x, y);
+                int argb1 = imageTraff.getRGB(x, y);
 
                 int a0 = (argb0 >> 24) & 0xFF;
                 int r0 = (argb0 >> 16) & 0xFF;
@@ -81,10 +78,12 @@ public class TrafficCrawler extends ACrawler {
 
                 int diff =
                         (aDiff << 24) | (rDiff << 16) | (gDiff << 8) | bDiff;
-                image6.setRGB(x, y, diff);
+                delta.setRGB(x, y, diff);
 
             }
-        ImageIO.write(image6, "png",  new File("image11.png"));
+
+        setChanged();
+        notifyObservers(new BufferedImage[]{imageTraff,imageNoTraff,delta});
 
     }
-}*/
+}

@@ -9,8 +9,10 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.toad.crawlers.BikesCrawler;
+import com.toad.crawlers.TrafficCrawler;
 import com.toad.crawlers.WeatherCrawler;
 import com.toad.observers.BikesObserver;
+import com.toad.observers.TrafficObserver;
 import com.toad.observers.WeatherObserver;
 
 /*    /\[([^\]]+)]/ */
@@ -25,12 +27,18 @@ public class Main {
 
         WeatherObserver wo = new WeatherObserver();
         BikesObserver bo = new BikesObserver();
+        TrafficObserver to = new TrafficObserver();
 
         WeatherCrawler.INSTANCE.addObserver(wo);
         BikesCrawler.INSTANCE.addObserver(bo);
+        TrafficCrawler.INSTANCE.addObserver(to);
+
 
         WeatherCrawler.INSTANCE.start();
         BikesCrawler.INSTANCE.start();
+        TrafficCrawler.INSTANCE.start();
+
+
 
         while(true) {
             Thread.sleep(100);
