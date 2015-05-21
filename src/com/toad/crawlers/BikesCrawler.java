@@ -2,6 +2,7 @@ package com.toad.crawlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +13,7 @@ import java.util.regex.Pattern;
 public class BikesCrawler extends ACrawler {
     private static final String address = "http://spb.velogorod.org";
     private static final int repeatMinutes = 10;
-    public static BikesCrawler INSTANCE = new BikesCrawler();
+    public static ACrawler INSTANCE = new BikesCrawler();
 
     static final String NAME_PATTERN = "\\[([^\\]]+)];";
     static final Pattern namePattern = Pattern.compile("var stationsData = "+ NAME_PATTERN);
@@ -22,9 +23,9 @@ public class BikesCrawler extends ACrawler {
     }
 
     @Override
-    protected void processInput(BufferedReader br) {
+    protected void processInput(InputStream is) {
 
-        try(BufferedReader in =new BufferedReader(new InputStreamReader(uc.getInputStream()));) {
+        try(BufferedReader in =new BufferedReader(new InputStreamReader(is));) {
             String inputLine;
             while ((inputLine = in.readLine()) != null){
                 Matcher m = namePattern.matcher(inputLine);

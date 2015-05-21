@@ -16,7 +16,7 @@ public class Util {
     private static  final Logger logger = Logger.getLogger(Util.class.getName());
 
     public static int safeInt(JSONObject jo, String s) {
-        int safe = -1;
+        int safe = Short.MAX_VALUE;
         try{
             safe = jo.getInt(s);
         }
@@ -64,6 +64,7 @@ public class Util {
 
         return safe;
     }
+
 
 
     static void printFile (File f, String s){

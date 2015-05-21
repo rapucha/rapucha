@@ -50,7 +50,7 @@ public class BikesObserver  implements Observer {
             String name = safeString(jsonobject, JSON_NAME);
             double lat = safeDouble(jsonobject, LAT);
             double lon = safeDouble(jsonobject, LON);
-            System.out.println(lat+","+lon);
+            System.out.println(lon+","+lat);
             int locks = safeInt(jsonobject, TOTAL_LOCKS);
             int subTotal = safeInt(jsonobject, TOTAL_BIKES);
             updateStationState(name, lat, lon, locks, subTotal, ts);

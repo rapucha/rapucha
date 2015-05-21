@@ -2,6 +2,7 @@ package com.toad.crawlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,7 +23,7 @@ public abstract class ACrawler extends Observable {
     private final long period;// =  15 * MINUTE;
     private URL url;
 
-    protected URLConnection uc;
+
     private final boolean beRandom;
     private final Random rnd = new Random();
     static Timer timer = new Timer();
@@ -69,24 +70,24 @@ public abstract class ACrawler extends Observable {
 
 
     private void crawl() throws IOException {
-        uc = url.openConnection();
+        URLConnection uc = url.openConnection();
         if(beRandom){
             uc.setRequestProperty("User-Agent", getUserAgent());
         }
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(uc.getInputStream()));) {
-            processInput(br);
+        try (InputStream is = uc.getInputStream();) {
+            processInput(is);
         }
 
     }
 
-    protected abstract void processInput(BufferedReader br);
+    protected abstract void processInput(InputStream is);
 
     public void start(){
         timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);//TODO add randomness to timer task
     }
 
-    private String getUserAgent(){
+    protected String getUserAgent(){
         String ua = userAgents[rnd.nextInt(userAgents.length-1)];
         logger.fine("Setting User-Agent " + ua);
         return ua;
