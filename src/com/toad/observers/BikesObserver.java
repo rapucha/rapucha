@@ -89,7 +89,7 @@ public class BikesObserver  implements Observer {
                             + locks + " )";
                     stmt.executeUpdate(createStation); }
             } else{
-                logger.fine("Station " + name + " is already present, updating history");
+                logger.finest("Station " + name + " is already present, updating history");
                 String addHistoryBikes = "INSERT INTO " + BIKES_HISTORY
                         + " ( " + TIMESTAMP + " , " + STATION_NUMBER + " , "+ BIKES+" ) "
                         + "VALUES (? , ? , ?)";

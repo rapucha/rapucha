@@ -16,7 +16,7 @@ public class SettingsManager {
     public static String dbschema;
     public static String dbpass;
     public static String  dbuser;
-    private static int port;
+    public static int port;
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     Properties prop = new Properties();

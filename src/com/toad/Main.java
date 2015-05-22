@@ -38,7 +38,7 @@ public class Main {
         BikesCrawler.INSTANCE.start();
         TrafficCrawler.INSTANCE.start();
 
-
+        Server.start();
 
         while(true) {
             Thread.sleep(100);
