@@ -55,10 +55,7 @@ public class Server {
         }
     }
 
-    private static final String form ="<!DOCTYPE html>\n" +
-            "<html>\n" +
-            "<head>\n" +
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"+
+    private static final String CSS =
             "<style type=\"text/css\">\n" +
             "@media only screen and (max-device-width: 480px) {\n" +
             "select, input, button {\n" +
@@ -67,7 +64,28 @@ public class Server {
             "   max-width: 100%;\n" +
             "   font-size: 220%;\n" +
             "}\n" +
-            "\n" +
+            "input[type=\"text\"] {\n" +
+            "height: 80px;\n" +
+            "width: 380px;\n" +
+            "}"+
+            "input[type=\"datetime-local\"] {\n" +
+            "height: 80px;\n" +
+            "width: 380px;\n" +
+            "}"+
+             "input[type=\"email\"] {\n" +
+                    "height: 80px;\n" +
+                    "width: 380px;\n" +
+                    "}"+
+              "input[type=\"submit\"] {\n" +
+                    "height: 80px;\n" +
+                    "width: 380px;\n" +
+                    "}"+
+             "input[type=\"reset\"] {\n" +
+                    "height: 80px;\n" +
+                    "width: 380px;\n" +
+                    "}"+
+
+                    "\n" +
             "/* Follow the size of input elements */\n" +
             "label {\n" +
             "   font-size: 220%;\n" +
@@ -79,7 +97,13 @@ public class Server {
             "}"+
             "\t}"+
 
-            "\t\t</style>"+
+            "\t\t</style>" ;
+
+    private static final String form ="<!DOCTYPE html>\n" +
+            "<html>\n" +
+            "<head>\n" +
+            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"+
+            CSS+
             "</head>\n" +
             "<body>\n" +
             "\n" +
@@ -90,12 +114,11 @@ public class Server {
             "<input type=\"text\" name=\"name\" value=\"your name\"><br>\n" +
             "Когда:<br>\n" +
             "<input type=\"datetime-local\" value=\"Прямо щас\"/><br>\n"+
-            "Моя почта:<br>\n" +
+            "На почту:<br>\n" +
             "<input type=\"email\" name=\"mail\" value=\"your email\"><br>\n" +
-            "Привет автору)<br>\n" +
-            "<input type=\"text\" name=\"comment\" value=\"your comment\" size=\"50\"><br><br>\n" +
             "<input type=\"submit\" value=\"Send\" size=\"250\">\n" +
             "<input type=\"reset\" value=\"Reset\" size=\"250\">\n" +
+            "<br><small>rapucha@mail.ru</small>"+
             "</form>\n" +
             "\n" +
             "</body>\n" +

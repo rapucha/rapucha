@@ -34,9 +34,9 @@ public class Main {
         TrafficCrawler.INSTANCE.addObserver(to);
 
 
-        WeatherCrawler.INSTANCE.start();
-        BikesCrawler.INSTANCE.start();
-        TrafficCrawler.INSTANCE.start();
+        //WeatherCrawler.INSTANCE.start();
+        //BikesCrawler.INSTANCE.start();
+        //TrafficCrawler.INSTANCE.start();
 
         Server.start();
 
