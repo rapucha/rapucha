@@ -111,11 +111,20 @@ public class Server {
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
-            "<input type=\"text\" name=\"name\" value=\"your name\"><br>\n" +
+            "<select>\n" +
+            "  <option>Тут</option>\n" +
+            "  <option>Рядом</option>\n" +
+            "  <option>Там</option>\n" +
+            "</select><br>"+
+
             "Когда:<br>\n" +
-            "<input type=\"datetime-local\" value=\"Прямо щас\"/><br>\n"+
-            "На почту:<br>\n" +
-            "<input type=\"email\" name=\"mail\" value=\"your email\"><br>\n" +
+            "<select>\n" +
+            "  <option>Сейчас</option>\n" +
+            "  <option>Через 10 минут</option>\n" +
+            "  <option>Через полчаса</option>\n" +
+            "</select><br>"+
+            "Кому:<br>\n" +
+            "<input type=\"email\" name=\"mail\" value=\"Почта\"><br>\n" +
             "<input type=\"submit\" value=\"Send\" size=\"250\">\n" +
             "<input type=\"reset\" value=\"Reset\" size=\"250\">\n" +
             "<br><small>rapucha@mail.ru</small>"+
