@@ -1,6 +1,7 @@
 package com.toad.observers;
 
 import com.toad.DBManager;
+import com.toad.StationCache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 import static com.toad.Util.safeDouble;
 import static com.toad.Util.safeInt;
 import static com.toad.Util.safeString;
-import static com.toad.StationCache.updateCache;
+
 /**
  * Created by Morta on 19-May-15.
  */
@@ -54,8 +55,8 @@ public class BikesObserver  implements Observer {
             int locks = safeInt(jsonobject, TOTAL_LOCKS_PER_STATION);
             int subTotal = safeInt(jsonobject, TOTAL_BIKES_PER_STATION);
             total =+subTotal;
-            updateCache(name, subTotal, total);
-            updateStationState(name, lat, lon, locks, subTotal, ts);
+            StationCache.INSTANCE.updateCache(name, lat, lon, locks, subTotal, total);// TODO this double update should become DAO access one day
+            updateStationState(name, lat, lon, locks, subTotal, ts);//
         }
     }
 

@@ -5,13 +5,20 @@ import java.util.HashMap;
 /**
  * Created by Morta on 23-May-15.
  */
-public final class StationCache {
+public enum StationCache {
+
+    INSTANCE;
 
     private static final HashMap<String,Station> STATIONS = new HashMap<String,Station>();
     private static int TOTAL_BIKES_ALL_STATIONS;
 
-    public static void updateCache(String name, int bikes, int total){
+    synchronized public void updateCache(String name, double lat, double lon, int locks, int bikes, int total){
+
         Station st = STATIONS.get(name);
+        if(null == st){
+            st = new Station(name, lat, lon, locks, bikes);
+            STATIONS.put(name,st);
+        }
         st.setBikes(bikes);
         TOTAL_BIKES_ALL_STATIONS = total;
     }
