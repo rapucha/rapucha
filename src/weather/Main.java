@@ -9,7 +9,9 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,41 +22,76 @@ import java.util.logging.Logger;
 
 
 public class Main {
-    static int port;
-    static String  dbuser, dbpass, dbschema, dburl, WeatherAPIkey;
-
+    static HashMap<String,TestObj> hma;
 
 
     public static void main(String[] args) throws Exception {
 
-        Properties prop = new Properties();
-        try(InputStream input  = new FileInputStream("config.properties");) {
-            prop.load(input);
-            dbuser = prop.getProperty("dbuser");
-            dbpass = prop.getProperty("dbpass");
-            dbschema = prop.getProperty("dbschema");
-            dburl = prop.getProperty("dburl");
-            port = Integer.parseInt(prop.getProperty("serverPort"));
-            WeatherAPIkey = prop.getProperty("WeatherAPIkey");
+
+        hma = new HashMap<>();
+        int[] hma2 = new int[100];
+        for(int i = 0; i<100; i++){
+            int j = new Random().nextInt();
+            TestObj to = new TestObj(i,j);
+            hma.put(Integer.toString(i),to);
+            hma2[i] = j;
         }
-        catch (IOException | NumberFormatException e){
-                e.printStackTrace();
+        int i = 0;
+        long time = System.nanoTime();
+        for (String s : hma.keySet()) {
+            i +=hma.get(s).getB();
+        }
+        time=System.nanoTime()-time;
+        System.out.println("Time is "+time+" Sum = "+i);
+       // System.out.println(jo.get("current_observation"));
+
+        time = System.nanoTime();
+        int j = 0;
+        for (int i1 = 0; i1<100; i1++) {
+            j += hma2[i1];
+        }
+        time=System.nanoTime()-time;
+        System.out.println("Time is "+time+" Sum = "+j);
+
+
+    }
+
+    static void update(String s, int val){
+        TestObj to = hma.get(s);
+        to.setA(val);
+        to.setB(val);
+    }
+
+     static class TestObj{
+        private int a,b;
+
+        public TestObj(int a, int b) {
+            this.a = a;
+            this.b = b;
         }
 
-
-        URL weather = new URL("http://api.wunderground.com/api/"+Main.WeatherAPIkey+"/conditions/q/59.935571,30.308397.json");
-        URLConnection uc = weather.openConnection();
-        String text = "";
-        try(BufferedReader in =new BufferedReader(new InputStreamReader(uc.getInputStream()));) {
-            String line;
-            while ((line = in.readLine()) != null) {
-                text = text + line;;
-            }
+        public int getA() {
+            return a;
         }
-        JSONObject jo = new JSONObject(text);
-        //jo.get("weather");
 
-        System.out.println(jo.get("current_observation"));
+        public void setA(int a) {
+            this.a = a;
+        }
 
+        public int getB() {
+            return b;
+        }
+
+        public void setB(int b) {
+            this.b = b;
+        }
+
+        @Override
+        public String toString() {
+            return "TestObj{" +
+                    "a=" + a +
+                    ", b=" + b +
+                    '}';
+        }
     }
 }

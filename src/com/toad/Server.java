@@ -8,6 +8,8 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
+
 import static com.toad.SettingsManager.port;
 
 
@@ -26,8 +28,7 @@ public class Server {
             server.createContext("/", new FormHandler());
             server.createContext("/hello", new HelloHandler());
             server.createContext("/style.css", new CSSHandler());
-            server.setExecutor(null);
-
+            server.setExecutor(Executors.newFixedThreadPool(20));
 
         } catch (IOException e) {
             e.printStackTrace();

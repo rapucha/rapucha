@@ -7,14 +7,13 @@ import org.json.JSONObject;
 import java.sql.*;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static com.toad.Util.safeDouble;
 import static com.toad.Util.safeInt;
 import static com.toad.Util.safeString;
-
+import static com.toad.StationCache.updateCache;
 /**
  * Created by Morta on 19-May-15.
  */
@@ -30,8 +29,8 @@ public class BikesObserver  implements Observer {
     private static final String JSON_NAME="Name";
     private static final String LAT="Latitude";
     private static final String LON="Longitude";
-    private static final String TOTAL_LOCKS="TotalLocks";
-    private static final String TOTAL_BIKES ="TotalAvailableBikes";
+    private static final String TOTAL_LOCKS_PER_STATION ="TotalLocks";
+    private static final String TOTAL_BIKES_PER_STATION ="TotalAvailableBikes";
 
     static final String NAME_PATTERN = "\\[([^\\]]+)];";
     static final Pattern namePattern = Pattern.compile("var stationsData = "+ NAME_PATTERN);
@@ -40,10 +39,11 @@ public class BikesObserver  implements Observer {
 
     private  final Logger logger = Logger.getLogger(this.getClass().getName());
     private Connection conn;
-
+    private int total;
     @Override
     public void update(Observable o, Object arg) {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
+        total = 0;
         JSONArray jarr = new JSONArray((String) arg);
         for (int i = 0; i < jarr.length(); i++) {
             JSONObject jsonobject = jarr.getJSONObject(i);
@@ -51,27 +51,31 @@ public class BikesObserver  implements Observer {
             double lat = safeDouble(jsonobject, LAT);
             double lon = safeDouble(jsonobject, LON);
             System.out.println(lon+","+lat);
-            int locks = safeInt(jsonobject, TOTAL_LOCKS);
-            int subTotal = safeInt(jsonobject, TOTAL_BIKES);
+            int locks = safeInt(jsonobject, TOTAL_LOCKS_PER_STATION);
+            int subTotal = safeInt(jsonobject, TOTAL_BIKES_PER_STATION);
+            total =+subTotal;
+            updateCache(name, subTotal, total);
             updateStationState(name, lat, lon, locks, subTotal, ts);
         }
     }
 
 
     private void updateStationState(String name, double lat, double lon, int locks, int subTotal, Timestamp ts)  {
-        int id = 0;
+        int id = -1;
         try {
             id = getNumber(name);
         } catch (Exception e) {
-            logger.severe("Assigning number 0 to station " +name);
+
+            logger.severe("Cannot parse station number, assigning number -1 to station " +name);
         }
-         conn = DBManager.getConn();
+
+        conn = DBManager.getConn();
 
         String selectStationById = "SELECT " + NAME + " FROM " + STATIONS_TABLE+ " WHERE "+ STATION_NUMBER +" = "+id;
         try(Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(selectStationById); )
         {
-            if (!rs.isBeforeFirst() ) {
+            if (!rs.isBeforeFirst()) {
                 logger.info("no record for station"+name+ "in STATIONS table");
 //TODO implement history update if something changed
 /*              {   logger.log(Level.INFO,"Creating history for "+name);
@@ -88,7 +92,7 @@ public class BikesObserver  implements Observer {
                             + "' , GeomFromText( 'POINT(" + lat + " " + lon + ")' ), "
                             + locks + " )";
                     stmt.executeUpdate(createStation); }
-            } else{
+            } else {
                 logger.finest("Station " + name + " is already present, updating history");
                 String addHistoryBikes = "INSERT INTO " + BIKES_HISTORY
                         + " ( " + TIMESTAMP + " , " + STATION_NUMBER + " , "+ BIKES+" ) "
