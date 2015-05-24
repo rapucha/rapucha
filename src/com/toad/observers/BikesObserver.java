@@ -2,6 +2,7 @@ package com.toad.observers;
 
 import com.toad.DBManager;
 import com.toad.StationCache;
+import com.toad.SubscriptionProcessor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -57,6 +58,7 @@ public class BikesObserver  implements Observer {
             total =+subTotal;
             StationCache.INSTANCE.updateCache(name, lat, lon, locks, subTotal, total);// TODO this double update should become DAO access one day
             updateStationState(name, lat, lon, locks, subTotal, ts);//
+            SubscriptionProcessor.INSTANCE.updateSubcribers();//
         }
     }
 

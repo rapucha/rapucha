@@ -15,18 +15,16 @@ public enum SubscriptionProcessor {
     private static final ConcurrentHashMap clients = new ConcurrentHashMap();
 
     public void start(){
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        },0,60, TimeUnit.SECONDS);
+        //Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(,0,60, TimeUnit.SECONDS);
     }
 
     public void addClient(Client client){
             //clients.p
     }
 
+    public void updateSubcribers(){
+
+    }
     private static final class Client{
         private  final Instant whenCreated;
         private final Duration whenNotify;
