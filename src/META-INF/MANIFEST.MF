@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Class-Path: mysql-connector-java-5.1.35-bin.jar
+Class-Path: mysql-connector-java-5.1.35-bin.jar javax.mail.jar
 Main-Class: com.toad.Main
 

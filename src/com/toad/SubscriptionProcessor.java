@@ -3,14 +3,28 @@ package com.toad;
 import javax.mail.internet.InternetAddress;
 import java.util.concurrent.ConcurrentHashMap;
 import java.time.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Morta on 24-May-15.
  */
-public class Subscribers {
+public enum SubscriptionProcessor {
+    INSTANCE;
+
     private static final ConcurrentHashMap clients = new ConcurrentHashMap();
 
-    public void addClient(Client client){
+    public void start(){
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
 
+            }
+        },0,60, TimeUnit.SECONDS);
+    }
+
+    public void addClient(Client client){
+            //clients.p
     }
 
     private static final class Client{
