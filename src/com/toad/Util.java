@@ -3,10 +3,7 @@ package com.toad;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.logging.Logger;
 
 /**
@@ -65,7 +62,11 @@ public class Util {
         return safe;
     }
 
+    public static String isToString(InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
 
+    }
 
     static void printFile (File f, String s){
 

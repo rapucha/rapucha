@@ -8,6 +8,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 
 import static com.toad.SettingsManager.port;
@@ -146,7 +147,11 @@ public class Server {
             }
             String response;
             if("POST".equalsIgnoreCase(t.getRequestMethod())){
-                response = isToString(t.getRequestBody());
+                Properties prop = new Properties();
+
+                prop.load(t.getRequestBody());//TODO catch every MTF thing here
+
+                response = Util.isToString(t.getRequestBody());
 
                 t.sendResponseHeaders(200, response.length());
             } else {
@@ -162,11 +167,7 @@ public class Server {
         }
     }
 
-    private String isToString(InputStream requestBody) {
-        java.util.Scanner s = new java.util.Scanner(requestBody).useDelimiter("\\A");
-            return s.hasNext() ? s.next() : "";
 
-    }
 
     String test ="<!DOCTYPE html>\n" +
             "<html>\n" +
