@@ -25,7 +25,7 @@ public class WeatherObserver implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        conn = DBManager.getConn();
+        conn = DBManager.INSTANCE.getConn();
 
         JSONObject jo = (new JSONObject((String) arg)).getJSONObject("current_observation");
 

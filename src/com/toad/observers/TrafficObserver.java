@@ -28,7 +28,7 @@ public class TrafficObserver implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        conn = DBManager.getConn();
+        conn = DBManager.INSTANCE.getConn();
         BufferedImage[] imgs = (BufferedImage[])arg;
 
         Timestamp ts = new Timestamp(new java.util.Date().getTime());

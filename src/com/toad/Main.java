@@ -22,8 +22,11 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
+
         logger.fine("reading properties");
         SettingsManager.INSTANCE.loadDefaultSettings();
+
+        DBManager.INSTANCE.initDBManager();
 
         WeatherObserver wo = new WeatherObserver();
         BikesObserver bo = new BikesObserver();

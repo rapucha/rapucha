@@ -70,7 +70,7 @@ public class BikesObserver  implements Observer {
             logger.severe("Cannot parse station number, assigning number -1 to station " +name);
         }
 
-        conn = DBManager.getConn();
+        conn = DBManager.INSTANCE.getConn();
 
         String selectStationById = "SELECT " + NAME + " FROM " + STATIONS_TABLE+ " WHERE "+ STATION_NUMBER +" = "+id;
         try(Statement stmt = conn.createStatement();
