@@ -2,11 +2,8 @@ package com.toad;
 
 import javax.mail.internet.InternetAddress;
 import java.time.temporal.ChronoUnit;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 import java.time.*;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Morta on 24-May-15.
@@ -16,14 +13,27 @@ public enum SubscriptionProcessor {
 
     private static final ConcurrentHashMap clients = new ConcurrentHashMap();
 
-    //DelayQueue<>
+    final DelayQueue<Client> queue = new DelayQueue<>();
 
     public void start(){
-        //Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(,0,60, TimeUnit.SECONDS);
+        ExecutorService service = Executors.newCachedThreadPool();
+        while(true) {
+            service.submit(new Runnable() {
+                public void run() {
+                    try {
+                      Client client =  queue.take();
+                        System.out.println(Instant.now().toString()+ "Sending to "+client);
+                       Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     public void addClient(Client client){
-            //clients.
+            queue.put(client);
     }
 
     public void notifySubcribers(){
@@ -65,6 +75,17 @@ public enum SubscriptionProcessor {
 
         public String getAtWhatStation() {
             return atWhatStation;
+        }
+
+        @Override
+        public String toString() {
+            return "Client{" +
+                    "whenCreated=" + whenCreated +
+                    ", whenNotify=" + whenNotify +
+                    ", email=" + email +
+                    ", howManyBikes=" + howManyBikes +
+                    ", atWhatStation='" + atWhatStation + '\'' +
+                    '}';
         }
 
         @Override
