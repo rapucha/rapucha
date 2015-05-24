@@ -1,6 +1,8 @@
 package com.toad;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Morta on 23-May-15.
@@ -8,6 +10,7 @@ import java.util.HashMap;
 public enum StationCache {
 
     INSTANCE;
+
 
     private static final HashMap<String,Station> STATIONS = new HashMap<String,Station>();
     private static int TOTAL_BIKES_ALL_STATIONS;
@@ -23,6 +26,10 @@ public enum StationCache {
         TOTAL_BIKES_ALL_STATIONS = total;
     }
 
+
+    public String[] getStationNames(){
+        return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
+    }
     /**
      * Created by Morta on 23-May-15.
      */

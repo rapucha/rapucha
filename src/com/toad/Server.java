@@ -5,9 +5,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import static com.toad.SettingsManager.port;
@@ -27,7 +27,7 @@ public class Server {
             server = HttpServer.create(new InetSocketAddress(port), 0);
             server.createContext("/", new FormHandler());
             server.createContext("/hello", new HelloHandler());
-            server.createContext("/style.css", new CSSHandler());
+            //server.createContext("/style.css", new CSSHandler());
             server.setExecutor(Executors.newFixedThreadPool(20));
 
         } catch (IOException e) {
@@ -100,6 +100,8 @@ public class Server {
 
             "\t\t</style>" ;
 
+    private static final String form2 = "";
+
     private static final String form ="<!DOCTYPE html>\n" +
             "<html>\n" +
             "<head>\n" +
@@ -112,22 +114,21 @@ public class Server {
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
-            "<select>\n" +
-            "  <option>Тут</option>\n" +
-            "  <option>Рядом</option>\n" +
-            "  <option>Там</option>\n" +
+            "<select name=\"where\">\n" +
+            "  <option selected value=\"Here\">Тут</option>\n" +
+            "  <option value=\"Near\">Рядом</option>\n" +
+            "  <option value=\"There\">Там</option>\n" +
             "</select><br>"+
 
             "Когда:<br>\n" +
-            "<select>\n" +
-            "  <option>Сейчас</option>\n" +
-            "  <option>Через 10 минут</option>\n" +
-            "  <option>Через полчаса</option>\n" +
+            "<select name=\"when\">\n" +
+            "  <option value=\"Now\">Сейчас</option>\n" +
+            "  <option value=\"Soon\">Через 10 минут</option>\n" +
+            "  <option value=\"Later\">Через полчаса</option>\n" +
             "</select><br>"+
             "Кому:<br>\n" +
             "<input type=\"email\" name=\"mail\" value=\"Почта\"><br>\n" +
             "<input type=\"submit\" value=\"Send\" size=\"250\">\n" +
-            "<input type=\"reset\" value=\"Reset\" size=\"250\">\n" +
             "<br><small>rapucha@mail.ru</small>"+
             "</form>\n" +
             "\n" +
@@ -138,13 +139,52 @@ public class Server {
         @Override
         public void handle(HttpExchange t) throws IOException {
             Headers h = t.getRequestHeaders();
-            String response = test;
-            t.sendResponseHeaders(200, response.length());
+
+            String qq="";
+            for (List<String> strings : h.values()) {
+                qq+=strings.toString();
+            }
+            String response;
+            if("POST".equalsIgnoreCase(t.getRequestMethod())){
+                response = isToString(t.getRequestBody());
+
+                t.sendResponseHeaders(200, response.length());
+            } else {
+                response = "F. Off";
+                t.sendResponseHeaders(406, response.length());
+            }
+
+
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();
 
         }
+    }
+
+    private String isToString(InputStream requestBody) {
+        //java.util.Scanner s = new java.util.Scanner(requestBody).useDelimiter("\\z");
+         //   return s.hasNext() ? s.next() : "";
+
+        StringBuilder inputStringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(requestBody, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String line = null;
+        try {
+            line = bufferedReader.readLine();
+            while(line != null){
+                inputStringBuilder.append(line);inputStringBuilder.append('\n');
+                line = bufferedReader.readLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  inputStringBuilder.toString();
     }
 
     String test ="<!DOCTYPE html>\n" +

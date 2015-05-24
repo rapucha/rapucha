@@ -3,8 +3,6 @@ package com.toad;
 import javax.mail.internet.InternetAddress;
 import java.util.concurrent.ConcurrentHashMap;
 import java.time.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Morta on 24-May-15.
@@ -22,8 +20,12 @@ public enum SubscriptionProcessor {
             //clients.p
     }
 
-    public void updateSubcribers(){
+    public void notifySubcribers(){
 
+
+        for (String s : StationCache.INSTANCE.getStationNames()) {
+
+        }
     }
     private static final class Client{
         private  final Instant whenCreated;

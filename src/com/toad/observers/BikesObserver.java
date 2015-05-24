@@ -58,7 +58,7 @@ public class BikesObserver  implements Observer {
             total =+subTotal;
             StationCache.INSTANCE.updateCache(name, lat, lon, locks, subTotal, total);// TODO this double update should become DAO access one day
             updateStationState(name, lat, lon, locks, subTotal, ts);//
-            SubscriptionProcessor.INSTANCE.updateSubcribers();//
+            SubscriptionProcessor.INSTANCE.notifySubcribers();//
         }
     }
 
