@@ -21,9 +21,8 @@ import java.util.logging.Logger;
 
         try {
             Class.forName(JDBC_DRIVER).newInstance();
-            System.out.println("JDBC driver registered ");
+            logger.info("JDBC driver registered ");
         } catch (Exception ex) {
-            System.out.println("Cannot register DB driver " + ex);
             logger.severe("Cannot register DB driver " + ex);
             ex.printStackTrace();
         }
@@ -35,8 +34,7 @@ import java.util.logging.Logger;
         try {
             if( conn == null || ! conn.isValid(10) ){
                 conn =
-                        //DriverManager.getConnection(SettingsManager.dburl+"/"+SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
-                        DriverManager.getConnection("jdbc:mysql://localhost:3306/rapucha", "rapucha", "DrinhoifaucKuOd3");
+                        DriverManager.getConnection(SettingsManager.dburl+"/"+SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
             }
         } catch (SQLException e) {
             logger.severe("Cannot check connection health "+e);
