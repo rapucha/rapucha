@@ -18,8 +18,7 @@ public enum SubscriptionProcessor {
     public void start(){
         ExecutorService service = Executors.newCachedThreadPool();
         while(true) {
-            service.submit(new Runnable() {
-                public void run() {
+            service.submit( () -> {
                     try {
                       Client client =  queue.take();
                         System.out.println(Instant.now().toString()+ "Sending to "+client);
@@ -27,7 +26,6 @@ public enum SubscriptionProcessor {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
             });
         }
     }
