@@ -163,28 +163,9 @@ public class Server {
     }
 
     private String isToString(InputStream requestBody) {
-        //java.util.Scanner s = new java.util.Scanner(requestBody).useDelimiter("\\z");
-         //   return s.hasNext() ? s.next() : "";
+        java.util.Scanner s = new java.util.Scanner(requestBody).useDelimiter("\\A");
+            return s.hasNext() ? s.next() : "";
 
-        StringBuilder inputStringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(requestBody, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String line = null;
-        try {
-            line = bufferedReader.readLine();
-            while(line != null){
-                inputStringBuilder.append(line);inputStringBuilder.append('\n');
-                line = bufferedReader.readLine();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return  inputStringBuilder.toString();
     }
 
     String test ="<!DOCTYPE html>\n" +
