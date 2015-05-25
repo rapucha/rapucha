@@ -20,7 +20,7 @@ public enum SubscriptionProcessor {
         for (int i = 0; i < 10; i++) {
             service.submit( () -> {
                 try {
-                    logger.info((Instant.now().toString()+" in queue"));
+                    logger.info("Thread "+Thread.currentThread().getId()+ "added");
                     Client client =  queue.take();
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {

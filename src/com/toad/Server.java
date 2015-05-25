@@ -10,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 import static com.toad.SettingsManager.port;
 
@@ -21,6 +22,7 @@ public class Server {
 
 
     private static HttpServer httpServer;
+    private static Logger logger = Logger.getLogger(Server.class.getName());
     public final static Server INSTANCE = new Server();
 
     private Server() {
@@ -29,22 +31,24 @@ public class Server {
             httpServer.createContext("/", new FormHandler());
             httpServer.createContext("/hello", new HelloHandler());
             //httpServer.createContext("/style.css", new CSSHandler());
-            httpServer.setExecutor(Executors.newFixedThreadPool(20));
+            httpServer.setExecutor(Executors.newCachedThreadPool());
+            logger.info("HTTP server created");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public static void start(){
+        logger.info("HTTP server started");
         httpServer.start();
     }
     static class FormHandler implements HttpHandler {
         public void handle(HttpExchange t) throws IOException {
             //Util.printFile(Crawler.accessLog, "------------------------" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()) + "--------------------------------" + System.lineSeparator());
             //Util.printFile(Crawler.accessLog, "Request from " + t.getRemoteAddress() + System.lineSeparator());
-            Headers h = t.getRequestHeaders();
+            //Headers h = t.getRequestHeaders();
             String response = form;
-            t.sendResponseHeaders(200, response.length());
+            t.sendResponseHeaders(200, response.getBytes().length);
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();

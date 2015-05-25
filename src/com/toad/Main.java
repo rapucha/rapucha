@@ -41,7 +41,7 @@ public class Main {
         //BikesCrawler.INSTANCE.start();
         //TrafficCrawler.INSTANCE.start();
 
-        SubscriptionProcessor.INSTANCE.start();
+        //SubscriptionProcessor.INSTANCE.start();
         Server.INSTANCE.start();
 
         while(true) {
