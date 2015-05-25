@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="rapucha:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/rapucha_jar</output-path>
-    <root id="archive" name="rapucha.jar">
-      <element id="module-output" name="rapucha" />
-    </root>
-  </artifact>
-</component>
