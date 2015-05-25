@@ -4,6 +4,7 @@ import javax.mail.internet.InternetAddress;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.*;
 import java.time.*;
+import java.util.logging.Logger;
 
 /**
  * Created by Morta on 24-May-15.
@@ -11,23 +12,24 @@ import java.time.*;
 public enum SubscriptionProcessor {
     INSTANCE;
 
-    private static final ConcurrentHashMap clients = new ConcurrentHashMap();
-
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     final DelayQueue<Client> queue = new DelayQueue<>();
 
     public void start(){
         ExecutorService service = Executors.newCachedThreadPool();
-        while(true) {
+        for (int i = 0; i < 10; i++) {
             service.submit( () -> {
-                    try {
-                      Client client =  queue.take();
-                        System.out.println(Instant.now().toString()+ "Sending to "+client);
-                       Thread.sleep(10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    logger.info((Instant.now().toString()+" in queue"));
+                    Client client =  queue.take();
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             });
+
         }
+
     }
 
     public void addClient(Client client){

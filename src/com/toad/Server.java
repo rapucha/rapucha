@@ -20,23 +20,23 @@ import static com.toad.SettingsManager.port;
 public class Server {
 
 
-    private static HttpServer server;
-    private final static Server INSTANCE = new Server();
+    private static HttpServer httpServer;
+    public final static Server INSTANCE = new Server();
 
     private Server() {
         try {
-            server = HttpServer.create(new InetSocketAddress(port), 0);
-            server.createContext("/", new FormHandler());
-            server.createContext("/hello", new HelloHandler());
-            //server.createContext("/style.css", new CSSHandler());
-            server.setExecutor(Executors.newFixedThreadPool(20));
+            httpServer = HttpServer.create(new InetSocketAddress(port), 0);
+            httpServer.createContext("/", new FormHandler());
+            httpServer.createContext("/hello", new HelloHandler());
+            //httpServer.createContext("/style.css", new CSSHandler());
+            httpServer.setExecutor(Executors.newFixedThreadPool(20));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public static void start(){
-        server.start();
+        httpServer.start();
     }
     static class FormHandler implements HttpHandler {
         public void handle(HttpExchange t) throws IOException {
