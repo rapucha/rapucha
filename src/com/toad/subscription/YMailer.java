@@ -36,11 +36,11 @@ public class YMailer {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));
             message.setSubject("Ваш велосипед -)");
-            message.setText("На станции "
+            message.setText("На станции "+station
                     + "\n\n свободных велосипедов: " + bikes);
-            long time = System.nanoTime();
+            long time = System.currentTimeMillis();
             Transport.send(message);
-            time = System.nanoTime() - time;
+            time = System.currentTimeMillis() - time;
             logger.info("message sent in " + time);
         } catch (MessagingException e) {
             logger.severe("Cannot send email " + e);

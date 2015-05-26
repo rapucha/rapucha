@@ -38,7 +38,6 @@ public class Main {
         //BikesCrawler.INSTANCE.start();
         //TrafficCrawler.INSTANCE.start();
 
-        Processor.INSTANCE.start();
         Server.INSTANCE.start();
 
         while (true) {

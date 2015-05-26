@@ -59,13 +59,16 @@ public final class Client implements Delayed {
 
     @Override
     public long getDelay(TimeUnit unit) {
-        return unit.convert(ChronoUnit.SECONDS.between(Instant.now(), whenNotify), TimeUnit.SECONDS);
+        long delay = unit.convert(ChronoUnit.SECONDS.between(Instant.now(), whenNotify), TimeUnit.SECONDS);
+        logger.info("Delay is "+TimeUnit.SECONDS.convert(delay,TimeUnit.NANOSECONDS));
+        return delay;
     }
 
     @Override
     public int compareTo(Delayed o) {
         Client cl = (Client) o;
         long toLapse = ChronoUnit.SECONDS.between(whenNotify, cl.whenNotify);
+        logger.info("To lapse is "+toLapse);
         if (toLapse < 0) {
             return -1;
         }
