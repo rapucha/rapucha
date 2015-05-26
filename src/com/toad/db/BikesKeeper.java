@@ -16,7 +16,7 @@ import static com.toad.Util.*;
 /**
  * Created by Morta on 19-May-15.
  */
-public class BikesObserver implements Observer {
+public class BikesKeeper implements Observer {
     static final String NAME_PATTERN = "\\[([^\\]]+)];";
     static final Pattern namePattern = Pattern.compile("var stationsData = " + NAME_PATTERN);
     static final String NUMBER_PATTERN = "[0-9][0-9]{1,3}\\.";

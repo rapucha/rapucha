@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 /**
  * Created by Morta on 21-May-15.
  */
-public class TrafficObserver implements Observer {
+public class TrafficKeeper implements Observer {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private Connection conn;

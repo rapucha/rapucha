@@ -6,7 +6,7 @@ package com.toad.server;
 public final class HtmlDocuments {
         public static final String WHEN="when";
         public static final String WHERE="where";
-        public static final String EMAIL="email";
+        public static final String EMAIL="mail";
         public static final String NOW="Now";
         public static final String SOON="Soon";
         public static final String LATER="Later";

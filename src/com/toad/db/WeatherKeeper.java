@@ -15,7 +15,7 @@ import static com.toad.Util.*;
 /**
  * Created by Morta on 19-May-15.
  */
-public class WeatherObserver implements Observer {
+public class WeatherKeeper implements Observer {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private Connection conn;
 

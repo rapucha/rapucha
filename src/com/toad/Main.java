@@ -3,12 +3,10 @@ package com.toad;
 import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.TrafficCrawler;
 import com.toad.crawlers.WeatherCrawler;
-import com.toad.db.BikesObserver;
-import com.toad.db.DBManager;
-import com.toad.db.TrafficObserver;
-import com.toad.db.WeatherObserver;
+import com.toad.db.BikesKeeper;
+import com.toad.db.TrafficKeeper;
+import com.toad.db.WeatherKeeper;
 import com.toad.server.Server;
-import com.toad.subscription.Processor;
 
 import java.util.logging.Logger;
 
@@ -25,9 +23,9 @@ public class Main {
 
         //DBManager.INSTANCE.initDBManager();
 
-        WeatherObserver wo = new WeatherObserver();
-        BikesObserver bo = new BikesObserver();
-        TrafficObserver to = new TrafficObserver();
+        WeatherKeeper wo = new WeatherKeeper();
+        BikesKeeper bo = new BikesKeeper();
+        TrafficKeeper to = new TrafficKeeper();
 
         WeatherCrawler.INSTANCE.addObserver(wo);
         BikesCrawler.INSTANCE.addObserver(bo);
