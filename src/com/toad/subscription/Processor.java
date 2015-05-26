@@ -1,7 +1,8 @@
 package com.toad.subscription;
 
 import java.util.concurrent.DelayQueue;
-import java.util.function.Consumer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
@@ -9,36 +10,37 @@ import java.util.logging.Logger;
  */
 public enum Processor {
     INSTANCE;
-    final DelayQueue<Client> queue = new DelayQueue<>();
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    Consumer<Client> clientConsumer = (c) -> process();
+
+
+    final DelayQueue<Client> queue = new DelayQueue<>();
+    final ExecutorService executorService = Executors.newCachedThreadPool();
+
 
 //http://stackoverflow.com/questions/21163108/custom-thread-pool-in-java-8-parallel-stream/22269778#22269778
 
-    public void start() {
-        System.out.println("started");
-        queue.parallelStream().forEach(clientConsumer);
-        System.out.println("ended");
-    }
-
     private void process() {
         try {
-
-            Client c = queue.poll();
+            logger.info("processing..");
+            Client c = queue.take();
+            logger.info("Client taken from queue.. " + c);
             YMailer mailer = new YMailer();
-            mailer.send(c.getEmail(),c.getAtWhatStation(),c.getHowManyBikes());
+            logger.info("Submitting mail. ");
+            executorService.submit(() -> mailer.send(c.getEmail(), c.getAtWhatStation(), c.getHowManyBikes()));
+            logger.info("mail submitted");
         }
         catch (Exception e) {
             logger.info("Processing the client was interrupted " + e);
+            e.printStackTrace();
             Thread.currentThread().interrupt();
         }
 
     }
 
     public void addClient(Client client) {
-        logger.info("client added at "+client.getWhenNotify());
+        logger.info("client added at " + client.getWhenNotify());
         queue.offer(client);
-        start();
+        executorService.submit(() -> process());
     }
 
 

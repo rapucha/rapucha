@@ -3,8 +3,19 @@ package com.toad.server;
 /**
  * Created by toad on 5/26/15.
  */
-public class HtmlDocuments {
-    private static final String CSS =
+public final class HtmlDocuments {
+        public static final String WHEN="when";
+        public static final String WHERE="where";
+        public static final String EMAIL="email";
+        public static final String NOW="Now";
+        public static final String SOON="Soon";
+        public static final String LATER="Later";
+        public static final String HERE="Here";
+        public static final String NEAR="Near";
+        public static final String THERE="There";
+
+
+        private static final String CSS =
             "<style type=\"text/css\">\n" +
                     "@media only screen and (max-device-width: 480px) {\n" +
                     "select, input, button {\n" +
@@ -59,21 +70,21 @@ public class HtmlDocuments {
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
-            "<select name=\"where\">\n" +
-            "  <option selected value=\"Here\">Тут</option>\n" +
-            "  <option value=\"Near\">Рядом</option>\n" +
-            "  <option value=\"There\">Там</option>\n" +
+            "<select name="+WHERE+">\n" +
+            "  <option selected value="+HERE+">Тут</option>\n" +
+            "  <option value="+NEAR+">Рядом</option>\n" +
+            "  <option value="+THERE+">Там</option>\n" +
             "</select>\n" +
             "<br>" +
 
             "Когда:<br>\n" +
-            "<select name=\"when\">\n" +
-            "  <option value=\"Now\">Сейчас</option>\n" +
-            "  <option value=\"Soon\">Через 10 минут</option>\n" +
-            "  <option value=\"Later\">Через полчаса</option>\n" +
+            "<select name="+WHEN+">\n" +
+            "  <option value="+NOW+">Сейчас</option>\n" +
+            "  <option value="+SOON+">Через 10 минут</option>\n" +
+            "  <option value="+LATER+">Через полчаса</option>\n" +
             "</select><br>" +
             "Кому:<br>\n" +
-            "<input type=\"email\" name=\"mail\" value=\"Почта\"><br>\n" +
+            "<input type="+EMAIL+" name=\"mail\" value=\"Почта\"><br>\n" +
             "<input type=\"submit\" value=\"Send\" size=\"250\">\n" +
             "<br><small>rapucha@mail.ru</small>\n" +
             "</form>\n" +

@@ -19,25 +19,24 @@ import java.util.logging.Logger;
 class HelloHandler implements HttpHandler {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
+
     @Override
     public void handle(HttpExchange t) throws IOException {
         Headers h = t.getRequestHeaders();
 
-        int howManyBikes = 1;
+        int howManyBikes = 1;//parameter reserved for future to request more that 1 bike
 
         StringBuilder response = new StringBuilder();
         if ("POST".equalsIgnoreCase(t.getRequestMethod())) {
             Properties prop = new Properties();
             prop.load(t.getRequestBody());//TODO catch every MTF thing here
-            int minutes = convertToMinutes(prop.getProperty("when"));
-            Client client = new Client(minutes, prop.getProperty("mail"), howManyBikes, prop.getProperty("where"));
+            int minutes = convertToMinutes(prop.getProperty(HtmlDocuments.WHEN));
+            Client client = new Client(minutes, prop.getProperty(HtmlDocuments.EMAIL), howManyBikes, prop.getProperty(HtmlDocuments.WHERE));
             Processor.INSTANCE.addClient(client);
+        }
             response.append("\nMeanwhile, there are " + StationCache.INSTANCE.TOTAL_BIKES_ALL_STATIONS + " free bikes in the system");
             t.sendResponseHeaders(200, response.length());
-        } else {
-            response.append("F. Off");
-            t.sendResponseHeaders(406, response.length());
-        }
+
         OutputStream os = t.getResponseBody();
         os.write(response.toString().getBytes());
         os.close();
@@ -46,17 +45,17 @@ class HelloHandler implements HttpHandler {
     private int convertToMinutes(String when) {
         int minutes = 0;
         switch (when) {
-            case "Now":
+            case HtmlDocuments.NOW:
                 minutes = 0;
                 break;
-            case "Soon":
+            case HtmlDocuments.SOON:
                 minutes = 1;
                 break;
-            case "Loon":
+            case HtmlDocuments.LATER:
                 minutes = 4;
                 break;
             default: {
-                logger.severe("Unknown when string: " + when);
+                logger.severe("Unknown information time: " + when);
                 break;
             }
         }
