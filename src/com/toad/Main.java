@@ -1,19 +1,15 @@
 package com.toad;
 
-import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Logger;
-
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.TrafficCrawler;
 import com.toad.crawlers.WeatherCrawler;
 import com.toad.observers.BikesObserver;
 import com.toad.observers.TrafficObserver;
 import com.toad.observers.WeatherObserver;
+import com.toad.server.Server;
+import com.toad.subscription.Processor;
+
+import java.util.logging.Logger;
 
 /*    /\[([^\]]+)]/ */
 public class Main {
@@ -37,14 +33,14 @@ public class Main {
         TrafficCrawler.INSTANCE.addObserver(to);
 
 
-        //WeatherCrawler.INSTANCE.start();
-        //BikesCrawler.INSTANCE.start();
-        //TrafficCrawler.INSTANCE.start();
+        WeatherCrawler.INSTANCE.start();
+        BikesCrawler.INSTANCE.start();
+        TrafficCrawler.INSTANCE.start();
 
-        //SubscriptionProcessor.INSTANCE.start();
+        Processor.INSTANCE.start();
         Server.INSTANCE.start();
 
-        while(true) {
+        while (true) {
             Thread.sleep(100);
         }
     }

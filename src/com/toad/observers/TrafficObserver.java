@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class TrafficObserver implements Observer {
 
-    private  final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
     private Connection conn;
 
 
@@ -29,7 +29,7 @@ public class TrafficObserver implements Observer {
     public void update(Observable o, Object arg) {
 
         conn = DBManager.INSTANCE.getConn();
-        BufferedImage[] imgs = (BufferedImage[])arg;
+        BufferedImage[] imgs = (BufferedImage[]) arg;
 
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
 
@@ -72,19 +72,18 @@ public class TrafficObserver implements Observer {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.severe("cannot paste "+e.getMessage());
+            logger.severe("cannot paste " + e.getMessage());
             e.printStackTrace();
         }
 
         try {
             conn.close();
         } catch (SQLException e) {
-            logger.severe("Cannot close connection "+e);
+            logger.severe("Cannot close connection " + e);
             e.printStackTrace();
         }
 
     }
-
 
 
 }

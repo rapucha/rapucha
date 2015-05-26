@@ -1,8 +1,6 @@
-package com.toad;
+package com.toad.crawlers;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Morta on 23-May-15.
@@ -12,24 +10,25 @@ public enum StationCache {
     INSTANCE;
 
 
-    private static final HashMap<String,Station> STATIONS = new HashMap<String,Station>();
-    private static int TOTAL_BIKES_ALL_STATIONS;
+    private static final HashMap<String, Station> STATIONS = new HashMap<String, Station>();
+    public static int TOTAL_BIKES_ALL_STATIONS;
 
-    synchronized public void updateCache(String name, double lat, double lon, int locks, int bikes, int total){
+    synchronized public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
 
         Station st = STATIONS.get(name);
-        if(null == st){
+        if (null == st) {
             st = new Station(name, lat, lon, locks, bikes);
-            STATIONS.put(name,st);
+            STATIONS.put(name, st);
         }
         st.setBikes(bikes);
         TOTAL_BIKES_ALL_STATIONS = total;
     }
 
 
-    public String[] getStationNames(){
+    public String[] getStationNames() {
         return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
     }
+
     /**
      * Created by Morta on 23-May-15.
      */

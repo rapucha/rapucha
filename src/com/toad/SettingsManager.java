@@ -15,21 +15,21 @@ public class SettingsManager {
     public static String dburl;
     public static String dbschema;
     public static String dbpass;
-    public static String  dbuser;
+    public static String dbuser;
     public static int port;
+    public static SettingsManager INSTANCE = new SettingsManager();
+    Properties prop = new Properties();
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    Properties prop = new Properties();
-
-    private SettingsManager(){
+    private SettingsManager() {
 
     }
-    public static SettingsManager INSTANCE = new SettingsManager();
 
     public void loadDefaultSettings() {
         loadSettings("config.properties");
 
     }
+
     public void loadSettings(String file) {
 
         try (InputStream input = new FileInputStream(file);) {
