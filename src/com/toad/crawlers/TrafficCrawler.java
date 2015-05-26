@@ -7,21 +7,21 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
-
+import static com.toad.SettingsManager.traffic_url;
 /**
  * Created by Morta on 21-May-15.
  */
 public class TrafficCrawler extends ACrawler {
 
-    private static final String address = "http://static-maps.yandex.ru/1.x/?ll=30.329246,59.943055&z=12&size=600,450&l=map";
+
     private static final int repeatMinutes = 20;
 
-    public static ACrawler INSTANCE = new TrafficCrawler(repeatMinutes, address);
+    public static ACrawler INSTANCE = new TrafficCrawler(repeatMinutes, traffic_url);
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    private TrafficCrawler(int time, String address) {
-        super(time, address, true);
+    private TrafficCrawler(int time, String traffic_url) {
+        super(time, traffic_url, true);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class TrafficCrawler extends ACrawler {
         }
 
         try {
-            URLConnection uc = new URL(address + ",trf").openConnection();
+            URLConnection uc = new URL(traffic_url + ",trf").openConnection();
             uc.setRequestProperty("User-Agent", getUserAgent());
             try (InputStream is2 = uc.getInputStream();) {
                 imageTraff = ImageIO.read(is2);

@@ -22,7 +22,9 @@ public enum Processor {
 
     private void process() {
         try {
-            Client c = queue.take();//send email to client
+            Client c = queue.take();
+            YMailer mailer = new YMailer();
+            mailer.send(c.getEmail(),c.getAtWhatStation(),c.getHowManyBikes());
         } catch (InterruptedException e) {
             logger.info("Processing the client was interrupted " + e);
             Thread.currentThread().interrupt();
@@ -31,6 +33,7 @@ public enum Processor {
     }
 
     public void addClient(Client client) {
+        logger.info("client added at "+client.getWhenNotify());
         queue.put(client);
     }
 

@@ -1,6 +1,5 @@
-package com.toad.observers;
+package com.toad.db;
 
-import com.toad.DBManager;
 import org.json.JSONObject;
 
 import java.sql.Connection;
@@ -28,7 +27,7 @@ public class WeatherObserver implements Observer {
         JSONObject jo = (new JSONObject((String) arg)).getJSONObject("current_observation");
 
         int observation_epoch = safeInt(jo, "observation_epoch");
-        String weather_string = safeString(jo, "weather");
+        String weather_string = safeString(jo, "testingPod");
         int temp_c = safeInt(jo, "temp_c");
         int relative_humidity = Integer.parseInt((safeString(jo, "relative_humidity")).replace("%", ""));
         int wind_degrees = safeInt(jo, "wind_degrees");

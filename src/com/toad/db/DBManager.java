@@ -1,4 +1,6 @@
-package com.toad;
+package com.toad.db;
+
+import com.toad.SettingsManager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

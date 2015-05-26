@@ -3,9 +3,10 @@ package com.toad;
 import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.TrafficCrawler;
 import com.toad.crawlers.WeatherCrawler;
-import com.toad.observers.BikesObserver;
-import com.toad.observers.TrafficObserver;
-import com.toad.observers.WeatherObserver;
+import com.toad.db.BikesObserver;
+import com.toad.db.DBManager;
+import com.toad.db.TrafficObserver;
+import com.toad.db.WeatherObserver;
 import com.toad.server.Server;
 import com.toad.subscription.Processor;
 
@@ -22,7 +23,7 @@ public class Main {
         logger.fine("reading properties");
         SettingsManager.INSTANCE.loadDefaultSettings();
 
-        DBManager.INSTANCE.initDBManager();
+        //DBManager.INSTANCE.initDBManager();
 
         WeatherObserver wo = new WeatherObserver();
         BikesObserver bo = new BikesObserver();
@@ -33,9 +34,9 @@ public class Main {
         TrafficCrawler.INSTANCE.addObserver(to);
 
 
-        WeatherCrawler.INSTANCE.start();
-        BikesCrawler.INSTANCE.start();
-        TrafficCrawler.INSTANCE.start();
+        //WeatherCrawler.INSTANCE.start();
+        //BikesCrawler.INSTANCE.start();
+        //TrafficCrawler.INSTANCE.start();
 
         Processor.INSTANCE.start();
         Server.INSTANCE.start();

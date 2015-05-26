@@ -1,6 +1,6 @@
 package com.toad.subscription;
 
-import javax.mail.internet.InternetAddress;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -11,16 +11,16 @@ import java.util.logging.Logger;
 /**
  * Created by toad on 5/26/15.
  */
-final class Client implements Delayed {
+public final class Client implements Delayed {
     private final Instant whenCreated, whenNotify;
-    private final InternetAddress email;
+    private final String email;
     private final int howManyBikes;
     private final String atWhatStation;
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public Client(Instant whenCreated, Duration howLong, InternetAddress email, int howManyBikes, String atWhatStation) {
-        this.whenCreated = whenCreated;
-        whenNotify = whenCreated.plus(howLong);
+    public Client(int minutes, String email, int howManyBikes, String atWhatStation) {
+        whenCreated = Instant.now();
+        whenNotify = whenCreated.plus(Duration.ofMinutes(minutes));
         this.email = email;
         this.howManyBikes = howManyBikes;
         this.atWhatStation = atWhatStation;
@@ -34,7 +34,7 @@ final class Client implements Delayed {
         return whenNotify;
     }
 
-    public InternetAddress getEmail() {
+    public String getEmail() {
         return email;
     }
 

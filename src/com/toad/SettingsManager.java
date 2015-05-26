@@ -16,6 +16,10 @@ public class SettingsManager {
     public static String dbschema;
     public static String dbpass;
     public static String dbuser;
+    public static String email_addr;
+    public static String email_pwd;
+    public static String email_smtp;
+    public static String traffic_url;
     public static int port;
     public static SettingsManager INSTANCE = new SettingsManager();
     Properties prop = new Properties();
@@ -38,8 +42,13 @@ public class SettingsManager {
             dbpass = prop.getProperty("dbpass");
             dbschema = prop.getProperty("dbschema");
             dburl = prop.getProperty("dburl");
+            email_addr = prop.getProperty("email_addr");
+            email_pwd = prop.getProperty("email_pwd");
+            email_smtp = prop.getProperty("email_smtp");
+            traffic_url = prop.getProperty("traffic_url");
             port = Integer.parseInt(prop.getProperty("serverPort"));
             WeatherAPIkey = prop.getProperty("WeatherAPIkey");
+
         } catch (IOException | NumberFormatException e) {
             logger.log(Level.SEVERE, "Error initializing from properties");
             e.printStackTrace();

@@ -1,6 +1,5 @@
-package com.toad.observers;
+package com.toad.db;
 
-import com.toad.DBManager;
 import com.toad.crawlers.StationCache;
 import org.json.JSONArray;
 import org.json.JSONObject;

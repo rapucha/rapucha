@@ -1,6 +1,4 @@
-package com.toad.observers;
-
-import com.toad.DBManager;
+package com.toad.db;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
