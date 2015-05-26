@@ -1,6 +1,5 @@
 package com.toad.subscription;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.DelayQueue;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -23,15 +22,16 @@ public enum Processor {
     }
 
     private void process() {
- //       try {
+        try {
+
             Client c = queue.poll();
             YMailer mailer = new YMailer();
             mailer.send(c.getEmail(),c.getAtWhatStation(),c.getHowManyBikes());
-  //      }
-     /*   catch (InterruptedException e) {
+        }
+        catch (Exception e) {
             logger.info("Processing the client was interrupted " + e);
             Thread.currentThread().interrupt();
-        } */
+        }
 
     }
 
