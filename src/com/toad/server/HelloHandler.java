@@ -10,6 +10,7 @@ import com.toad.subscription.Processor;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpCookie;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -51,8 +52,8 @@ class HelloHandler implements HttpHandler {
 
     private boolean requestIsValid(HttpExchange t) {
         List<String> cookies = t.getRequestHeaders().get(CookieProvider.COOKIE);
-        if (null == cookies) {
-            logger.fine("no cookie");
+        if (null == cookies|| cookies.size()!=1) {
+            logger.fine("no cookie or too much cookies");//FIXME is this correct?
             return false;
         }
         if (!"POST".equalsIgnoreCase(t.getRequestMethod())) {
@@ -63,6 +64,9 @@ class HelloHandler implements HttpHandler {
             logger.info("Wrong referer");
             return false;
         }
+
+        //List<HttpCookie> cookies = HttpCookie.parse(t.getRequestHeaders());
+        //if (!cookies.contains())
         //TODO implement cookie's life span
         return true;
 
