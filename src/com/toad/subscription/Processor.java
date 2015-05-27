@@ -28,8 +28,7 @@ public enum Processor {
             logger.info("Submitting mail. ");
             executorService.submit(() -> mailer.send(c.getEmail(), c.getAtWhatStation(), c.getHowManyBikes()));
             logger.info("mail submitted");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.info("Processing the client was interrupted " + e);
             e.printStackTrace();
             Thread.currentThread().interrupt();

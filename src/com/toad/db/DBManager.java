@@ -43,7 +43,7 @@ public enum DBManager {
             conn = null;
             e.printStackTrace();
         }
-        if(conn == null) {
+        if (conn == null) {
             logger.severe("Cannot get JDBS connection");
             throw new RuntimeException("cannot get JDBC connection");
         }

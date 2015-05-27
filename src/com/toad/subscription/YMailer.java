@@ -36,7 +36,7 @@ public class YMailer {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));
             message.setSubject("Ваш велосипед -)");
-            message.setText("На станции "+station
+            message.setText("На станции " + station
                     + "\n\n свободных велосипедов: " + bikes);
             long time = System.currentTimeMillis();
             Transport.send(message);

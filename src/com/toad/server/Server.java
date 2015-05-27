@@ -26,9 +26,8 @@ public enum Server {
         httpServer.createContext("/hello", new HelloHandler());
         httpServer.setExecutor(Executors.newCachedThreadPool());
         logger.info("HTTP com.toad.server created");
-
-        logger.info("HTTP server started");
         httpServer.start();
+        logger.info("HTTP server started");
     }
 
 }

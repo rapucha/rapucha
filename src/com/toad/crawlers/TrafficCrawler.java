@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
+
 import static com.toad.SettingsManager.traffic_url;
+
 /**
  * Created by Morta on 21-May-15.
  */
