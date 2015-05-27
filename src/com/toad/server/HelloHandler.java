@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.json.Cookie;
+import org.json.JSONObject;
+
 /**
  * Created by toad on 5/26/15.
  */
@@ -64,9 +67,13 @@ class HelloHandler implements HttpHandler {
             logger.info("Wrong referer");
             return false;
         }
-
-        //List<HttpCookie> cookies = HttpCookie.parse(t.getRequestHeaders());
-        //if (!cookies.contains())
+        for (String c : cookies) {
+            JSONObject jo= Cookie.toJSONObject(c);
+            jo.get("id");
+        }
+        //List<HttpCookie> cooks = HttpCookie.parse(t.getRequestHeaders());
+//        Properties p = new
+ //       if (!cookies.contains())
         //TODO implement cookie's life span
         return true;
 

@@ -19,7 +19,7 @@ class FormHandler implements HttpHandler {
 
     public void handle(HttpExchange t) throws IOException {
         String response = mainForm;
-        String cookie = "id=" + CookieProvider.getCookie();
+        String cookie = CookieProvider.getCookieString();
         List<String> value = new ArrayList<String>();
         value.add(cookie);
         Headers respHeaders = t.getResponseHeaders();
