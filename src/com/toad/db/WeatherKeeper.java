@@ -27,7 +27,7 @@ public class WeatherKeeper implements Observer {
         JSONObject jo = (new JSONObject((String) arg)).getJSONObject("current_observation");
 
         int observation_epoch = safeInt(jo, "observation_epoch");
-        String weather_string = safeString(jo, "testingPod");
+        String weather_string = safeString(jo, "weather");
         int temp_c = safeInt(jo, "temp_c");
         int relative_humidity = Integer.parseInt((safeString(jo, "relative_humidity")).replace("%", ""));
         int wind_degrees = safeInt(jo, "wind_degrees");

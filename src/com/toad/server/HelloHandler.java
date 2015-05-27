@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 class HelloHandler implements HttpHandler {
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private String customMessage="";
+    private String customMessage = "";
 
     @Override
     public void handle(HttpExchange t) throws IOException {
@@ -61,8 +61,11 @@ class HelloHandler implements HttpHandler {
             logger.fine("not a post request");
             return false;
         }
-        List <String> referers= t.getRequestHeaders().get("Referer");
-        if (! (referers.contains("http://rapucha.ru/") ||(referers.contains("http://localhost/") ))) {
+//        if (somebodyIsTooFast(t) ){ // check the combination of address,user-agent and X-Forward
+//            return false;
+//        }
+        List<String> referers = t.getRequestHeaders().get("Referer");
+        if (!(referers.contains("http://rapucha.ru/") || (referers.contains("http://localhost/")))) {
             logger.info("Wrong referer: ");
             t.getRequestHeaders().get("Referer").forEach(logger::fine);
             return false;
@@ -73,11 +76,11 @@ class HelloHandler implements HttpHandler {
             logger.info("Cookies size is >1 : " + result.size());
         }
         customMessage = CookieProvider.cookieIsGood(result.get(0));
-        if ("ok".equals(customMessage)) {
-            return true;
+        if (!"ok".equals(customMessage)) {
+            return false;
         }
 
-        return false;
+        return true;
 
     }
 

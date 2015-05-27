@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-
+import static com.toad.SettingsManager.port;
 
 /**
  * Created by Morta on 21-May-15.
@@ -19,7 +19,7 @@ public enum Server {
 
 
     public static void start() throws IOException {
-        httpServer = HttpServer.create(new InetSocketAddress(80), 0);
+        httpServer = HttpServer.create(new InetSocketAddress(port), 0);
         httpServer.createContext("/", new FormHandler());
         httpServer.createContext("/hello", new HelloHandler());
         httpServer.setExecutor(Executors.newCachedThreadPool());

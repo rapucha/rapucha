@@ -6,6 +6,7 @@ import com.toad.crawlers.WeatherCrawler;
 import com.toad.db.BikesKeeper;
 import com.toad.db.TrafficKeeper;
 import com.toad.db.WeatherKeeper;
+import com.toad.server.CookieProvider;
 import com.toad.server.Server;
 
 import java.util.logging.Logger;
@@ -32,10 +33,11 @@ public class Main {
         TrafficCrawler.INSTANCE.addObserver(to);
 
 
-        //WeatherCrawler.INSTANCE.start();
-        //BikesCrawler.INSTANCE.start();
-        //TrafficCrawler.INSTANCE.start();
+        WeatherCrawler.INSTANCE.start();
+        BikesCrawler.INSTANCE.start();
+        TrafficCrawler.INSTANCE.start();
 
+        CookieProvider.INSTANCE.init();
         Server.INSTANCE.start();
 
         while (true) {
