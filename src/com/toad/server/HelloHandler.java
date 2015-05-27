@@ -10,20 +10,17 @@ import com.toad.subscription.Processor;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpCookie;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
-
-import org.json.Cookie;
-import org.json.JSONObject;
+import java.util.stream.Collectors;
 
 /**
  * Created by toad on 5/26/15.
  */
 class HelloHandler implements HttpHandler {
     private Logger logger = Logger.getLogger(this.getClass().getName());
-
+    private String customMessage="";
 
     @Override
     public void handle(HttpExchange t) throws IOException {
@@ -45,6 +42,7 @@ class HelloHandler implements HttpHandler {
             Client client = new Client(minutes, prop.getProperty(HtmlDocuments.EMAIL), howManyBikes, prop.getProperty(HtmlDocuments.WHERE));
             Processor.INSTANCE.addClient(client);
         }
+        response.append(customMessage);
         response.append("\nMeanwhile, there are " + StationCache.INSTANCE.TOTAL_BIKES_ALL_STATIONS + " free bikes in the system");
         t.sendResponseHeaders(200, response.length());
 
@@ -55,27 +53,31 @@ class HelloHandler implements HttpHandler {
 
     private boolean requestIsValid(HttpExchange t) {
         List<String> cookies = t.getRequestHeaders().get(CookieProvider.COOKIE);
-        if (null == cookies|| cookies.size()!=1) {
-            logger.fine("no cookie or too much cookies");//FIXME is this correct?
+        if (null == cookies) {
+            logger.fine("no cookie ");
             return false;
         }
         if (!"POST".equalsIgnoreCase(t.getRequestMethod())) {
             logger.fine("not a post request");
             return false;
         }
-        if (!(t.getRequestHeaders().get("Referer").contains("http://rapucha.ru/"))) {
-            logger.info("Wrong referer");
+        List <String> referers= t.getRequestHeaders().get("Referer");
+        if (! (referers.contains("http://rapucha.ru/") ||(referers.contains("http://localhost/") ))) {
+            logger.info("Wrong referer: ");
+            t.getRequestHeaders().get("Referer").forEach(logger::fine);
             return false;
         }
-        for (String c : cookies) {
-            JSONObject jo= Cookie.toJSONObject(c);
-            jo.get("id");
+
+        List<String> result = cookies.stream().filter(cookie -> cookie.startsWith("id=")).collect(Collectors.toList());
+        if (result.size() > 1) {
+            logger.info("Cookies size is >1 : " + result.size());
         }
-        //List<HttpCookie> cooks = HttpCookie.parse(t.getRequestHeaders());
-//        Properties p = new
- //       if (!cookies.contains())
-        //TODO implement cookie's life span
-        return true;
+        customMessage = CookieProvider.cookieIsGood(result.get(0));
+        if ("ok".equals(customMessage)) {
+            return true;
+        }
+
+        return false;
 
     }
 

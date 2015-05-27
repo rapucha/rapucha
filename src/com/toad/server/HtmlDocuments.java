@@ -68,7 +68,7 @@ public final class HtmlDocuments {
             "\n" +
             "<h2>Хочу велик!!</h2>\n" +
             "\n" +
-            "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
+            "<form action=\"http://localhost/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
             "<select name=" + WHERE + ">\n" +
             "  <option selected value=" + HERE + ">Тут</option>\n" +
