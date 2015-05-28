@@ -24,6 +24,7 @@ public class FaviconHandler implements HttpHandler {
             java.util.List<java.awt.image.BufferedImage> images = net.sf.image4j.codec.ico.ICODecoder.read(inFile);
             ico = images.get(0);
         } catch (IOException e) {
+            logger.severe("Cannot read favicon from file "+e);
             e.printStackTrace();
         }
     }
