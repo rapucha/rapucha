@@ -1,5 +1,9 @@
 package com.toad.server;
 
+//import com.toad.crawlers.StationCache;
+
+import static com.toad.crawlers.StationCache.STATION_CACHE;
+
 /**
  * Created by toad on 5/26/15.
  */
@@ -70,16 +74,12 @@ final class HtmlDocuments {
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
-            "<select name=" + WHERE + ">\n" +
-            "  <option selected value=" + HERE + ">Тут</option>\n" +
-            "  <option value=" + NEAR + ">Рядом</option>\n" +
-            "  <option value=" + THERE + ">Там</option>\n" +
-            "</select>\n" +
+            getStationsOptionsList() +
             "<br>" +
 
             "Когда:<br>\n" +
             "<select name=" + WHEN + ">\n" +
-            "  <option value=" + NOW + ">Сейчас</option>\n" +
+            "  <option selected value=" + NOW + ">Сейчас</option>\n" +
             "  <option value=" + SOON + ">Через 10 минут</option>\n" +
             "  <option value=" + LATER + ">Через полчаса</option>\n" +
             "</select><br>" +
@@ -91,4 +91,19 @@ final class HtmlDocuments {
             "\n" +
             "</body>\n" +
             "</html>";
+
+    private static String getStationsOptionsList() {
+        StringBuilder sb = new StringBuilder("<select name=" + WHERE + ">\n");
+        STATION_CACHE.getStationNames();
+        for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
+            String station = STATION_CACHE.getStationNames()[i];
+            sb.append("  <option value=" + STATION_CACHE.getStationNumber(station) + ">");
+            sb.append(station);
+            sb.append(" свободно: ");
+            sb.append(STATION_CACHE.getFreeBikes(station) + "/" + STATION_CACHE.getLocks(station));
+            sb.append("</option>\n");
+        }
+        sb.append("</select>\n");
+        return sb.toString();
+    }
 }

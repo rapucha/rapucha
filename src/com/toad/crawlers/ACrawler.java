@@ -37,6 +37,7 @@ public abstract class ACrawler extends Observable {
             "[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36]"};
 
     private final long period;
+    private final long delay;
     private final boolean beRandom;
     private final Random rnd = new Random();
     private URL url;
@@ -51,6 +52,7 @@ public abstract class ACrawler extends Observable {
      */
     ACrawler(int time, String address, boolean beRandom) {
         period = time;
+        delay = 0;
         this.beRandom = beRandom;
         try {
             url = new URL(address);
@@ -87,7 +89,7 @@ public abstract class ACrawler extends Observable {
                 reportProblem(e);
                 e.printStackTrace();
             }
-        }, 0, period, TimeUnit.MINUTES);
+        }, delay, period, TimeUnit.MINUTES);
     }
 
     String getUserAgent() {

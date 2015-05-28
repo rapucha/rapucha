@@ -31,7 +31,7 @@ public class BikesKeeper implements Observer {
     private static final String LON = "Longitude";
     private static final String TOTAL_LOCKS_PER_STATION = "TotalLocks";
     private static final String TOTAL_BIKES_PER_STATION = "TotalAvailableBikes";
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private static final Logger logger = Logger.getLogger(BikesKeeper.class.getName());
     private int total;
 
     @Override
@@ -39,7 +39,7 @@ public class BikesKeeper implements Observer {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
         total = 0;
 
-        StationCache.INSTANCE.dropCache();
+        StationCache.STATION_CACHE.dropCache();
         JSONArray jarr = new JSONArray((String) arg);
         for (int i = 0; i < jarr.length(); i++) {
             JSONObject jsonobject = jarr.getJSONObject(i);
@@ -49,11 +49,11 @@ public class BikesKeeper implements Observer {
             int locks = safeInt(jsonobject, TOTAL_LOCKS_PER_STATION);
             int subTotal = safeInt(jsonobject, TOTAL_BIKES_PER_STATION);
             total = +subTotal;
-            StationCache.INSTANCE.updateCache(name, lat, lon, locks, subTotal, total);// TODO this double update should become DAO access one day
+            StationCache.STATION_CACHE.updateCache(name, lat, lon, locks, subTotal, total);// TODO this double update should become DAO access one day
             updateStationState(name, lat, lon, locks, subTotal, ts);//
 
         }
-        StationCache.INSTANCE.publishCache();
+        StationCache.STATION_CACHE.publishCache();
     }
 
 
@@ -118,7 +118,7 @@ public class BikesKeeper implements Observer {
     }
 
 
-    private int getNumber(String name) throws Exception {
+    public static int getNumber(String name) throws Exception {
         Matcher m = numberPattern.matcher(name);
         if (m.find()) {
             String number = (m.group().replaceFirst("^0+(?!$)", "").replace(".", ""));//remove leading zeros and all dots

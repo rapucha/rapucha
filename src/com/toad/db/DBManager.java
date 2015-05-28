@@ -15,7 +15,7 @@ public enum DBManager {
     INSTANCE;
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static Connection conn;
+    // private static Connection conn;
     private final Logger logger = Logger.getLogger(DBManager.class.getName());
 
 
@@ -31,10 +31,10 @@ public enum DBManager {
 
     }
 
-    public Connection getConn() {
-
+    synchronized public Connection getConn() {
+        Connection conn = null;
         try {
-            if (conn == null || !conn.isValid(10)) {
+            {
                 conn =
                         DriverManager.getConnection(SettingsManager.dburl + "/" + SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
             }
