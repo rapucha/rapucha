@@ -4,6 +4,7 @@ import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.TrafficCrawler;
 import com.toad.crawlers.WeatherCrawler;
 import com.toad.db.BikesKeeper;
+import com.toad.db.DBManager;
 import com.toad.db.TrafficKeeper;
 import com.toad.db.WeatherKeeper;
 import com.toad.server.CookieProvider;
@@ -22,7 +23,7 @@ public class Main {
         logger.fine("reading properties");
         SettingsManager.INSTANCE.loadDefaultSettings();
 
-        //DBManager.INSTANCE.initDBManager();
+        DBManager.INSTANCE.initDBManager();
 
         WeatherKeeper wo = new WeatherKeeper();
         BikesKeeper bo = new BikesKeeper();
