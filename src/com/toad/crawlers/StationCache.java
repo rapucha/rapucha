@@ -12,8 +12,8 @@ public enum StationCache {
 
 
     private static final HashMap<String, Station> STATIONS = new HashMap<String, Station>();
-    private  int totalBikesTemp;
-    private  AtomicInteger totalBikes = new AtomicInteger();
+    private int totalBikesTemp;
+    private AtomicInteger totalBikes = new AtomicInteger();
 
     public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         Station st = STATIONS.get(name);
@@ -30,18 +30,19 @@ public enum StationCache {
         return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
     }
 
-     synchronized public void dropCache() {
-         totalBikesTemp = 0;
-         totalBikes.set(0);
+    synchronized public void dropCache() {
+        totalBikesTemp = 0;
+        totalBikes.set(0);
 
     }
 
     public void publishCache() {
-        totalBikes.set(totalBikesTemp);;
+        totalBikes.set(totalBikesTemp);
+        ;
     }
 
 
-     public int getTotalBikes() {
+    public int getTotalBikes() {
         return totalBikes.get();
     }
 

@@ -36,7 +36,7 @@ public class BikesKeeper implements Observer {
     private int total;
 
     @Override
-     public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
         total = 0;
 

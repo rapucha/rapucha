@@ -24,7 +24,7 @@ public enum CookieProvider {
 
     ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
-     public void init() {
+    public void init() {
 
         service.scheduleWithFixedDelay(() -> {
 
