@@ -11,22 +11,29 @@ public enum StationCache {
 
 
     private static final HashMap<String, Station> STATIONS = new HashMap<String, Station>();
-    public static int TOTAL_BIKES_ALL_STATIONS;
+    private static int TOTAL_BIKES_ALL_STATIONS;
 
-    synchronized public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
-
+    public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         Station st = STATIONS.get(name);
         if (null == st) {
             st = new Station(name, lat, lon, locks, bikes);
             STATIONS.put(name, st);
         }
         st.setBikes(bikes);
-        TOTAL_BIKES_ALL_STATIONS = total;
+        TOTAL_BIKES_ALL_STATIONS = TOTAL_BIKES_ALL_STATIONS + total;
     }
 
 
     public String[] getStationNames() {
         return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
+    }
+
+    synchronized public void dropCache() {
+        TOTAL_BIKES_ALL_STATIONS = 0;
+    }
+
+    synchronized public int getTotalBikes() {
+        return TOTAL_BIKES_ALL_STATIONS;
     }
 
     /**

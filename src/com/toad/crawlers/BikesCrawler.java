@@ -36,6 +36,7 @@ public class BikesCrawler extends ACrawler {
                 }
             }
         } catch (IOException e) {
+            //logger.severe();
             e.printStackTrace();
         }
 

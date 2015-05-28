@@ -43,7 +43,7 @@ class HelloHandler implements HttpHandler {
             Processor.INSTANCE.addClient(client);
         }
         response.append(customMessage);
-        response.append("\nMeanwhile, there are " + StationCache.INSTANCE.TOTAL_BIKES_ALL_STATIONS + " free bikes in the system");
+        response.append("\nMeanwhile, there are " + StationCache.INSTANCE.getTotalBikes() + " free bikes in the system");
         t.sendResponseHeaders(200, response.length());
 
         OutputStream os = t.getResponseBody();
