@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 /*    /\[([^\]]+)]/ */
 public class Main {
 
-    static Logger logger = Logger.getLogger(Main.class.getName());
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws Exception {
 
@@ -39,7 +39,7 @@ public class Main {
         TrafficCrawler.INSTANCE.start();
 
         CookieProvider.INSTANCE.init();
-        Server.INSTANCE.start();
+        Server.start();
 
         while (true) {
             Thread.sleep(100);

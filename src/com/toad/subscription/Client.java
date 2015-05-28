@@ -16,7 +16,7 @@ public final class Client implements Delayed {
     private final String email;
     private final int howManyBikes;
     private final String atWhatStation;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     public Client(int minutes, String email, int howManyBikes, String atWhatStation) {
         whenCreated = Instant.now();

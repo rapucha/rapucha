@@ -2,7 +2,6 @@ package com.toad.server;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -16,27 +15,24 @@ import java.util.logging.Logger;
 public enum CookieProvider {
     INSTANCE;
 
-    public static final String COOKIE = "Cookie", SET_COOKIE = "Set-Cookie", ID = "id";
-    private static Logger logger = Logger.getLogger(CookieProvider.class.getName());
+    public static final String COOKIE = "Cookie";
+    public static final String SET_COOKIE = "Set-Cookie";
+    private static final String ID = "id";
+    private static final int cleanupTime = 15;
+    private static final Logger logger = Logger.getLogger(CookieProvider.class.getName());
 
-    public static final ConcurrentHashMap<UUID, Instant> cookiesMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, Instant> cookiesMap = new ConcurrentHashMap<>();
 
 
-    ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     public void init() {
-
         service.scheduleWithFixedDelay(() -> {
-
             logger.info("Cookies map cleaned up");
-            for (Map.Entry<UUID, Instant> cookie : cookiesMap.entrySet()) {
-                if (cookie.getValue().until(Instant.now(), ChronoUnit.MINUTES) > 15) {
-                    cookiesMap.remove(cookie.getKey());
-                }
-            }
-
-        }, 0, 15, TimeUnit.MINUTES);
-
+            cookiesMap.entrySet().stream()
+                    .filter(cookie -> cookie.getValue().until(Instant.now(), ChronoUnit.MINUTES) > cleanupTime)
+                    .forEach(cookie -> cookiesMap.remove(cookie.getKey()));
+        }, 0, cleanupTime, TimeUnit.MINUTES);
     }
 
     // I am not sure if broken synch. will harm anything here.
@@ -48,10 +44,7 @@ public enum CookieProvider {
     }
 
     public static String getCookieString() {
-        StringBuffer sb = new StringBuffer(ID);
-        sb.append("=");
-        sb.append(getUUID());
-        return sb.toString();
+        return ID + "=" + getUUID();
 
     }
 

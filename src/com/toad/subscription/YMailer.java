@@ -11,10 +11,10 @@ import static com.toad.SettingsManager.*;
 /**
  * Created by toad on 5/26/15.
  */
-public class YMailer {
+class YMailer {
 
-    Properties props = new Properties();
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private final Properties props = new Properties();
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     void send(String email, String station, int bikes) {
         props.put("mail.smtp.auth", "true");

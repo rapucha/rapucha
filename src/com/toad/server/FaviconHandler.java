@@ -1,6 +1,5 @@
 package com.toad.server;
 
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import net.sf.image4j.codec.ico.ICOEncoder;
@@ -13,18 +12,18 @@ import java.util.logging.Logger;
 /**
  * Created by toad on 5/28/15.
  */
-public class FaviconHandler implements HttpHandler {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
-    private String strInFile = "res/Icons-Land-Points-Of-Interest-Bicycle-Green-2.ico";
+class FaviconHandler implements HttpHandler {
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final String strInFile = "res/Icons-Land-Points-Of-Interest-Bicycle-Green-2.ico";
     private static BufferedImage ico = null;
 
     public FaviconHandler() {
         java.io.File inFile = new java.io.File(strInFile);
         try {
             java.util.List<java.awt.image.BufferedImage> images = net.sf.image4j.codec.ico.ICODecoder.read(inFile);
-            ico = images.get(0);
+            ico = images.get(6);
         } catch (IOException e) {
-            logger.severe("Cannot read favicon from file "+e);
+            logger.severe("Cannot read favicon from file " + e);
             e.printStackTrace();
         }
     }

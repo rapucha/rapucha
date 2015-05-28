@@ -20,20 +20,19 @@ import java.util.logging.Logger;
 public class TrafficKeeper implements Observer {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private Connection conn;
 
 
     @Override
     public void update(Observable o, Object arg) {
 
-        conn = DBManager.INSTANCE.getConn();
+        Connection conn = DBManager.INSTANCE.getConn();
         BufferedImage[] imgs = (BufferedImage[]) arg;
 
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
 
         String addObservation = "INSERT INTO traffic_history_Y (timestamp, station_number, no_traffic, traffic, delta )" +
                 "  VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(addObservation);) {
+        try (PreparedStatement ps = conn.prepareStatement(addObservation)) {
             ps.setTimestamp(1, ts);
             ps.setInt(2, 1);
 

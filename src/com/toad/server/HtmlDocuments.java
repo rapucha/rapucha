@@ -3,16 +3,16 @@ package com.toad.server;
 /**
  * Created by toad on 5/26/15.
  */
-public final class HtmlDocuments {
+final class HtmlDocuments {
     public static final String WHEN = "when";
     public static final String WHERE = "where";
     public static final String EMAIL = "mail";
     public static final String NOW = "Now";
     public static final String SOON = "Soon";
     public static final String LATER = "Later";
-    public static final String HERE = "Here";
-    public static final String NEAR = "Near";
-    public static final String THERE = "There";
+    private static final String HERE = "Here";
+    private static final String NEAR = "Near";
+    private static final String THERE = "There";
 
 
     private static final String CSS =

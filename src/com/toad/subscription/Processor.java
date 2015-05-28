@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public enum Processor {
     INSTANCE;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 
     final DelayQueue<Client> queue = new DelayQueue<>();
@@ -33,14 +33,12 @@ public enum Processor {
             e.printStackTrace();
             Thread.currentThread().interrupt();
         }
-
     }
 
     public void addClient(Client client) {
         logger.info("client added at " + client.getWhenNotify());
         queue.offer(client);
-        executorService.submit(() -> process());
+        executorService.submit(this::process);
     }
-
 
 }

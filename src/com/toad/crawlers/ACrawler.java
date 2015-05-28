@@ -7,8 +7,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Observable;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,9 +19,6 @@ import java.util.logging.Logger;
 public abstract class ACrawler extends Observable {
 
 
-    private static final int SECOND = 1000;
-    private static final long delay = SECOND;
-    private static final int MINUTE = 60 * SECOND;
     private static final String[] userAgents = {
             "[Mozilla/5.0 (Mobile; Windows Phone 8.1; Android 4.0; ARM; Trident/7.0; Touch; rv:11.0; IEMobile/11.0; NOKIA; Lumia 820) like iPhone OS 7_0_3 Mac OS X AppleWebKit/537 (KHTML, like Gecko) Mobile Safari/537]",
             "[Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/42.0.2311.47 Mobile/11B554a Safari/9537.53]",
@@ -37,12 +35,13 @@ public abstract class ACrawler extends Observable {
             "[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36]",
             "[Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)]",
             "[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36]"};
-    static Timer timer = new Timer();
-    private final long period;// =  15 * MINUTE;
+
+    private final long period;
     private final boolean beRandom;
     private final Random rnd = new Random();
     private URL url;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     /**
      * @param time     minutes between crawling actions
@@ -50,8 +49,8 @@ public abstract class ACrawler extends Observable {
      * @param beRandom add some jitter to requests ;)
      * @throws MalformedURLException
      */
-    public ACrawler(int time, String address, boolean beRandom) {
-        period = time * MINUTE;
+    ACrawler(int time, String address, boolean beRandom) {
+        period = time;
         this.beRandom = beRandom;
         try {
             url = new URL(address);
@@ -69,7 +68,7 @@ public abstract class ACrawler extends Observable {
             uc.setRequestProperty("User-Agent", getUserAgent());
         }
 
-        try (InputStream is = uc.getInputStream();) {
+        try (InputStream is = uc.getInputStream()) {
             processInput(is);
         }
 
@@ -77,29 +76,25 @@ public abstract class ACrawler extends Observable {
 
     protected abstract void processInput(InputStream is);
 
-    public void start() {
-        timer.scheduleAtFixedRate(new CrawlerTask(), delay, period);//TODO add randomness to timer task
+    protected abstract void reportProblem(Exception e);
+
+    public void start() {//TODO add randomness to timer task
+
+        service.scheduleAtFixedRate(() -> {
+            try {
+                crawl();
+            } catch (Exception e) {
+                reportProblem(e);
+                e.printStackTrace();
+            }
+        }, 0, period, TimeUnit.MINUTES);
     }
 
-    protected String getUserAgent() {
+    String getUserAgent() {
         String ua = userAgents[rnd.nextInt(userAgents.length - 1)];
         logger.fine("Setting User-Agent " + ua);
         return ua;
     }
 
-    class CrawlerTask extends TimerTask
-
-    {
-
-        @Override
-        public void run() {
-            try {
-                crawl();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
 
 }

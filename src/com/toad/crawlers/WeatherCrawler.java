@@ -14,9 +14,9 @@ import java.util.logging.Logger;
  */
 public class WeatherCrawler extends ACrawler {
     private static final String url = "http://api.wunderground.com/api/" + SettingsManager.WeatherAPIkey + "/conditions/q/59.935571,30.308397.json";
-    private static final int repeatMinutes = 5;
-    public static ACrawler INSTANCE = new WeatherCrawler();
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static final int repeatMinutes = 23;
+    public static final ACrawler INSTANCE = new WeatherCrawler();
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 
     private WeatherCrawler() {
@@ -26,7 +26,7 @@ public class WeatherCrawler extends ACrawler {
     @Override
     protected void processInput(InputStream is) {
         String text = "";
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(is));) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(is))) {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 text = text + inputLine;
@@ -37,5 +37,10 @@ public class WeatherCrawler extends ACrawler {
         }
         setChanged();
         notifyObservers(text);
+    }
+
+    @Override
+    protected void reportProblem(Exception e) {
+        logger.severe("Error in weather thread: " + e);
     }
 }

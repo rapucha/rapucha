@@ -11,9 +11,9 @@ public enum StationCache {
     INSTANCE;
 
 
-    private static final HashMap<String, Station> STATIONS = new HashMap<String, Station>();
+    private static final HashMap<String, Station> STATIONS = new HashMap<>();
     private int totalBikesTemp;
-    private AtomicInteger totalBikes = new AtomicInteger();
+    private final AtomicInteger totalBikes = new AtomicInteger();
 
     public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         Station st = STATIONS.get(name);
@@ -38,7 +38,6 @@ public enum StationCache {
 
     public void publishCache() {
         totalBikes.set(totalBikesTemp);
-        ;
     }
 
 

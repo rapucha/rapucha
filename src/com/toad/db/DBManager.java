@@ -16,7 +16,7 @@ public enum DBManager {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static Connection conn;
-    private Logger logger = Logger.getLogger(DBManager.class.getName());
+    private final Logger logger = Logger.getLogger(DBManager.class.getName());
 
 
     public void initDBManager() {

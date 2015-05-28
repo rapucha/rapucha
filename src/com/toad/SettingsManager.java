@@ -21,9 +21,9 @@ public class SettingsManager {
     public static String email_smtp;
     public static String traffic_url;
     public static int port;
-    public static SettingsManager INSTANCE = new SettingsManager();
-    Properties prop = new Properties();
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    public static final SettingsManager INSTANCE = new SettingsManager();
+    private final Properties prop = new Properties();
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private SettingsManager() {
 
@@ -34,9 +34,9 @@ public class SettingsManager {
 
     }
 
-    public void loadSettings(String file) {
+    private void loadSettings(String file) {
 
-        try (InputStream input = new FileInputStream(file);) {
+        try (InputStream input = new FileInputStream(file)) {
             prop.load(input);
             dbuser = prop.getProperty("dbuser");
             dbpass = prop.getProperty("dbpass");

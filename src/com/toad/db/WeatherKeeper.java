@@ -17,12 +17,11 @@ import static com.toad.Util.*;
  */
 public class WeatherKeeper implements Observer {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private Connection conn;
 
     @Override
     public void update(Observable o, Object arg) {
 
-        conn = DBManager.INSTANCE.getConn();
+        Connection conn = DBManager.INSTANCE.getConn();
 
         JSONObject jo = (new JSONObject((String) arg)).getJSONObject("current_observation");
 
@@ -46,7 +45,7 @@ public class WeatherKeeper implements Observer {
                 "temp_c, relative_humidity, wind_degrees, wind_kph, pressure_mb, pressure_trend, dewpoint_c, " +
                 "heat_index_c, windchill_c, feelslike_c, visibility_km, icon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, " +
                 "?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(addObservation);) {
+        try (PreparedStatement ps = conn.prepareStatement(addObservation)) {
             ps.setTimestamp(1, ts);
             ps.setInt(2, observation_epoch);
             ps.setString(3, weather_string);

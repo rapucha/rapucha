@@ -14,14 +14,13 @@ import static com.toad.SettingsManager.port;
  */
 public enum Server {
     INSTANCE;
-    private static Logger logger = Logger.getLogger(Server.class.getName());
+    private static final Logger logger = Logger.getLogger(Server.class.getName());
 
-    private static HttpServer httpServer;
-    private static int backlog = 100;
+    private static final int backlog = 100;
 
 
     public static void start() throws IOException {
-        httpServer = HttpServer.create(new InetSocketAddress(port), backlog);
+        HttpServer httpServer = HttpServer.create(new InetSocketAddress(port), backlog);
         httpServer.createContext("/", new FormHandler());
         httpServer.createContext("/favicon.ico", new FaviconHandler());
         httpServer.createContext("/hello", new HelloHandler());

@@ -16,11 +16,11 @@ import static com.toad.SettingsManager.traffic_url;
 public class TrafficCrawler extends ACrawler {
 
 
-    private static final int repeatMinutes = 20;
+    private static final int repeatMinutes = 13;
 
-    public static ACrawler INSTANCE = new TrafficCrawler(repeatMinutes, traffic_url);
+    public static final ACrawler INSTANCE = new TrafficCrawler(repeatMinutes, traffic_url);
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private TrafficCrawler(int time, String traffic_url) {
         super(time, traffic_url, true);
@@ -29,26 +29,26 @@ public class TrafficCrawler extends ACrawler {
     @Override
     protected void processInput(InputStream is) {
 
-        // URL pic = new URL(place+",trf");
-        // URLConnection uc = pic.openConnection();
-        // uc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
-        BufferedImage imageNoTraff = null, imageTraff = null;
+        BufferedImage imageNoTraff, imageTraff;
         try {
             imageNoTraff = ImageIO.read(is);
         } catch (IOException ioe) {
-            logger.severe("Cannot read image mainForm stream " + ioe);
+            logger.severe("Cannot read NoTraff image mainForm stream " + ioe);
             ioe.printStackTrace();
+            return;
         }
 
         try {
             URLConnection uc = new URL(traffic_url + ",trf").openConnection();
             uc.setRequestProperty("User-Agent", getUserAgent());
-            try (InputStream is2 = uc.getInputStream();) {
+            try (InputStream is2 = uc.getInputStream()) {
                 imageTraff = ImageIO.read(is2);
             }
 
         } catch (IOException e) {
+            logger.severe("Cannot read Traff image mainForm stream " + e);
             e.printStackTrace();
+            return;
         }
 
         BufferedImage delta = new BufferedImage(imageTraff.getWidth(), imageTraff.getHeight(), imageTraff.getType());
@@ -84,5 +84,10 @@ public class TrafficCrawler extends ACrawler {
         setChanged();
         notifyObservers(new BufferedImage[]{imageTraff, imageNoTraff, delta});
 
+    }
+
+    @Override
+    protected void reportProblem(Exception e) {
+        logger.severe("Error in traffic thread: " + e);
     }
 }
