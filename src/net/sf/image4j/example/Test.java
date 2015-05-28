@@ -21,7 +21,7 @@ public class Test {
     
     // input and output file names
     
-    String strInFile = "input.ico";
+    String strInFile = "res/favicon.ico";
     String strOutFile = "output.ico";
                 
     try {

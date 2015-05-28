@@ -17,10 +17,11 @@ public enum Server {
     private static Logger logger = Logger.getLogger(Server.class.getName());
 
     private static HttpServer httpServer;
+    private static int backlog = 100;
 
 
     public static void start() throws IOException {
-        httpServer = HttpServer.create(new InetSocketAddress(port), 0);
+        httpServer = HttpServer.create(new InetSocketAddress(port), backlog);
         httpServer.createContext("/", new FormHandler());
         httpServer.createContext("/hello", new HelloHandler());
         httpServer.setExecutor(Executors.newCachedThreadPool());
