@@ -36,9 +36,10 @@ public class BikesKeeper implements Observer {
     private int total;
 
     @Override
-    synchronized public void update(Observable o, Object arg) {
+     public void update(Observable o, Object arg) {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
         total = 0;
+
         StationCache.INSTANCE.dropCache();
         JSONArray jarr = new JSONArray((String) arg);
         for (int i = 0; i < jarr.length(); i++) {
@@ -53,6 +54,7 @@ public class BikesKeeper implements Observer {
             updateStationState(name, lat, lon, locks, subTotal, ts);//
 
         }
+        StationCache.INSTANCE.publishCache();
     }
 
 

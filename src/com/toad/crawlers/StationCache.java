@@ -1,6 +1,7 @@
 package com.toad.crawlers;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Morta on 23-May-15.
@@ -11,7 +12,8 @@ public enum StationCache {
 
 
     private static final HashMap<String, Station> STATIONS = new HashMap<String, Station>();
-    private static int TOTAL_BIKES_ALL_STATIONS;
+    private  int totalBikesTemp;
+    private  AtomicInteger totalBikes = new AtomicInteger();
 
     public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         Station st = STATIONS.get(name);
@@ -20,7 +22,7 @@ public enum StationCache {
             STATIONS.put(name, st);
         }
         st.setBikes(bikes);
-        TOTAL_BIKES_ALL_STATIONS = TOTAL_BIKES_ALL_STATIONS + total;
+        totalBikesTemp = totalBikesTemp + total;
     }
 
 
@@ -28,12 +30,19 @@ public enum StationCache {
         return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
     }
 
-    synchronized public void dropCache() {
-        TOTAL_BIKES_ALL_STATIONS = 0;
+     synchronized public void dropCache() {
+         totalBikesTemp = 0;
+         totalBikes.set(0);
+
     }
 
-    synchronized public int getTotalBikes() {
-        return TOTAL_BIKES_ALL_STATIONS;
+    public void publishCache() {
+        totalBikes.set(totalBikesTemp);;
+    }
+
+
+     public int getTotalBikes() {
+        return totalBikes.get();
     }
 
     /**
