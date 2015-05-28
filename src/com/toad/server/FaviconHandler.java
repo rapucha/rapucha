@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpHandler;
 import net.sf.image4j.codec.ico.ICOEncoder;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Logger;
@@ -18,7 +17,8 @@ public class FaviconHandler implements HttpHandler {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private String strInFile = "res/favicon.ico";
     private static BufferedImage ico = null;
-    public FaviconHandler(){
+
+    public FaviconHandler() {
         java.io.File inFile = new java.io.File(strInFile);
         try {
             java.util.List<java.awt.image.BufferedImage> images = net.sf.image4j.codec.ico.ICODecoder.read(inFile);
@@ -27,6 +27,7 @@ public class FaviconHandler implements HttpHandler {
             e.printStackTrace();
         }
     }
+
     @Override
     public void handle(HttpExchange t) throws IOException {
 
