@@ -15,7 +15,6 @@ public enum DBManager {
     INSTANCE;
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    // private static Connection conn;
     private final Logger logger = Logger.getLogger(DBManager.class.getName());
 
 
@@ -31,21 +30,14 @@ public enum DBManager {
 
     }
 
-    synchronized public Connection getConn() {
+    public Connection getConn() {
         Connection conn = null;
         try {
-            {
-                conn =
-                        DriverManager.getConnection(SettingsManager.dburl + "/" + SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
-            }
+            conn =
+                    DriverManager.getConnection(SettingsManager.dburl + "/" + SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
         } catch (SQLException e) {
-            logger.severe("Cannot check connection health " + e);
-            conn = null;
+            logger.severe("Cannot get connection " + e);
             e.printStackTrace();
-        }
-        if (conn == null) {
-            logger.severe("Cannot get JDBS connection");
-            throw new RuntimeException("cannot get JDBC connection");
         }
 
         return conn;

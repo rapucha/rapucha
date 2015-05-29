@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import static com.toad.crawlers.StationCache.STATION_CACHE;
 
 /**
  * Created by toad on 5/26/15.
@@ -44,7 +45,7 @@ class HelloHandler implements HttpHandler {
                 logger.severe("Error parsing parameters from main HTML form " + Util.isToString(t.getRequestBody()));
             }
             int minutes = convertToMinutes(prop.getProperty(HtmlDocuments.WHEN));
-            Client client = new Client(minutes, prop.getProperty(HtmlDocuments.EMAIL), howManyBikes, prop.getProperty(HtmlDocuments.WHERE));
+            Client client = new Client(minutes, prop.getProperty(HtmlDocuments.EMAIL), howManyBikes, STATION_CACHE.getStationName(prop.getProperty(HtmlDocuments.WHERE)));
             Processor.INSTANCE.addClient(client);
         }
         response.append(customMessage);

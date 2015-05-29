@@ -2,6 +2,7 @@ package com.toad.crawlers;
 
 import com.toad.db.BikesKeeper;
 
+import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -34,7 +35,8 @@ public enum StationCache {
         return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
     }
 
-    public static int getStationNumber(String name) {
+
+    public static int getStationNumber(String name){
 
         try {
             return BikesKeeper.getNumber(name);
@@ -45,15 +47,29 @@ public enum StationCache {
         return 0;
     }
 
-    public static int getFreeBikes(String name) {
+    public static int getFreeBikes(String name){
 
         return STATIONS.get(name).getBikes();
     }
 
-    public static int getLocks(String name) {
+    public static int getFreeBikes(int number){
+
+        for (String name : STATIONS.keySet()) {
+            int n = getStationNumber(name);
+            if (n == number){
+                return STATIONS.get(name).getBikes();
+            }
+        }
+        logger.severe("error searching station by number");
+        return 0;
+    }
+
+
+    public static int getLocks(String name){
 
         return STATIONS.get(name).getLocks();
     }
+
 
 
     synchronized public void dropCache() {
@@ -71,4 +87,18 @@ public enum StationCache {
         return totalBikes.get();
     }
 
+    public String getStationName(String number) {
+
+        int num = Integer.parseInt(number);
+
+        for (String name : STATIONS.keySet()) {
+            int n = getStationNumber(name);
+            if (n == num){
+                return name;
+            }
+        }
+        logger.severe("error searching station by number");
+        return "";
+
+    }
 }

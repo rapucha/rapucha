@@ -1,7 +1,6 @@
 package com.toad.server;
 
 //import com.toad.crawlers.StationCache;
-
 import static com.toad.crawlers.StationCache.STATION_CACHE;
 
 /**
@@ -14,9 +13,6 @@ final class HtmlDocuments {
     public static final String NOW = "Now";
     public static final String SOON = "Soon";
     public static final String LATER = "Later";
-    private static final String HERE = "Here";
-    private static final String NEAR = "Near";
-    private static final String THERE = "There";
 
 
     private static final String CSS =
@@ -74,7 +70,7 @@ final class HtmlDocuments {
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
-            getStationsOptionsList() +
+            getStationsOptionsList()+
             "<br>" +
 
             "Когда:<br>\n" +
@@ -92,18 +88,18 @@ final class HtmlDocuments {
             "</body>\n" +
             "</html>";
 
-    private static String getStationsOptionsList() {
-        StringBuilder sb = new StringBuilder("<select name=" + WHERE + ">\n");
-        STATION_CACHE.getStationNames();
-        for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
-            String station = STATION_CACHE.getStationNames()[i];
-            sb.append("  <option value=" + STATION_CACHE.getStationNumber(station) + ">");
-            sb.append(station);
-            sb.append(" свободно: ");
-            sb.append(STATION_CACHE.getFreeBikes(station) + "/" + STATION_CACHE.getLocks(station));
-            sb.append("</option>\n");
+        private static String getStationsOptionsList(){
+                StringBuilder sb = new StringBuilder("<select name=" + WHERE + ">\n");
+                STATION_CACHE.getStationNames();
+                for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
+                        String station = STATION_CACHE.getStationNames()[i];
+                        sb.append("  <option value="+STATION_CACHE.getStationNumber(station)+">");
+                        sb.append(station);
+                        sb.append(" свободно: ");
+                        sb.append(STATION_CACHE.getFreeBikes(station)+"/"+STATION_CACHE.getLocks(station));
+                        sb.append("</option>\n");
+                }
+                sb.append("</select>\n");
+                return sb.toString();
         }
-        sb.append("</select>\n");
-        return sb.toString();
-    }
 }
