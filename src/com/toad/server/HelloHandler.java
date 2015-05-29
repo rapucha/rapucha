@@ -61,10 +61,12 @@ class HelloHandler implements HttpHandler {
         List<String> cookies = t.getRequestHeaders().get(CookieProvider.COOKIE);
         if (null == cookies) {
             logger.fine("no cookie ");
+            customMessage = "no cookie ";
             return false;
         }
         if (!"POST".equalsIgnoreCase(t.getRequestMethod())) {
             logger.fine("not a post request");
+            customMessage = "not a post request";
             return false;
         }
 //        if (somebodyIsTooFast(t) ){ // check the combination of address,user-agent and X-Forward
@@ -74,6 +76,7 @@ class HelloHandler implements HttpHandler {
         if (!(referers.contains("http://rapucha.ru/") || (referers.contains("http://localhost/")))) {
             logger.info("Wrong referer: ");
             t.getRequestHeaders().get("Referer").forEach(logger::fine);
+            customMessage = "Wrong referer: ";
             return false;
         }
 

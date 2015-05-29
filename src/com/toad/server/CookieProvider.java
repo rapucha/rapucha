@@ -58,7 +58,7 @@ public enum CookieProvider {
         UUID id = UUID.fromString(sb.toString());//TODO this is probably not thread safe
         Instant when = cookiesMap.remove(id);
         if (null == when) {
-            return "";
+            return "no cookie";
         }
 
         if (when.until(Instant.now(), ChronoUnit.SECONDS) < 1) {
