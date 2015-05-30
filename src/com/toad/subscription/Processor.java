@@ -26,6 +26,7 @@ public enum Processor {
             logger.info("processing..");
             Client c = queue.take();
             logger.info("Client taken from queue.. " + c);
+
             YMailer mailer = new YMailer();
             logger.info("Submitting mail. ");
             int bikes = StationCache.getFreeBikes(c.getAtWhatStation());

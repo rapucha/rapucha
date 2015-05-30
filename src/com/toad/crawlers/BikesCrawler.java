@@ -15,14 +15,16 @@ public class BikesCrawler extends ACrawler {
     private static final String NAME_PATTERN = "\\[([^\\]]+)];";
     private static final Pattern namePattern = Pattern.compile("var stationsData = " + NAME_PATTERN);
     private static final String address = "http://spb.velogorod.org";
-    private static final int repeatMinutes = 7;
-    public static final ACrawler INSTANCE = new BikesCrawler();
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private static final Logger logger = Logger.getLogger(BikesCrawler.class.getName());
+    private int repeatMinutes;
 
-    private BikesCrawler() {
-        super(repeatMinutes, address, true);
+    private BikesCrawler(int time) {
+        super(time, address, true);
+        logger.info("Created bikes crawler with timeout " + time);
     }
-
+    synchronized  public static ACrawler createBewBikesCrawler(int time){
+            return new BikesCrawler(time);
+    }
 
     @Override
     protected void processInput(InputStream is) {
