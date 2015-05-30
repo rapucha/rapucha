@@ -9,11 +9,52 @@ import static com.toad.crawlers.StationCache.STATION_CACHE;
 final class HtmlDocuments {
     public static final String WHEN = "when";
     public static final String WHERE = "where";
-    public static final String EMAIL = "mail";
+    public static final String EMAIL = "email";
     public static final String NOW = "Now";
     public static final String SOON = "Soon";
     public static final String LATER = "Later";
-
+    static String map = "<p id=\"demo\">Click the button to get your position.</p>\n" +
+            "\n" +
+            "<button onclick=\"getLocation()\">Try It</button>\n" +
+            "\n" +
+            "<div id=\"mapholder\"></div>\n" +
+            "\n" +
+            "<script>\n" +
+            "var x = document.getElementById(\"demo\");\n" +
+            "\n" +
+            "function getLocation() {\n" +
+            "    if (navigator.geolocation) {\n" +
+            "        navigator.geolocation.getCurrentPosition(showPosition, showError);\n" +
+            "    } else {\n" +
+            "        x.innerHTML = \"Geolocation is not supported by this browser.\";\n" +
+            "    }\n" +
+            "}\n" +
+            "\n" +
+            "function showPosition(position) {\n" +
+            "    var latlon = position.coords.latitude + \",\" + position.coords.longitude;\n" +
+            "\n" +
+            "    var img_url = \"http://maps.googleapis.com/maps/api/staticmap?center=\"\n" +
+            "    +latlon+\"&zoom=14&size=400x300&sensor=false\";\n" +
+            "    document.getElementById(\"mapholder\").innerHTML = \"<img src='\"+img_url+\"'>\";\n" +
+            "}\n" +
+            "\n" +
+            "function showError(error) {\n" +
+            "    switch(error.code) {\n" +
+            "        case error.PERMISSION_DENIED:\n" +
+            "            x.innerHTML = \"User denied the request for Geolocation.\"\n" +
+            "            break;\n" +
+            "        case error.POSITION_UNAVAILABLE:\n" +
+            "            x.innerHTML = \"Location information is unavailable.\"\n" +
+            "            break;\n" +
+            "        case error.TIMEOUT:\n" +
+            "            x.innerHTML = \"The request to get user location timed out.\"\n" +
+            "            break;\n" +
+            "        case error.UNKNOWN_ERROR:\n" +
+            "            x.innerHTML = \"An unknown error occurred.\"\n" +
+            "            break;\n" +
+            "    }\n" +
+            "}\n" +
+            "</script>";
 
     private static final String CSS =
             "<style type=\"text/css\">\n" +
@@ -61,6 +102,7 @@ final class HtmlDocuments {
     public static final String mainForm = "<!DOCTYPE html>\n" +
             "<html>\n" +
             "<head>\n" +
+            "\n" +
             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
             CSS +
             "</head>\n" +
@@ -72,7 +114,6 @@ final class HtmlDocuments {
             "Где:<br>\n" +
             getStationsOptionsList()+
             "<br>" +
-
             "Когда:<br>\n" +
             "<select name=" + WHEN + ">\n" +
             "  <option selected value=" + NOW + ">Сейчас</option>\n" +
@@ -80,11 +121,11 @@ final class HtmlDocuments {
             "  <option value=" + LATER + ">Через полчаса</option>\n" +
             "</select><br>" +
             "Кому:<br>\n" +
-            "<input type=" + EMAIL + " name=\"mail\" value=\"Почта\"><br>\n" +
-            "<input type=\"submit\" value=\"Send\" size=\"250\">\n" +
-            "<br><small>rapucha@mail.ru</small>\n" +
+            "<input type=" + EMAIL + " name="+EMAIL+ " placeholder=\"Почта\" autocomplete = \"on\" required><br>\n" +
+            "<input type=\"submit\" value=\"Уведомить\" size=\"250\">\n" +
+            "<br><small>rapucha@yandex.ru</small>\n" +
             "</form>\n" +
-            "\n" +
+ //           "\n" +map+
             "</body>\n" +
             "</html>";
 
@@ -102,4 +143,7 @@ final class HtmlDocuments {
                 sb.append("</select>\n");
                 return sb.toString();
         }
+
+//            "<input type=time name="+WHEN+ " step=\"60\"  value =\"13:00\" required><br>\n" +
+
 }

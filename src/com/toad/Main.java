@@ -10,6 +10,7 @@ import com.toad.db.WeatherKeeper;
 import com.toad.server.CookieProvider;
 import com.toad.server.Server;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 /*    /\[([^\]]+)]/ */
@@ -39,14 +40,17 @@ public class Main {
         TrafficCrawler.INSTANCE.start();
 
         CookieProvider.INSTANCE.init();
-        Server.start();
 
-        while (true) {
-            Thread.sleep(100);
+        try {
+            Server.start();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    ;
 }
+
 
 
 
