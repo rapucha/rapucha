@@ -14,13 +14,13 @@ import java.util.logging.Logger;
  */
 public class WeatherCrawler extends ACrawler {
     private static final String url = "http://api.wunderground.com/api/" + SettingsManager.WeatherAPIkey + "/conditions/q/59.935571,30.308397.json";
-    private static final int repeatMinutes = 23;
+    private static final int REPEAT_SECONDS = 23*60;
     public static final ACrawler INSTANCE = new WeatherCrawler();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 
     private WeatherCrawler() {
-        super(repeatMinutes, url, false);
+        super(REPEAT_SECONDS, url, false);
     }
 
     @Override

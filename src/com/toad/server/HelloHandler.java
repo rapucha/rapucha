@@ -33,7 +33,6 @@ class HelloHandler implements HttpHandler {
         System.out.println(t.getRemoteAddress());
 
 
-
         StringBuilder response = new StringBuilder();
 
         if (requestIsValid(t)) {
@@ -47,7 +46,7 @@ class HelloHandler implements HttpHandler {
             Client client = new Client(minutes, params.get(HtmlDocuments.EMAIL).get(0),
                     Integer.parseInt(params.get(HtmlDocuments.BIKES).get(0)),
                     params.get(HtmlDocuments.WHERE).stream().map(s -> StationCache.STATION_CACHE.getStationName(s)).collect(Collectors.toList()));
-              Processor.INSTANCE.addClient(client);
+            Processor.INSTANCE.addClient(client);
         }
         response.append(customMessage);
         response.append("\nMeanwhile, there are " + StationCache.STATION_CACHE.getTotalBikes() + " free bikes in the system");

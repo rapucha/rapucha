@@ -16,9 +16,9 @@ import static com.toad.SettingsManager.traffic_url;
 public class TrafficCrawler extends ACrawler {
 
 
-    private static final int repeatMinutes = 13;
+    private static final int REPEAT_SECONDS = 13*60;
 
-    public static final ACrawler INSTANCE = new TrafficCrawler(repeatMinutes, traffic_url);
+    public static final ACrawler INSTANCE = new TrafficCrawler(REPEAT_SECONDS, traffic_url);
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 

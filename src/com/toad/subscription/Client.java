@@ -8,11 +8,9 @@ import com.toad.crawlers.StationSnapshot;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -26,6 +24,7 @@ public final class Client implements Delayed, ClientListener {
     private final List<StationSnapshot> atWhatStations;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     final ExecutorService executorService = Executors.newFixedThreadPool(1);
+    private boolean done;
 
     public Client(int minutes, String email, int howManyBikes, List<String> names) {
         whenCreated = Instant.now();
@@ -91,19 +90,25 @@ public final class Client implements Delayed, ClientListener {
 
     @Override
     public void update(TreeMap<String, StationSnapshot> m) {
-        int sumOfBikes=0;
+        int sumOfBikes = 0;
         for (StationSnapshot atWhatStation : atWhatStations) {
             StationSnapshot st = m.get(atWhatStation.getName());
-            sumOfBikes = sumOfBikes+st.getBikes();
+            sumOfBikes = sumOfBikes + st.getBikes();
         }
-        if (sumOfBikes >= howManyBikes){
+
+        if (sumOfBikes >= howManyBikes) {
             YMailer mailer = new YMailer();//TODO make mailer static
             logger.info("Submitting mail. ");
             final int finalSumOfBikes = sumOfBikes;
             executorService.submit(() -> mailer.send(getEmail(), getAtWhatStations(), finalSumOfBikes));
-            logger.info("mail submitted");
-            StationCache.STATION_CACHE.removeClientListener(this);
-            BikesCrawler.INSTANCE.setUpdateTime(7);
+            done=true;
+
         }
+    }
+
+    @Override
+    public boolean isDone() {
+        return done;
+
     }
 }

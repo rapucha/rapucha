@@ -1,12 +1,11 @@
 package com.toad.crawlers;
 
 import com.toad.db.BikesKeeper;
-import com.toad.subscription.Client;
 import com.toad.subscription.ClientListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -87,7 +86,7 @@ public enum StationCache {
     public void publishCache() {
         totalBikes.set(totalBikesTemp);
         notifyClientListeners();
-
+        logger.info("Stations cache updated");
     }
 
 
@@ -109,15 +108,29 @@ public enum StationCache {
         return "";
 
     }
-    public void addClientListener(ClientListener c){
+
+    public void addClientListener(ClientListener c) {
         listeners.add(c);
     }
-    public void removeClientListener(ClientListener c){
+
+    synchronized public void removeClientListener(ClientListener c) {
         listeners.remove(c);
     }
 
-    public void notifyClientListeners(){
+    public void notifyClientListeners() {
+        listeners.stream().forEach(clientListener -> logger.info("listener present " + clientListener));
         listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
+//        listeners.parallelStream().filter(clientListener -> clientListener.isDone()).forEach(clientListener -> removeClientListener(clientListener));
+        Iterator<ClientListener> iter = listeners.iterator();
+        while(iter.hasNext()){
+            if(iter.next().isDone()){
+                logger.fine("removing client ");
+                iter.remove();
+            }
+        }
+        listeners.stream().forEach(clientListener -> logger.info("listener remains " + clientListener));
+        BikesCrawler.INSTANCE.setUpdateTime(11 * 60);
+
     }
 
 }

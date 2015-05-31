@@ -15,12 +15,12 @@ public class BikesCrawler extends ACrawler {
     private static final String NAME_PATTERN = "\\[([^\\]]+)];";
     private static final Pattern namePattern = Pattern.compile("var stationsData = " + NAME_PATTERN);
     private static final String address = "http://spb.velogorod.org";
-    private static final int repeatMinutes = 7;
+    private static final int REPEAT_SECONDS = 3*60;//FIXME change to 10-1555 minutes
     public static final ACrawler INSTANCE = new BikesCrawler();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private BikesCrawler() {
-        super(repeatMinutes, address, true);
+        super(REPEAT_SECONDS, address, true);
     }
 
 

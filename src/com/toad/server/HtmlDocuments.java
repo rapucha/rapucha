@@ -14,8 +14,8 @@ final class HtmlDocuments {
     public static final String NOW = "Now";
     public static final String SOON = "Soon";
     public static final String LATER = "Later";
-        public static final String BIKES = "bikes";
-        static String map = "<p id=\"demo\">Click the button to get your position.</p>\n" +
+    public static final String BIKES = "bikes";
+    static String map = "<p id=\"demo\">Click the button to get your position.</p>\n" +
             "\n" +
             "<button onclick=\"getLocation()\">Try It</button>\n" +
             "\n" +
@@ -124,13 +124,13 @@ final class HtmlDocuments {
             "</select>  " +
             "Сколько:\n" +
             //"<label for=num>Скока</label>"+
-            "  <input type=range name="+BIKES+" value=1 id=num min=1 max=10 required oninput=\"outputUpdate(value)\">"+
+            "  <input type=range name=" + BIKES + " value=1 id=num min=1 max=10 required oninput=\"outputUpdate(value)\">" +
             "<output for=num id=volume>1</output>\n" +
             "<script>\n" +
             "function outputUpdate(nmb) {\n" +
             "document.getElementById('volume').value = nmb;\n" +
             "}\n" +
-            "</script>"+
+            "</script>" +
             "<br>" +
             "Кому:<br>\n" +
             "<input type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required><br>\n" +
@@ -146,7 +146,7 @@ final class HtmlDocuments {
         STATION_CACHE.getStationNames();
         for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
             String station = STATION_CACHE.getStationNames()[i];
-                System.out.println(station);
+            System.out.println(station);
             sb.append("  <option value=" + STATION_CACHE.getStationNumber(station) + ">");
             sb.append(station);
             sb.append(" свободно: ");

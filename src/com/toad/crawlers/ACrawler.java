@@ -7,9 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Observable;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,13 +34,13 @@ public abstract class ACrawler extends Observable {
             "[Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)]",
             "[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36]"};
 
-    private long period;
-    private final long delay;
+    private int delay;
     private final boolean beRandom;
     private final Random rnd = new Random();
     private URL url;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledFuture scheduledFuture;
 
     /**
      * @param time     minutes between crawling actions
@@ -51,8 +49,7 @@ public abstract class ACrawler extends Observable {
      * @throws MalformedURLException
      */
     ACrawler(int time, String address, boolean beRandom) {
-        period = time;
-        delay = 0;
+        delay = time;
         this.beRandom = beRandom;
         try {
             url = new URL(address);
@@ -63,12 +60,16 @@ public abstract class ACrawler extends Observable {
         }
     }
 
+    /**
+     *
+     * @param i seconds
+     */
     public void setUpdateTime(int i) {
+        scheduledFuture.cancel(true);
         logger.fine("update time set to " + i);
-        period = i;
+        delay = i;
+        start();
     }
-
-
 
 
     private void crawl() throws IOException {
@@ -87,16 +88,19 @@ public abstract class ACrawler extends Observable {
 
     protected abstract void reportProblem(Exception e);
 
-    public void start() {//TODO add randomness to timer task
+    public void start() {
 
-        service.scheduleAtFixedRate(() -> {
+        scheduledFuture = service.schedule(() -> {
             try {
                 crawl();
+                start();
+
             } catch (Exception e) {
                 reportProblem(e);
                 e.printStackTrace();
             }
-        }, delay, period, TimeUnit.MINUTES);
+        }, delay+getJitter(), TimeUnit.SECONDS);
+
     }
 
     String getUserAgent() {
@@ -106,4 +110,12 @@ public abstract class ACrawler extends Observable {
     }
 
 
+    public int getJitter() {
+        int jitter =0;
+        if(beRandom){
+           jitter = rnd.nextInt(delay/2);
+           logger.fine("jitter set to " + jitter);
+        }
+        return jitter;
+    }
 }
