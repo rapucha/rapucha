@@ -118,8 +118,8 @@ final class HtmlDocuments {
             "Когда:<br>\n" +
             "<select name=" + WHEN + ">\n" +
             "  <option selected value=" + NOW + ">Сейчас</option>\n" +
-            "  <option value=" + SOON + ">Через 10 минут</option>\n" +
-            "  <option value=" + LATER + ">Через полчаса</option>\n" +
+            "  <option value=" + SOON + ">Через полчаса</option>\n" +
+            "  <option value=" + LATER + ">Через час</option>\n" +
             "</select>  " +
             "Сколько:\n" +
             //"<label for=num>Скока</label>"+
