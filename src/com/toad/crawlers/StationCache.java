@@ -126,10 +126,11 @@ public enum StationCache {
             if(iter.next().isDone()){
                 logger.fine("removing client ");
                 iter.remove();
+                BikesCrawler.INSTANCE.setUpdateTime(11 * 60);
             }
         }
         listeners.stream().forEach(clientListener -> logger.info("listener remains " + clientListener));
-        BikesCrawler.INSTANCE.setUpdateTime(11 * 60);
+
 
     }
 

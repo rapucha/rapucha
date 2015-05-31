@@ -101,7 +101,7 @@ final class HtmlDocuments {
                     "\t}" +
 
                     "\t\t</style>";
-    public static final String mainForm = "<!DOCTYPE html>\n" +
+    public static final String part1 = "<!DOCTYPE html>\n" +
             "<html>\n" +
             "<head>\n" +
             "\n" +
@@ -113,9 +113,10 @@ final class HtmlDocuments {
             "<h2>Хочу велик!!</h2>\n" +
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
-            "Где:<br>\n" +
-            getStationsOptionsList() +
-            "<br>" +
+            "Где:<br>\n"+
+            "<select multiple size=\"4\" required name=" + WHERE + ">\n";
+
+     public static final String part3 = "</select><br>\n" +
             "Когда:<br>\n" +
             "<select name=" + WHEN + ">\n" +
             "  <option selected value=" + NOW + ">Сейчас</option>\n" +
@@ -141,22 +142,6 @@ final class HtmlDocuments {
             "</body>\n" +
             "</html>";
 
-    private static String getStationsOptionsList() {
-        StringBuilder sb = new StringBuilder("<select multiple size=\"4\" required name=" + WHERE + ">\n");
-        STATION_CACHE.getStationNames();
-        for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
-            String station = STATION_CACHE.getStationNames()[i];
-            System.out.println(station);
-            sb.append("  <option value=" + STATION_CACHE.getStationNumber(station) + ">");
-            sb.append(station);
-            sb.append(" свободно: ");
-            sb.append(STATION_CACHE.getFreeBikes(station) + "/" + STATION_CACHE.getLocks(station));
-            sb.append("</option>\n");
-        }
-        sb.append("</select>\n");
-        return sb.toString();
-    }
 
-//            "<input type=time name="+WHEN+ " step=\"60\"  value =\"13:00\" required><br>\n" +
 
 }
