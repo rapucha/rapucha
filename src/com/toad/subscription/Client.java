@@ -1,7 +1,6 @@
 package com.toad.subscription;
 
 
-import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.StationCache;
 import com.toad.crawlers.StationSnapshot;
 
@@ -10,7 +9,10 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.concurrent.*;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -101,7 +103,7 @@ public final class Client implements Delayed, ClientListener {
             logger.info("Submitting mail. ");
             final int finalSumOfBikes = sumOfBikes;
             executorService.submit(() -> mailer.send(getEmail(), getAtWhatStations(), finalSumOfBikes));
-            done=true;
+            done = true;
 
         }
     }

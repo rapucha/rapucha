@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 class HelloHandler implements HttpHandler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private String customMessage = "";
+    private String verbalWhen = "";
 
     @Override
     public void handle(HttpExchange t) throws IOException {
@@ -32,8 +33,15 @@ class HelloHandler implements HttpHandler {
         }
         System.out.println(t.getRemoteAddress());
 
-
         StringBuilder response = new StringBuilder();
+
+        response.append("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "\n" +
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
+                "</head>\n" +
+                "<body>\n");
 
         if (requestIsValid(t)) {
             Map<String, List<String>> params = Util.parse(t.getRequestBody());
@@ -47,13 +55,63 @@ class HelloHandler implements HttpHandler {
                     Integer.parseInt(params.get(HtmlDocuments.BIKES).get(0)),
                     params.get(HtmlDocuments.WHERE).stream().map(s -> StationCache.STATION_CACHE.getStationName(s)).collect(Collectors.toList()));
             Processor.INSTANCE.addClient(client);
-        }
-        response.append(customMessage);
-        response.append("\nMeanwhile, there are " + StationCache.STATION_CACHE.getTotalBikes() + " free bikes in the system");
-        t.sendResponseHeaders(200, response.length());
+            response.append("Вы хотите узнать \n");
+            response.append(verbalWhen);
+            response.append(client.getAtWhatStations().size() > 1 ? ", когда на станциях \n" : "Когда на станции \n");
+            client.getAtWhatStations().stream().forEach(s -> response.append("\"" + s + "\"" + ", "));
+            response.append(" будет ");
+            String bikes;
+            switch (client.getHowManyBikes()) {
+                case 1:
+                    bikes = "один свободный велосипед";
+                    break;
+                case 2:
+                    bikes = "два свободных велосипеда";
+                    break;
+                case 3:
+                    bikes = "три свободных велосипеда";
+                    break;
+                case 4:
+                    bikes = "четыре свободных велосипеда";
+                    break;
+                case 5:
+                    bikes = "пять свободных велосипедов";
+                    break;
+                case 6:
+                    bikes = "шесть свободных велосипедов";
+                    break;
+                case 7:
+                    bikes = "семь свободных велосипедов";
+                    break;
+                case 8:
+                    bikes = "восемь свободных велосипедов";
+                    break;
+                case 9:
+                    bikes = "девять свободных велосипедов";
+                    break;
+                case 10:
+                    bikes = "десять свободных велосипедов.. очень много";
+                    break;
 
+                default:
+                    bikes = "Что-то сломалось";
+                    logger.severe("unexpected number of bikes in client " + client.getHowManyBikes());
+            }
+            response.append(bikes);
+            response.append(".\n<br>На почту ");
+            response.append(client.getEmail());
+            response.append(" будет выслано письмо. \n<br> Удачи!<br>Кстати, во всём городе доступных велосипедов сейчас ");
+            response.append(StationCache.STATION_CACHE.getTotalBikes());
+        } else {
+            response.append(" я не смог выполнить ваш запрос. Внутренняя ошибка: ");
+            response.append(customMessage);
+        }
+        response.append("<br></body>\n </html>");
+
+        byte[] reply = response.toString().getBytes();
+        t.sendResponseHeaders(200, reply.length);
         OutputStream os = t.getResponseBody();
-        os.write(response.toString().getBytes());
+        os.write(reply);
         os.close();
     }
 
@@ -94,12 +152,15 @@ class HelloHandler implements HttpHandler {
         switch (when) {
             case HtmlDocuments.NOW:
                 minutes = 0;
+                verbalWhen = "сразу";
                 break;
             case HtmlDocuments.SOON:
-                minutes = 1;
+                minutes = 30;
+                verbalWhen = "через полчаса";
                 break;
             case HtmlDocuments.LATER:
-                minutes = 4;
+                minutes = 60;
+                verbalWhen = "через час";
                 break;
             default: {
                 logger.severe("Unknown information time: " + when);

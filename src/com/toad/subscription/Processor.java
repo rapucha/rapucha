@@ -27,7 +27,7 @@ public enum Processor {
             logger.info("processing..");
             Client c = queue.take();//blocking
             logger.info("Client taken from queue.. " + c);
-            BikesCrawler.INSTANCE.setUpdateTime(1*60);
+            BikesCrawler.INSTANCE.setUpdateTime(1 * 60);
             StationCache.STATION_CACHE.addClientListener(c);
         } catch (Exception e) {
             logger.info("Processing the client was interrupted " + e);//TODO review when showuld we set interrupt flag

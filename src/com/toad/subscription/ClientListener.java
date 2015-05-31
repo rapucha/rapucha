@@ -9,5 +9,6 @@ import java.util.TreeMap;
  */
 public interface ClientListener {
     public void update(TreeMap<String, StationSnapshot> m);
+
     public boolean isDone();
 }

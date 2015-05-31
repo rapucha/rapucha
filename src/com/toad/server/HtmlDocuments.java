@@ -2,8 +2,6 @@ package com.toad.server;
 
 //import com.toad.crawlers.StationCache;
 
-import static com.toad.crawlers.StationCache.STATION_CACHE;
-
 /**
  * Created by toad on 5/26/15.
  */
@@ -58,7 +56,7 @@ final class HtmlDocuments {
             "}\n" +
             "</script>";
 
-    private static final String CSS =
+    public static final String CSS =
             "<style type=\"text/css\">\n" +
                     "@media only screen and (max-device-width: 480px) {\n" +
                     "select, input, button {\n" +
@@ -113,10 +111,10 @@ final class HtmlDocuments {
             "<h2>Хочу велик!!</h2>\n" +
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
-            "Где:<br>\n"+
+            "Где:<br>\n" +
             "<select multiple size=\"4\" required name=" + WHERE + ">\n";
 
-     public static final String part3 = "</select><br>\n" +
+    public static final String part3 = "</select><br>\n" +
             "Когда:<br>\n" +
             "<select name=" + WHEN + ">\n" +
             "  <option selected value=" + NOW + ">Сейчас</option>\n" +
@@ -138,10 +136,8 @@ final class HtmlDocuments {
             "<input type=\"submit\" value=\"Уведомить\" size=\"250\">\n" +
             "<br><small>rapucha@yandex.ru</small>\n" +
             "</form>\n" +
-            //           "\n" +map+
             "</body>\n" +
             "</html>";
-
 
 
 }

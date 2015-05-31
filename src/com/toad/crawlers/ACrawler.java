@@ -7,7 +7,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Observable;
 import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,7 +64,6 @@ public abstract class ACrawler extends Observable {
     }
 
     /**
-     *
      * @param i seconds
      */
     public void setUpdateTime(int i) {
@@ -99,7 +101,7 @@ public abstract class ACrawler extends Observable {
                 reportProblem(e);
                 e.printStackTrace();
             }
-        }, delay+getJitter(), TimeUnit.SECONDS);
+        }, delay + getJitter(), TimeUnit.SECONDS);
 
     }
 
@@ -111,10 +113,10 @@ public abstract class ACrawler extends Observable {
 
 
     public int getJitter() {
-        int jitter =0;
-        if(beRandom){
-           jitter = rnd.nextInt(delay/2);
-           logger.fine("jitter set to " + jitter);
+        int jitter = 0;
+        if (beRandom) {
+            jitter = rnd.nextInt(delay / 2);
+            logger.fine("jitter set to " + jitter);
         }
         return jitter;
     }

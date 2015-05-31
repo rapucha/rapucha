@@ -122,8 +122,8 @@ public enum StationCache {
         listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
 //        listeners.parallelStream().filter(clientListener -> clientListener.isDone()).forEach(clientListener -> removeClientListener(clientListener));
         Iterator<ClientListener> iter = listeners.iterator();
-        while(iter.hasNext()){
-            if(iter.next().isDone()){
+        while (iter.hasNext()) {
+            if (iter.next().isDone()) {
                 logger.fine("removing client ");
                 iter.remove();
                 BikesCrawler.INSTANCE.setUpdateTime(11 * 60);
