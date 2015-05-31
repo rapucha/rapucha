@@ -62,7 +62,7 @@ public enum CookieProvider {
         }
 
         if (when.until(Instant.now(), ChronoUnit.SECONDS) < 1) {
-            logger.fine("fast cookie "+when.until(Instant.now(), ChronoUnit.SECONDS));
+            logger.fine("fast cookie " + when.until(Instant.now(), ChronoUnit.SECONDS));
             return "too fast ";
         }
         logger.fine("cookie ok");

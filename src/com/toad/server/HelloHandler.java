@@ -12,10 +12,9 @@ import com.toad.subscription.Processor;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import static com.toad.crawlers.StationCache.STATION_CACHE;
 
 /**
  * Created by toad on 5/26/15.
@@ -33,20 +32,22 @@ class HelloHandler implements HttpHandler {
         }
         System.out.println(t.getRemoteAddress());
 
-        int howManyBikes = 1;//parameter reserved for future to request more that 1 bike
+
 
         StringBuilder response = new StringBuilder();
 
         if (requestIsValid(t)) {
-            Properties prop = new Properties();
-            try {
-                prop.load(t.getRequestBody());
-            } catch (Exception e) {
-                logger.severe("Error parsing parameters from main HTML form " + Util.isToString(t.getRequestBody()));
+            Map<String, List<String>> params = Util.parse(t.getRequestBody());
+            List<String> stations = params.get(HtmlDocuments.WHERE);
+            for (String k : params.keySet()) {
+                logger.info(k + ": " + params.get(k));
             }
-            int minutes = convertToMinutes(prop.getProperty(HtmlDocuments.WHEN));
-            Client client = new Client(minutes, prop.getProperty(HtmlDocuments.EMAIL), howManyBikes, STATION_CACHE.getStationName(prop.getProperty(HtmlDocuments.WHERE)));
-            Processor.INSTANCE.addClient(client);
+
+            int minutes = convertToMinutes(params.get(HtmlDocuments.WHEN).get(0));
+            Client client = new Client(minutes, params.get(HtmlDocuments.EMAIL).get(0),
+                    Integer.parseInt(params.get(HtmlDocuments.BIKES).get(0)),
+                    params.get(HtmlDocuments.WHERE).stream().map(s -> StationCache.STATION_CACHE.getStationName(s)).collect(Collectors.toList()));
+              Processor.INSTANCE.addClient(client);
         }
         response.append(customMessage);
         response.append("\nMeanwhile, there are " + StationCache.STATION_CACHE.getTotalBikes() + " free bikes in the system");

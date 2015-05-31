@@ -1,6 +1,5 @@
 package com.toad;
 
-import com.toad.crawlers.ACrawler;
 import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.TrafficCrawler;
 import com.toad.crawlers.WeatherCrawler;
@@ -32,15 +31,12 @@ public class Main {
         TrafficKeeper to = new TrafficKeeper();
 
         WeatherCrawler.INSTANCE.addObserver(wo);
+        BikesCrawler.INSTANCE.addObserver(bo);
         TrafficCrawler.INSTANCE.addObserver(to);
-
-        ACrawler bikes = BikesCrawler.createBewBikesCrawler(7);
-        bikes.addObserver(bo);
-        bikes.start();
-
 
 
         WeatherCrawler.INSTANCE.start();
+        BikesCrawler.INSTANCE.start();
         TrafficCrawler.INSTANCE.start();
 
         CookieProvider.INSTANCE.init();

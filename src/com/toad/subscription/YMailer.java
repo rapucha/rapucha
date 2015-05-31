@@ -16,7 +16,7 @@ public class YMailer {
     private final Properties props = new Properties();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public void send(String email, String station, int bikes) {
+    public void send(String email, String[] station, int bikes) {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", email_smtp);

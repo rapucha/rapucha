@@ -2,7 +2,6 @@ package com.toad.crawlers;
 
 import com.toad.db.BikesKeeper;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -14,11 +13,12 @@ public enum StationCache {
 
     STATION_CACHE;
 
-
     private static final TreeMap<String, StationSnapshot> STATIONS = new TreeMap<>();
     private int totalBikesTemp;
     private final AtomicInteger totalBikes = new AtomicInteger();
     private static final Logger logger = Logger.getLogger(StationCache.class.getName());
+
+    //private final List listeners = new Linkedjava listsjava listsjava
 
     public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         StationSnapshot st = STATIONS.get(name);
@@ -30,13 +30,16 @@ public enum StationCache {
         totalBikesTemp = totalBikesTemp + total;
     }
 
+    public StationSnapshot getStation(String name) {
+        return STATIONS.get(name);
+    }
 
     public String[] getStationNames() {
         return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
     }
 
 
-    public static int getStationNumber(String name){
+    public static int getStationNumber(String name) {
 
         try {
             return BikesKeeper.getNumber(name);
@@ -47,16 +50,16 @@ public enum StationCache {
         return 0;
     }
 
-    public static int getFreeBikes(String name){
+    public static int getFreeBikes(String name) {
 
         return STATIONS.get(name).getBikes();
     }
 
-    public static int getFreeBikes(int number){
+    public static int getFreeBikes(int number) {
 
         for (String name : STATIONS.keySet()) {
             int n = getStationNumber(name);
-            if (n == number){
+            if (n == number) {
                 return STATIONS.get(name).getBikes();
             }
         }
@@ -65,11 +68,10 @@ public enum StationCache {
     }
 
 
-    public static int getLocks(String name){
+    public static int getLocks(String name) {
 
         return STATIONS.get(name).getLocks();
     }
-
 
 
     synchronized public void dropCache() {
@@ -93,7 +95,7 @@ public enum StationCache {
 
         for (String name : STATIONS.keySet()) {
             int n = getStationNumber(name);
-            if (n == num){
+            if (n == num) {
                 return name;
             }
         }

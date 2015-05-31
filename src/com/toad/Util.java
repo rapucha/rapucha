@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -72,4 +73,20 @@ public class Util {
             e.printStackTrace();
         }
     }
+
+    public static Map<String, List<String>> parse(InputStream is) {
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        Scanner s = new Scanner(is);
+        while (s.hasNext()) {
+            String[] kv = s.next().split("=");
+
+            List<String> l = map.get(kv[0]);
+            if (l == null)
+                map.put(kv[0], l = new ArrayList<String>());
+            l.add(kv[1]);
+        }
+
+        return map;
+    }
+
 }

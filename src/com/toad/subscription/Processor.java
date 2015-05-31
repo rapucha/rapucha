@@ -1,12 +1,10 @@
 package com.toad.subscription;
 
-import com.toad.crawlers.StationCache;
-
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-import static com.toad.crawlers.StationCache.STATION_CACHE;
+
 /**
  * Created by Morta on 24-May-15.
  */
@@ -24,13 +22,15 @@ public enum Processor {
     private void process() {
         try {
             logger.info("processing..");
-            Client c = queue.take();
+            Client c = queue.take();//blocking
             logger.info("Client taken from queue.. " + c);
+
 
             YMailer mailer = new YMailer();
             logger.info("Submitting mail. ");
-            int bikes = StationCache.getFreeBikes(c.getAtWhatStation());
-            executorService.submit(() -> mailer.send(c.getEmail(), c.getAtWhatStation(),bikes));
+
+            //int bikes = StationCache.getFreeBikes(c.get);
+            executorService.submit(() -> mailer.send(c.getEmail(), c.getAtWhatStations(), 0));
             logger.info("mail submitted");
         } catch (Exception e) {
             logger.info("Processing the client was interrupted " + e);

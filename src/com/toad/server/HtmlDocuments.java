@@ -1,6 +1,7 @@
 package com.toad.server;
 
 //import com.toad.crawlers.StationCache;
+
 import static com.toad.crawlers.StationCache.STATION_CACHE;
 
 /**
@@ -13,7 +14,8 @@ final class HtmlDocuments {
     public static final String NOW = "Now";
     public static final String SOON = "Soon";
     public static final String LATER = "Later";
-    static String map = "<p id=\"demo\">Click the button to get your position.</p>\n" +
+        public static final String BIKES = "bikes";
+        static String map = "<p id=\"demo\">Click the button to get your position.</p>\n" +
             "\n" +
             "<button onclick=\"getLocation()\">Try It</button>\n" +
             "\n" +
@@ -112,37 +114,48 @@ final class HtmlDocuments {
             "\n" +
             "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
-            getStationsOptionsList()+
+            getStationsOptionsList() +
             "<br>" +
             "Когда:<br>\n" +
             "<select name=" + WHEN + ">\n" +
             "  <option selected value=" + NOW + ">Сейчас</option>\n" +
             "  <option value=" + SOON + ">Через 10 минут</option>\n" +
             "  <option value=" + LATER + ">Через полчаса</option>\n" +
-            "</select><br>" +
+            "</select>  " +
+            "Сколько:\n" +
+            //"<label for=num>Скока</label>"+
+            "  <input type=range name="+BIKES+" value=1 id=num min=1 max=10 required oninput=\"outputUpdate(value)\">"+
+            "<output for=num id=volume>1</output>\n" +
+            "<script>\n" +
+            "function outputUpdate(nmb) {\n" +
+            "document.getElementById('volume').value = nmb;\n" +
+            "}\n" +
+            "</script>"+
+            "<br>" +
             "Кому:<br>\n" +
-            "<input type=" + EMAIL + " name="+EMAIL+ " placeholder=\"Почта\" autocomplete = \"on\" required><br>\n" +
+            "<input type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required><br>\n" +
             "<input type=\"submit\" value=\"Уведомить\" size=\"250\">\n" +
             "<br><small>rapucha@yandex.ru</small>\n" +
             "</form>\n" +
- //           "\n" +map+
+            //           "\n" +map+
             "</body>\n" +
             "</html>";
 
-        private static String getStationsOptionsList(){
-                StringBuilder sb = new StringBuilder("<select name=" + WHERE + ">\n");
-                STATION_CACHE.getStationNames();
-                for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
-                        String station = STATION_CACHE.getStationNames()[i];
-                        sb.append("  <option value="+STATION_CACHE.getStationNumber(station)+">");
-                        sb.append(station);
-                        sb.append(" свободно: ");
-                        sb.append(STATION_CACHE.getFreeBikes(station)+"/"+STATION_CACHE.getLocks(station));
-                        sb.append("</option>\n");
-                }
-                sb.append("</select>\n");
-                return sb.toString();
+    private static String getStationsOptionsList() {
+        StringBuilder sb = new StringBuilder("<select multiple size=\"4\" required name=" + WHERE + ">\n");
+        STATION_CACHE.getStationNames();
+        for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
+            String station = STATION_CACHE.getStationNames()[i];
+                System.out.println(station);
+            sb.append("  <option value=" + STATION_CACHE.getStationNumber(station) + ">");
+            sb.append(station);
+            sb.append(" свободно: ");
+            sb.append(STATION_CACHE.getFreeBikes(station) + "/" + STATION_CACHE.getLocks(station));
+            sb.append("</option>\n");
         }
+        sb.append("</select>\n");
+        return sb.toString();
+    }
 
 //            "<input type=time name="+WHEN+ " step=\"60\"  value =\"13:00\" required><br>\n" +
 
