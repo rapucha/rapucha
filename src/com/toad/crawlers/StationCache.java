@@ -1,7 +1,12 @@
 package com.toad.crawlers;
 
 import com.toad.db.BikesKeeper;
+import com.toad.subscription.Client;
+import com.toad.subscription.ClientListener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -17,8 +22,7 @@ public enum StationCache {
     private int totalBikesTemp;
     private final AtomicInteger totalBikes = new AtomicInteger();
     private static final Logger logger = Logger.getLogger(StationCache.class.getName());
-
-    //private final List listeners = new Linkedjava listsjava listsjava
+    private List<ClientListener> listeners = new ArrayList<>();
 
     public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         StationSnapshot st = STATIONS.get(name);
@@ -82,6 +86,8 @@ public enum StationCache {
 
     public void publishCache() {
         totalBikes.set(totalBikesTemp);
+        notifyClientListeners();
+
     }
 
 
@@ -103,4 +109,15 @@ public enum StationCache {
         return "";
 
     }
+    public void addClientListener(ClientListener c){
+        listeners.add(c);
+    }
+    public void removeClientListener(ClientListener c){
+        listeners.remove(c);
+    }
+
+    public void notifyClientListeners(){
+        listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
+    }
+
 }

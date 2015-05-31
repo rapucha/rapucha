@@ -1,5 +1,8 @@
 package com.toad.subscription;
 
+import com.toad.crawlers.BikesCrawler;
+import com.toad.crawlers.StationCache;
+
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,14 +27,8 @@ public enum Processor {
             logger.info("processing..");
             Client c = queue.take();//blocking
             logger.info("Client taken from queue.. " + c);
-
-
-            YMailer mailer = new YMailer();
-            logger.info("Submitting mail. ");
-
-            //int bikes = StationCache.getFreeBikes(c.get);
-            executorService.submit(() -> mailer.send(c.getEmail(), c.getAtWhatStations(), 0));
-            logger.info("mail submitted");
+            BikesCrawler.INSTANCE.setUpdateTime(1);
+            StationCache.STATION_CACHE.addClientListener(c);
         } catch (Exception e) {
             logger.info("Processing the client was interrupted " + e);
             e.printStackTrace();

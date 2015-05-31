@@ -3,6 +3,7 @@ package com.toad.subscription;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -16,7 +17,7 @@ public class YMailer {
     private final Properties props = new Properties();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public void send(String email, String[] station, int bikes) {
+    public void send(String email, List<String> stations, int bikes) {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", email_smtp);
@@ -36,8 +37,9 @@ public class YMailer {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));
             message.setSubject("Ваш велосипед -)");
-            message.setText("На станции " + station
+            message.setText("На ваших станциях "
                     + "\n\n свободных велосипедов: " + bikes);
+            //iterate stations:
             long time = System.currentTimeMillis();
             Transport.send(message);
             time = System.currentTimeMillis() - time;

@@ -68,6 +68,9 @@ public abstract class ACrawler extends Observable {
         period = i;
     }
 
+
+
+
     private void crawl() throws IOException {
         URLConnection uc = url.openConnection();
         if (beRandom) {

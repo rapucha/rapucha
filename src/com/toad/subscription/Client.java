@@ -1,17 +1,17 @@
 package com.toad.subscription;
 
 
+import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.StationCache;
 import com.toad.crawlers.StationSnapshot;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.Delayed;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 /**
  * Created by toad on 5/26/15.
  */
-public final class Client implements Delayed, Observer {
+public final class Client implements Delayed, ClientListener {
     private final Instant whenCreated, whenNotify;
     private final String email;
     private final int howManyBikes;
     private final List<StationSnapshot> atWhatStations;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
+    final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     public Client(int minutes, String email, int howManyBikes, List<String> names) {
         whenCreated = Instant.now();
@@ -51,8 +52,8 @@ public final class Client implements Delayed, Observer {
         return howManyBikes;
     }
 
-    public String[] getAtWhatStations() {
-        return atWhatStations.stream().map(stationSnapshot -> stationSnapshot.getName()).collect(Collectors.toList()).toArray(new String[0]);
+    public List<String> getAtWhatStations() {
+        return atWhatStations.stream().map(stationSnapshot -> stationSnapshot.getName()).collect(Collectors.toList());
 
     }
 
@@ -89,7 +90,20 @@ public final class Client implements Delayed, Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-
+    public void update(TreeMap<String, StationSnapshot> m) {
+        int sumOfBikes=0;
+        for (StationSnapshot atWhatStation : atWhatStations) {
+            StationSnapshot st = m.get(atWhatStation.getName());
+            sumOfBikes = sumOfBikes+st.getBikes();
+        }
+        if (sumOfBikes >= howManyBikes){
+            YMailer mailer = new YMailer();//TODO make mailer static
+            logger.info("Submitting mail. ");
+            final int finalSumOfBikes = sumOfBikes;
+            executorService.submit(() -> mailer.send(getEmail(), getAtWhatStations(), finalSumOfBikes));
+            logger.info("mail submitted");
+            StationCache.STATION_CACHE.removeClientListener(this);
+            BikesCrawler.INSTANCE.setUpdateTime(7);
+        }
     }
 }
