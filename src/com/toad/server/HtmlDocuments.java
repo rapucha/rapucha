@@ -2,6 +2,8 @@ package com.toad.server;
 
 //import com.toad.crawlers.StationCache;
 
+import com.toad.SettingsManager;
+
 /**
  * Created by toad on 5/26/15.
  */
@@ -110,7 +112,7 @@ final class HtmlDocuments {
             "\n" +
             "<h2>Хочу велик!!</h2>\n" +
             "\n" +
-            "<form action=\"http://rapucha.ru/hello\" method=\"post\" enctype=\"text/plain\">\n" +
+            "<form action="+ SettingsManager.host+"/hello\" method=\"post\" enctype=\"text/plain\">\n" +
             "Где:<br>\n" +
             "<select multiple size=\"4\" required name=" + WHERE + ">\n";
 

@@ -23,6 +23,8 @@ public class SettingsManager {
     public static String bikes_url;
     public static int port;
     public static final SettingsManager INSTANCE = new SettingsManager();
+    public static int cookeLife;
+    public static String host;
     private final Properties prop = new Properties();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -50,6 +52,8 @@ public class SettingsManager {
             port = Integer.parseInt(prop.getProperty("serverPort"));
             WeatherAPIkey = prop.getProperty("WeatherAPIkey");
             bikes_url = prop.getProperty("bikes_url");
+            cookeLife = Integer.parseInt(prop.getProperty("cookeLife"));
+            host = prop.getProperty("host");
 
         } catch (IOException | NumberFormatException e) {
             logger.log(Level.SEVERE, "Error initializing from properties");

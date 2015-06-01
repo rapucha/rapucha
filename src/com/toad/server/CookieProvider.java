@@ -1,5 +1,7 @@
 package com.toad.server;
 
+import com.toad.SettingsManager;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -61,7 +63,7 @@ public enum CookieProvider {
             return "no cookie";
         }
 
-        if (when.until(Instant.now(), ChronoUnit.SECONDS) < 1) {
+        if (when.until(Instant.now(), ChronoUnit.SECONDS) < SettingsManager.cookeLife) {
             logger.fine("fast cookie " + when.until(Instant.now(), ChronoUnit.SECONDS));
             return "too fast ";
         }

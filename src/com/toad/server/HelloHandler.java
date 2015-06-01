@@ -4,6 +4,7 @@ package com.toad.server;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import com.toad.SettingsManager;
 import com.toad.Util;
 import com.toad.crawlers.StationCache;
 import com.toad.subscription.Client;
@@ -28,10 +29,12 @@ class HelloHandler implements HttpHandler {
     public void handle(HttpExchange t) throws IOException {
         Headers h = t.getRequestHeaders();
 
+        StringBuilder sb = new StringBuilder("Hello visited from host ");
+        sb.append(t.getRemoteAddress());
         for (String s : h.keySet()) {
-            System.out.println(s + " " + h.get(s));
+            sb.append("\nheader " + s + " : " + h.get(s));
         }
-        System.out.println(t.getRemoteAddress());
+        logger.info(sb.toString());
 
         StringBuilder response = new StringBuilder();
 
@@ -125,7 +128,7 @@ class HelloHandler implements HttpHandler {
 //            return false;
 //        }
         List<String> referers = t.getRequestHeaders().get("Referer");
-        if (!(referers.contains("http://rapucha.ru/") || (referers.contains("http://localhost/")))) {
+        if (!(referers.contains(SettingsManager.host) || (referers.contains("http://localhost/")))) {
             logger.info("Wrong referer: ");
             t.getRequestHeaders().get("Referer").forEach(logger::fine);
             customMessage = "Wrong referer: ";

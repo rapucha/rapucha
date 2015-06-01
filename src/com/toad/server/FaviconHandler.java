@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 class FaviconHandler implements HttpHandler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private final String strInFile = "res/Icons-Land-Points-Of-Interest-Bicycle-Green-2.ico";
+    private final String strInFile = "Icons-Land-Points-Of-Interest-Bicycle-Green-2.ico";
     private static BufferedImage ico = null;
 
     public FaviconHandler() {
