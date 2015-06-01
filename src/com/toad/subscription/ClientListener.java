@@ -11,4 +11,5 @@ public interface ClientListener {
     public void update(TreeMap<String, StationSnapshot> m);
 
     public boolean isDone();
+    public void setDone();
 }

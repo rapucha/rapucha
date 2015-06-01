@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * Created by toad on 5/26/15.
  */
-public final class Client implements Delayed, ClientListener {
+public final class Client implements Delayed, ClientListener {//TODO decompose, add LisenListener field instead
     private final Instant whenCreated, whenNotify;
     private final String email;
     private final int howManyBikes;
@@ -93,6 +93,8 @@ public final class Client implements Delayed, ClientListener {
     @Override
     public void update(TreeMap<String, StationSnapshot> m) {
         int sumOfBikes = 0;
+
+       // atWhatStations.stream().reduce((sum, stationSnapshot) -> sum+m.get(stationSnapshot.getName())) TODO
         for (StationSnapshot atWhatStation : atWhatStations) {
             StationSnapshot st = m.get(atWhatStation.getName());
             sumOfBikes = sumOfBikes + st.getBikes();
@@ -101,9 +103,8 @@ public final class Client implements Delayed, ClientListener {
         if (sumOfBikes >= howManyBikes) {
             YMailer mailer = new YMailer();//TODO make mailer static
             logger.info("Submitting mail. ");
-            final int finalSumOfBikes = sumOfBikes;
-            executorService.submit(() -> mailer.send(getEmail(), getAtWhatStations(), finalSumOfBikes));
-            done = true;
+            executorService.submit(() -> mailer.send(getEmail(), atWhatStations ));
+            setDone();
 
         }
     }
@@ -111,6 +112,13 @@ public final class Client implements Delayed, ClientListener {
     @Override
     public boolean isDone() {
         return done;
+
+    }
+
+
+    @Override
+    public void setDone() {
+        done = true;
 
     }
 }
