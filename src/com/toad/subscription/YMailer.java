@@ -40,8 +40,20 @@ public class YMailer {
                     InternetAddress.parse(email));
             message.setSubject("Ваш велосипед -)");
             StringBuilder sb = new StringBuilder("Велосипеды на ваших станциях: \n");
-            stations.stream().filter(station-> station.getBikes() > 1)
-                    .forEach(station -> {sb.append(station.getName());sb.append(" : ");sb.append(station.getBikes());});
+            stations.stream().filter(station-> station.getBikes() >= 1)
+                    .forEach(station -> {
+                        sb.append(station.getName().substring(4));
+                        sb.append(": ");
+                        sb.append(station.getBikes());
+                        sb.append("\n");
+                    });
+            sb.append("\nНа этих станциях пусто: \n");
+            stations.stream().filter(station-> station.getBikes() == 0)
+                    .forEach(station -> {
+                        sb.append(station.getName().substring(4));
+                        sb.append("\n");
+                    });
+
             message.setText(sb.toString());
             long time = System.currentTimeMillis();
             Transport.send(message);

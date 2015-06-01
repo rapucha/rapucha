@@ -93,8 +93,10 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
     @Override
     public void update(TreeMap<String, StationSnapshot> m) {
         int sumOfBikes = 0;
-
-       // atWhatStations.stream().reduce((sum, stationSnapshot) -> sum+m.get(stationSnapshot.getName())) TODO
+/*
+        atWhatStations.stream().
+                map(stationSnapshot -> m.get(stationSnapshot.getName())).
+                reduce((sumOfBikes2, stationSnapshot.) -> {})*/
         for (StationSnapshot atWhatStation : atWhatStations) {
             StationSnapshot st = m.get(atWhatStation.getName());
             sumOfBikes = sumOfBikes + st.getBikes();
