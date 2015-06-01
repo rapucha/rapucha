@@ -40,7 +40,7 @@ public class YMailer {
                     InternetAddress.parse(email));
             message.setSubject("Ваш велосипед -)");
             StringBuilder sb = new StringBuilder("Велосипеды на ваших станциях: \n");
-            stations.stream().filter(station-> station.getBikes() >= 1)
+            stations.stream().filter(station -> station.getBikes() >= 1)
                     .forEach(station -> {
                         sb.append(station.getName().substring(4));
                         sb.append(": ");
@@ -48,7 +48,7 @@ public class YMailer {
                         sb.append("\n");
                     });
             sb.append("\nНа этих станциях пусто: \n");
-            stations.stream().filter(station-> station.getBikes() == 0)
+            stations.stream().filter(station -> station.getBikes() == 0)
                     .forEach(station -> {
                         sb.append(station.getName().substring(4));
                         sb.append("\n");

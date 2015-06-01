@@ -2,9 +2,11 @@ package com.toad.crawlers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -75,16 +77,38 @@ public abstract class ACrawler extends Observable {
 
 
     private void crawl() throws IOException {
-        URLConnection uc = url.openConnection();
+        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
         if (beRandom) {
             uc.setRequestProperty("User-Agent", getUserAgent());
         }
-
+        int i = 0;
         try (InputStream is = uc.getInputStream()) {
+            int status = uc.getResponseCode();
+            if (status != 200) {
+                logger.severe("Response is not 200 OK for " + url.getHost());
+                Map<String, List<String>> map = uc.getHeaderFields();
+                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+                    logger.severe("Key : " + entry.getKey() +
+                            " ,Value : " + entry.getValue());
+                }
+                if (status == HttpURLConnection.HTTP_MOVED_TEMP
+                        || status == HttpURLConnection.HTTP_MOVED_PERM
+                        || status == HttpURLConnection.HTTP_SEE_OTHER) {
+                    url = new URL(uc.getHeaderField("Location"));
+                    logger.severe("Redirecting to " + url.getHost());
+                    if (++i > 3) {
+                        logger.severe("Too many redirects. Exiting");
+                        throw new Error("too many redirects");
+                    }
+                    crawl();
+                }
+            } else {
+                logger.fine("Response 200 OK");
+            }
             processInput(is);
         }
-
     }
+
 
     protected abstract void processInput(InputStream is);
 

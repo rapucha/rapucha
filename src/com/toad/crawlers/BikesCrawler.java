@@ -1,5 +1,7 @@
 package com.toad.crawlers;
 
+import com.toad.SettingsManager;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,13 +16,12 @@ import java.util.regex.Pattern;
 public class BikesCrawler extends ACrawler {
     private static final String NAME_PATTERN = "\\[([^\\]]+)];";
     private static final Pattern namePattern = Pattern.compile("var stationsData = " + NAME_PATTERN);
-    private static final String address = "http://spb.velogorod.org";
     private static final int REPEAT_SECONDS = 11*60;//FIXME change to 10-15 minutes
     public static final ACrawler INSTANCE = new BikesCrawler();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private BikesCrawler() {
-        super(REPEAT_SECONDS, address, true);
+        super(REPEAT_SECONDS, SettingsManager.bikes_url, true);
     }
 
 

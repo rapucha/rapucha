@@ -105,7 +105,7 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
         if (sumOfBikes >= howManyBikes) {
             YMailer mailer = new YMailer();//TODO make mailer static
             logger.info("Submitting mail. ");
-            executorService.submit(() -> mailer.send(getEmail(), atWhatStations ));
+            executorService.submit(() -> mailer.send(getEmail(), atWhatStations));
             setDone();
 
         }

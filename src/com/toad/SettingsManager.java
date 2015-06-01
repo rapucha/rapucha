@@ -20,6 +20,7 @@ public class SettingsManager {
     public static String email_pwd;
     public static String email_smtp;
     public static String traffic_url;
+    public static String bikes_url;
     public static int port;
     public static final SettingsManager INSTANCE = new SettingsManager();
     private final Properties prop = new Properties();
@@ -48,6 +49,7 @@ public class SettingsManager {
             traffic_url = prop.getProperty("traffic_url");
             port = Integer.parseInt(prop.getProperty("serverPort"));
             WeatherAPIkey = prop.getProperty("WeatherAPIkey");
+            bikes_url = prop.getProperty("bikes_url");
 
         } catch (IOException | NumberFormatException e) {
             logger.log(Level.SEVERE, "Error initializing from properties");
