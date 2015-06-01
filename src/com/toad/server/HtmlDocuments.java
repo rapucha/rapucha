@@ -123,7 +123,7 @@ final class HtmlDocuments {
             "</select>  " +
             "Сколько:\n" +
             //"<label for=num>Скока</label>"+
-            "  <input type=range name=" + BIKES + " value=1 id=num min=1 max=10 required oninput=\"outputUpdate(value)\">" +
+            "  <input type=range name=" + BIKES + " value=1 id=num min=1 max=8 required oninput=\"outputUpdate(value)\">" +
             "<output for=num id=volume>1</output>\n" +
             "<script>\n" +
             "function outputUpdate(nmb) {\n" +

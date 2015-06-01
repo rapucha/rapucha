@@ -57,7 +57,7 @@ class HelloHandler implements HttpHandler {
             Processor.INSTANCE.addClient(client);
             response.append("Вы хотите узнать \n");
             response.append(verbalWhen);
-            response.append(client.getAtWhatStations().size() > 1 ? ", когда на станциях \n" : "Когда на станции \n");
+            response.append(client.getAtWhatStations().size() > 1 ? ", когда на станциях \n" : ", когда на станции \n");
             client.getAtWhatStations().stream().forEach(s -> response.append("\"" + s + "\"" + ", "));
             response.append(" будет ");
             String bikes;
@@ -84,13 +84,7 @@ class HelloHandler implements HttpHandler {
                     bikes = "семь свободных велосипедов";
                     break;
                 case 8:
-                    bikes = "восемь свободных велосипедов";
-                    break;
-                case 9:
-                    bikes = "девять свободных велосипедов";
-                    break;
-                case 10:
-                    bikes = "десять свободных велосипедов.. очень много";
+                    bikes = "восемь свободных велосипедов.. очень много";
                     break;
 
                 default:
