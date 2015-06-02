@@ -42,7 +42,7 @@ class HelloHandler implements HttpHandler {
                 "<html>\n" +
                 "<head>\n" +
                 "\n" +
-                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8>\n" +
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
                 "</head>\n" +
                 "<body>\n");
 
@@ -128,7 +128,7 @@ class HelloHandler implements HttpHandler {
 //            return false;
 //        }
         List<String> referers = t.getRequestHeaders().get("Referer");
-        if (!(referers.contains(SettingsManager.host) || (referers.contains("http://localhost/")))) {
+        if (!(referers.contains(SettingsManager.host+"/") || (referers.contains("http://localhost/")))) {
             logger.info("Wrong referer: ");
             t.getRequestHeaders().get("Referer").forEach(logger::fine);
             customMessage = "Wrong referer: ";
