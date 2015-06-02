@@ -42,7 +42,7 @@ class HelloHandler implements HttpHandler {
                 "<html>\n" +
                 "<head>\n" +
                 "\n" +
-                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8>\n" +
                 "</head>\n" +
                 "<body>\n");
 
