@@ -4,15 +4,37 @@ package testingPod;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
 
 public class Mail {
-
+    static List<String> list = new LinkedList<>();
     public static void main(String[] args){
-        send("rapucha@mail.ru");
+
+        for (int i = 0; i < 10; i++) {
+            list.add(""+i);
+        }
+
+        //send("rapucha@mail.ru");
+        testList();
     }
+
+    private static void testList() {
+        list.stream().forEach(c -> System.out.println(c+">"));
+        System.out.println("====");
+        list.parallelStream().filter(string -> string.equalsIgnoreCase("5")).forEach(clientListener -> removeClientListener(clientListener));
+        //list.parallelStream().filter(string -> string.equalsIgnoreCase("5")).forEach(clientListener -> System.out.println(clientListener));
+        list.stream().forEach(c -> System.out.println("<"+c));
+    }
+
+    private static void removeClientListener(String clientListener) {
+        list.remove(clientListener);
+
+    }
+
 
     private static final Properties props = new Properties();
     public static void send(String email) {
@@ -47,4 +69,6 @@ public class Mail {
             e.printStackTrace();
         }
     }
+
+
 }
