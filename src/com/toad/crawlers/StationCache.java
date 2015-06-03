@@ -126,9 +126,8 @@ public enum StationCache {
             return;
         }
 
-            listeners.stream().forEach(clientListener -> logger.info("listener present " + clientListener));
-            listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
-        listeners.parallelStream().filter(clientListener -> clientListener.isDone()).forEach(clientListener -> removeClientListener(clientListener));
+        listeners.stream().forEach(clientListener -> logger.info("listener present " + clientListener));
+        listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
         listeners.removeIf(clientListener -> clientListener.isDone());
         listeners.stream().forEach(clientListener -> logger.info("listener remains " + clientListener));
         if(listeners.isEmpty()) {
