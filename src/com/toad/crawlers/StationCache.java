@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -21,7 +22,7 @@ public enum StationCache {
     private int totalBikesTemp;
     private final AtomicInteger totalBikes = new AtomicInteger();
     private static final Logger logger = Logger.getLogger(StationCache.class.getName());
-    private List<ClientListener> listeners = new ArrayList<>();
+    private ConcurrentLinkedQueue<ClientListener> listeners = new ConcurrentLinkedQueue<>();
 
     public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         StationSnapshot st = STATIONS.get(name);
@@ -111,25 +112,30 @@ public enum StationCache {
 
     public void addClientListener(ClientListener c) {
         listeners.add(c);
+        BikesCrawler.INSTANCE.setUpdateTime(2 * 60);
     }
 
-    synchronized public void removeClientListener(ClientListener c) {
+    public void removeClientListener(ClientListener c) {
         listeners.remove(c);
     }
 
     public void notifyClientListeners() {
-        listeners.stream().forEach(clientListener -> logger.info("listener present " + clientListener));
-        listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
-//        listeners.parallelStream().filter(clientListener -> clientListener.isDone()).forEach(clientListener -> removeClientListener(clientListener));
-        Iterator<ClientListener> iter = listeners.iterator();
-        while (iter.hasNext()) {
-            if (iter.next().isDone()) {
-                logger.fine("removing client ");
-                iter.remove();
-            }
+
+        if(listeners.isEmpty() ){
+            logger.info("No listeners");
+            return;
         }
+
+            listeners.stream().forEach(clientListener -> logger.info("listener present " + clientListener));
+            listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
+        listeners.parallelStream().filter(clientListener -> clientListener.isDone()).forEach(clientListener -> removeClientListener(clientListener));
+        listeners.removeIf(clientListener -> clientListener.isDone());
         listeners.stream().forEach(clientListener -> logger.info("listener remains " + clientListener));
-        BikesCrawler.INSTANCE.setUpdateTime(11 * 60);
+        if(listeners.isEmpty()) {
+            logger.info("restoring normal polling time");
+            BikesCrawler.INSTANCE.setUpdateTime(7 * 60);
+        }
+
 
     }
 

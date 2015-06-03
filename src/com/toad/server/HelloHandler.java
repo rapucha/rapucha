@@ -105,7 +105,7 @@ class HelloHandler implements HttpHandler {
         }
         response.append("<br></body>\n </html>");
 
-        byte[] reply = response.toString().getBytes();
+        byte[] reply = response.toString().getBytes("UTF-8");
         t.sendResponseHeaders(200, reply.length);
         OutputStream os = t.getResponseBody();
         os.write(reply);

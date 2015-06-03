@@ -19,7 +19,7 @@ public class YMailer {
     private final Properties props = new Properties();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public void send(String email, List<StationSnapshot> stations) {
+    public void send(String email, List<StationSnapshot> stations, int desiredNumber) {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", email_smtp);
@@ -34,12 +34,17 @@ public class YMailer {
 
         logger.fine("Sending email to " + email);
         try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(email_uname));
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("info@bikes.rapucha.ru"));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));
-            message.setSubject("Ваш велосипед -)");
-            StringBuilder sb = new StringBuilder("Велосипеды на ваших станциях: \n");
+            if(desiredNumber>1){
+                message.setSubject("Ваши велосипеды -)","UTF-8");
+            } else {
+                message.setSubject("Ваш велосипед -)","UTF-8");
+            }
+
+            StringBuilder sb = new StringBuilder("Велосипед(ы) на ваших станциях: \n");
             stations.stream().filter(station -> station.getBikes() >= 1)
                     .forEach(station -> {
                         sb.append(station.getName().substring(4));
@@ -47,6 +52,7 @@ public class YMailer {
                         sb.append(station.getBikes());
                         sb.append("\n");
                     });
+
             sb.append("\nНа этих станциях пусто: \n");
             stations.stream().filter(station -> station.getBikes() == 0)
                     .forEach(station -> {
@@ -54,7 +60,7 @@ public class YMailer {
                         sb.append("\n");
                     });
 
-            message.setText(sb.toString());
+            message.setText(sb.toString(),"UTF-8");
             long time = System.currentTimeMillis();
             Transport.send(message);
             time = System.currentTimeMillis() - time;

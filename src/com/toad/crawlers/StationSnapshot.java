@@ -17,6 +17,14 @@ public class StationSnapshot {
         this.bikes = bikes;
     }
 
+    @Override
+    public String toString() {
+        return "StationSnapshot{" +
+                "number='" + name.substring(0,1) + '\'' +
+                ", bikes=" + bikes +
+                '}';
+    }
+
     public String getName() {
         return name;
     }

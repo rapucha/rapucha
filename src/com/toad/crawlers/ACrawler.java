@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,7 +67,7 @@ public abstract class ACrawler extends Observable {
      */
     public void setUpdateTime(int i) {
         scheduledFuture.cancel(true);
-        logger.fine("update time set to " + i);
+        reportInfo("update time set to " + i);
         delay = i;
         start();
     }
@@ -113,20 +110,27 @@ public abstract class ACrawler extends Observable {
     protected abstract void processInput(InputStream is);
 
     protected abstract void reportProblem(Exception e);
+    protected abstract void reportInfo(String s);
 
     public void start() {
 
-        scheduledFuture = service.schedule(() -> {
+        scheduledFuture = service.scheduleAtFixedRate(() -> {
+
             try {
                 crawl();
-                start();
 
             } catch (Exception e) {
                 reportProblem(e);
                 e.printStackTrace();
             }
-        }, delay + getJitter(), TimeUnit.SECONDS);
+        }, 0, getTime(), TimeUnit.SECONDS);
 
+    }
+
+    private long getTime() {
+        long time = delay + getJitter();
+        reportInfo("Time to next start is "+time);
+        return time;
     }
 
     String getUserAgent() {
@@ -140,7 +144,7 @@ public abstract class ACrawler extends Observable {
         int jitter = 0;
         if (beRandom) {
             jitter = rnd.nextInt(delay / 2);
-            logger.fine("jitter set to " + jitter);
+            reportInfo("jitter set to " + jitter);
         }
         return jitter;
     }

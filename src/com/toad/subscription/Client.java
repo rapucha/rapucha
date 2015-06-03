@@ -93,10 +93,6 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
     @Override
     public void update(TreeMap<String, StationSnapshot> m) {
         int sumOfBikes = 0;
-/*
-        atWhatStations.stream().
-                map(stationSnapshot -> m.get(stationSnapshot.getName())).
-                reduce((sumOfBikes2, stationSnapshot.) -> {})*/
         for (StationSnapshot atWhatStation : atWhatStations) {
             StationSnapshot st = m.get(atWhatStation.getName());
             sumOfBikes = sumOfBikes + st.getBikes();
@@ -105,7 +101,7 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
         if (sumOfBikes >= howManyBikes) {
             YMailer mailer = new YMailer();//TODO make mailer static
             logger.info("Submitting mail. ");
-            executorService.submit(() -> mailer.send(getEmail(), atWhatStations));
+            executorService.submit(() -> mailer.send(getEmail(), atWhatStations,howManyBikes));
             setDone();
 
         }

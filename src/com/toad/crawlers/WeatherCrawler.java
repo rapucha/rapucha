@@ -43,4 +43,11 @@ public class WeatherCrawler extends ACrawler {
     protected void reportProblem(Exception e) {
         logger.severe("Error in weather thread: " + e);
     }
+
+
+    @Override
+    protected void reportInfo(String s) {
+        logger.info(s);
+    }
+
 }

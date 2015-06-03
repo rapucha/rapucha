@@ -90,4 +90,9 @@ public class TrafficCrawler extends ACrawler {
     protected void reportProblem(Exception e) {
         logger.severe("Error in traffic thread: " + e);
     }
+
+    @Override
+    protected void reportInfo(String s) {
+        logger.info(s);
+    }
 }

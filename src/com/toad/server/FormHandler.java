@@ -49,7 +49,7 @@ class FormHandler implements HttpHandler {
         Headers respHeaders = t.getResponseHeaders();
         respHeaders.put(CookieProvider.SET_COOKIE, value);
 
-        byte[] reply = response.toString().getBytes();
+        byte[] reply = response.toString().getBytes("UTF-8");
         t.sendResponseHeaders(200, reply.length);
         OutputStream os = t.getResponseBody();
         os.write(reply);
