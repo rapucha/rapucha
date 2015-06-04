@@ -3,9 +3,6 @@ package com.toad.crawlers;
 import com.toad.db.BikesKeeper;
 import com.toad.subscription.ClientListener;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -121,7 +118,7 @@ public enum StationCache {
 
     public void notifyClientListeners() {
 
-        if(listeners.isEmpty() ){
+        if (listeners.isEmpty()) {
             logger.info("No listeners");
             return;
         }
@@ -132,7 +129,7 @@ public enum StationCache {
         listeners.stream().forEach(clientListener -> logger.info("listener remains " + clientListener));
 
 
-        if(listeners.isEmpty()) {
+        if (listeners.isEmpty()) {
             logger.info("restoring normal polling time");
             BikesCrawler.INSTANCE.setUpdateTime(7 * 60);
         }

@@ -20,7 +20,7 @@ public class StationSnapshot {
     @Override
     public String toString() {
         return "StationSnapshot{" +
-                "number='" + name.substring(0,1) + '\'' +
+                "number='" + name.substring(0, 1) + '\'' +
                 ", bikes=" + bikes +
                 '}';
     }

@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -105,7 +108,7 @@ public abstract class ACrawler extends Observable {
                     crawl();
                 }
             } else {
-                logger.fine("Response 200 OK from "+url.getHost());
+                logger.fine("Response 200 OK from " + url.getHost());
             }
             processInput(is);
         }
@@ -115,6 +118,7 @@ public abstract class ACrawler extends Observable {
     protected abstract void processInput(InputStream is);
 
     protected abstract void reportProblem(Exception e);
+
     protected abstract void reportInfo(String s);
 
     public void start() {
@@ -128,7 +132,7 @@ public abstract class ACrawler extends Observable {
                 reportProblem(e);
                 e.printStackTrace();
                 try {
-                    YMailer.sendGenericMessage("rapucha@mail.ru","alarm@bikes.rapucha.ru", "Всё сломалось",e.getMessage());
+                    YMailer.sendGenericMessage("rapucha@mail.ru", "alarm@bikes.rapucha.ru", "Всё сломалось", e.getMessage());
                 } catch (MessagingException e1) {
                     reportProblem(e1);
                     e1.printStackTrace();
@@ -140,7 +144,7 @@ public abstract class ACrawler extends Observable {
 
     private long getTime() {
         long time = delay + getJitter();
-        reportInfo("Time to next start is "+time);
+        reportInfo("Time to next start is " + time);
         return time;
     }
 

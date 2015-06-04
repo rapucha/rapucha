@@ -128,7 +128,7 @@ class HelloHandler implements HttpHandler {
 //            return false;
 //        }
         List<String> referers = t.getRequestHeaders().get("Referer");
-        if (!(referers.contains(SettingsManager.host+"/") || (referers.contains("http://localhost/")))) {
+        if (!(referers.contains(SettingsManager.host + "/") || (referers.contains("http://localhost/")))) {
             logger.info("Wrong referer: ");
             t.getRequestHeaders().get("Referer").forEach(logger::fine);
             customMessage = "Wrong referer: ";

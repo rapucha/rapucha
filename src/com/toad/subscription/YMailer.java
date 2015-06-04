@@ -5,7 +5,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -58,7 +57,7 @@ public enum YMailer {
     }
 
     @Deprecated
-    public static void sendClientNotification(String email, List<SimpleStation> stations, int desiredNumber)  {
+    public static void sendClientNotification(String email, List<SimpleStation> stations, int desiredNumber) {
 
         String from = "info@bikes.rapucha.ru";
         String subj = (desiredNumber == 1) ? "Ваш велосипед -)" : "Ваши велосипеды -)";
@@ -88,10 +87,10 @@ public enum YMailer {
                     .forEach(station -> {
                         sb.append("\n  №");
 
-                        if(station.name.substring(0,1).equalsIgnoreCase("0")) {
+                        if (station.name.substring(0, 1).equalsIgnoreCase("0")) {
 
                             sb.append(station.name.substring(1, 2));
-                        } else{
+                        } else {
                             sb.append(station.name.substring(0, 2));
                         }
                         sb.append(" \"");
@@ -108,9 +107,9 @@ public enum YMailer {
                 stations.stream().filter(station -> station.bikes == 0)
                         .forEach(station -> {
                             sb.append("\n  №");
-                            if(station.name.substring(0,1).equalsIgnoreCase("0")) {
+                            if (station.name.substring(0, 1).equalsIgnoreCase("0")) {
                                 sb.append(station.name.substring(1, 2));
-                            } else{
+                            } else {
                                 sb.append(station.name.substring(0, 2));
                             }
                             sb.append(" \"");
@@ -125,9 +124,9 @@ public enum YMailer {
         sb.append(".");
         String body = sb.toString();
         try {
-            sendGenericMessage(email,from,subj,body);
+            sendGenericMessage(email, from, subj, body);
         } catch (MessagingException e) {
-            logger.severe("Cannot send mail: "+e);
+            logger.severe("Cannot send mail: " + e);
             e.printStackTrace();
         }
     }

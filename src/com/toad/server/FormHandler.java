@@ -26,7 +26,7 @@ class FormHandler implements HttpHandler {
         StringBuilder sb = new StringBuilder("Main form visited from host ");
         sb.append(t.getRemoteAddress());
         for (String s : h.keySet()) {
-            sb.append("\nheader "+s + " : " + h.get(s));
+            sb.append("\nheader " + s + " : " + h.get(s));
         }
         logger.info(sb.toString());
 

@@ -1,6 +1,5 @@
 package com.toad.subscription;
 
-import com.toad.crawlers.BikesCrawler;
 import com.toad.crawlers.StationCache;
 
 import java.util.concurrent.DelayQueue;
