@@ -5,12 +5,12 @@ import com.toad.crawlers.StationSnapshot;
 import java.util.TreeMap;
 
 /**
- * Created by toad on 5/31/15.
+ * Created by Seva Nechaev "Rapucha" on 5/31/15. All rights reserved ;)
  */
 public interface ClientListener {
-    public void update(TreeMap<String, StationSnapshot> m);
+    void update(TreeMap<String, StationSnapshot> m);
 
-    public boolean isDone();
+    boolean isDone();
 
-    public void setDone();
+    void setDone();
 }

@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 19-May-15.
+ * Created by Seva Nechaev "Rapucha" on 19-May-15. All rights reserved ;)
  */
 public class WeatherCrawler extends ACrawler {
     private static final String url = "http://api.wunderground.com/api/" + SettingsManager.WeatherAPIkey + "/conditions/q/59.935571,30.308397.json";

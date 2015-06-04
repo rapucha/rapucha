@@ -5,7 +5,7 @@ package com.toad.server;
 import com.toad.SettingsManager;
 
 /**
- * Created by toad on 5/26/15.
+ * Created by Seva Nechaev "Rapucha" on 5/26/15. All rights reserved ;)
  */
 final class HtmlDocuments {
     public static final String WHEN = "when";

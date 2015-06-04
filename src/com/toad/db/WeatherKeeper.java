@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import static com.toad.Util.*;
 
 /**
- * Created by Morta on 19-May-15.
+ * Created by Seva Nechaev "Rapucha" on 19-May-15. All rights reserved ;)
  */
 public class WeatherKeeper implements Observer {
     private final Logger logger = Logger.getLogger(this.getClass().getName());

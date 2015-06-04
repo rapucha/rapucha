@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 21-May-15.
+ * Created by Seva Nechaev "Rapucha" on 21-May-15. All rights reserved ;)
  */
 public class Util {
     private static final Logger logger = Logger.getLogger(Util.class.getName());
@@ -75,14 +75,14 @@ public class Util {
     }
 
     public static Map<String, List<String>> parse(InputStream is) {
-        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        Map<String, List<String>> map = new HashMap<>();
         Scanner s = new Scanner(is);
         while (s.hasNext()) {
             String[] kv = s.next().split("=");
 
             List<String> l = map.get(kv[0]);
             if (l == null)
-                map.put(kv[0], l = new ArrayList<String>());
+                map.put(kv[0], l = new ArrayList<>());
             l.add(kv[1]);
         }
 

@@ -1,7 +1,7 @@
 package com.toad.crawlers;
 
 /**
- * Created by Morta on 23-May-15.
+ * Created by Seva Nechaev "Rapucha" on 23-May-15. All rights reserved ;)
  */
 public class StationSnapshot {
     private final String name;

@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 18-May-15.
+ * Created by Seva Nechaev "Rapucha" on 18-May-15. All rights reserved ;)
  */
 public abstract class ACrawler extends Observable {
 
@@ -54,7 +54,6 @@ public abstract class ACrawler extends Observable {
      * @param time     minutes between crawling actions
      * @param address  where to go
      * @param beRandom add some jitter to requests ;)
-     * @throws MalformedURLException
      */
     ACrawler(int time, String address, boolean beRandom) {
         delay = time;

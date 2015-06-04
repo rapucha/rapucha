@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 19-May-15.
+ * Created by Seva Nechaev "Rapucha" on 19-May-15. All rights reserved ;)
  */
 public class SettingsManager {
     public static String WeatherAPIkey;

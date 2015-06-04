@@ -15,7 +15,7 @@ import java.util.Observer;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 21-May-15.
+ * Created by Seva Nechaev "Rapucha" on 21-May-15. All rights reserved ;)
  */
 public class TrafficKeeper implements Observer {
 

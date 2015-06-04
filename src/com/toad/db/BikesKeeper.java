@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import static com.toad.Util.*;
 
 /**
- * Created by Morta on 19-May-15.
+ * Created by Seva Nechaev "Rapucha" on 19-May-15. All rights reserved ;)
  */
 public class BikesKeeper implements Observer {
     private static final String NAME_PATTERN = "\\[([^\\]]+)];";
@@ -32,12 +32,11 @@ public class BikesKeeper implements Observer {
     private static final String TOTAL_LOCKS_PER_STATION = "TotalLocks";
     private static final String TOTAL_BIKES_PER_STATION = "TotalAvailableBikes";
     private static final Logger logger = Logger.getLogger(BikesKeeper.class.getName());
-    private int total;
 
     @Override
     public void update(Observable o, Object arg) {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
-        total = 0;
+        int total;
 
         StationCache.STATION_CACHE.dropCache();
         JSONArray jarr = new JSONArray((String) arg);

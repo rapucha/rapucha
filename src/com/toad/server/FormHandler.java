@@ -3,6 +3,7 @@ package com.toad.server;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import com.toad.crawlers.StationCache;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +17,7 @@ import static com.toad.server.HtmlDocuments.part3;
 
 
 /**
- * Created by toad on 5/26/15.
+ * Created by Seva Nechaev "Rapucha" on 5/26/15. All rights reserved ;)
  */
 class FormHandler implements HttpHandler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -35,10 +36,10 @@ class FormHandler implements HttpHandler {
         STATION_CACHE.getStationNames();
         for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
             String station = STATION_CACHE.getStationNames()[i];
-            response.append("  <option value=").append(STATION_CACHE.getStationNumber(station)).append(">");
+            response.append("  <option value=").append(StationCache.getStationNumber(station)).append(">");
             response.append(station);
             response.append(" свободно: ");
-            response.append(STATION_CACHE.getFreeBikes(station)).append("/").append(STATION_CACHE.getLocks(station));
+            response.append(StationCache.getFreeBikes(station)).append("/").append(StationCache.getLocks(station));
             response.append("</option>\n");
         }
         response.append(part3);

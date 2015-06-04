@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import static com.toad.SettingsManager.*;
 
 /**
- * Created by toad on 5/26/15.
+ * Created by Seva Nechaev "Rapucha" on 5/26/15. All rights reserved ;)
  */
 public enum YMailer {
 
@@ -24,7 +24,7 @@ public enum YMailer {
     private static final Logger logger = Logger.getLogger(YMailer.class.getName());
 
 
-    private YMailer() {
+    YMailer() {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", email_smtp);

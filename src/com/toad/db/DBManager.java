@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 17-May-15.
+ * Created by Seva Nechaev "Rapucha" on 17-May-15. All rights reserved ;)
  */
 public enum DBManager {
 

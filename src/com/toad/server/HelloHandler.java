@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Created by toad on 5/26/15.
+ * Created by Seva Nechaev "Rapucha" on 5/26/15. All rights reserved ;)
  */
 class HelloHandler implements HttpHandler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -48,15 +48,14 @@ class HelloHandler implements HttpHandler {
 
         if (requestIsValid(t)) {
             Map<String, List<String>> params = Util.parse(t.getRequestBody());
-            List<String> stations = params.get(HtmlDocuments.WHERE);
             for (String k : params.keySet()) {
                 logger.info(k + ": " + params.get(k));
             }
 
             int minutes = convertToMinutes(params.get(HtmlDocuments.WHEN).get(0));
-            Client client = new Client(minutes, params.get(HtmlDocuments.EMAIL).get(0),
+            Client client = Client.creatRegularCleint(minutes, params.get(HtmlDocuments.EMAIL).get(0),
                     Integer.parseInt(params.get(HtmlDocuments.BIKES).get(0)),
-                    params.get(HtmlDocuments.WHERE).stream().map(s -> StationCache.STATION_CACHE.getStationName(s)).collect(Collectors.toList()));
+                    params.get(HtmlDocuments.WHERE).stream().map(StationCache.STATION_CACHE::getStationName).collect(Collectors.toList()));
             Processor.INSTANCE.addClient(client);
             response.append("Вы хотите узнать \n");
             response.append(verbalWhen);

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
- * Created by toad on 5/27/15.
+ * Created by Seva Nechaev "Rapucha" on 5/27/15. All rights reserved ;)
  */
 public enum CookieProvider {
     INSTANCE;

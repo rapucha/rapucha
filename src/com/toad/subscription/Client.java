@@ -1,6 +1,7 @@
 package com.toad.subscription;
 
 
+import com.sun.istack.internal.NotNull;
 import com.toad.crawlers.StationCache;
 import com.toad.crawlers.StationSnapshot;
 
@@ -17,18 +18,23 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Created by toad on 5/26/15.
+ * Created by Seva Nechaev "Rapucha" on 5/26/15. All rights reserved ;)
  */
-public final class Client implements Delayed, ClientListener {//TODO decompose, add LisenListener field instead
+public final class Client implements Delayed, ClientListener {
     private final Instant whenCreated, whenNotify;
     private final String email;
     private final int howManyBikes;
     private final List<SimpleStation> atWhatStations;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    final ExecutorService executorService = Executors.newFixedThreadPool(1);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(1);
     private boolean done;
 
-    public Client(int minutes, String email, int howManyBikes, List<String> names) {
+    public static Client creatRegularCleint(int delay, String email, int howmanyBikes, List<String> stationNames){
+
+        return new Client(delay,email,howmanyBikes,stationNames);
+    }
+
+    private  Client(int minutes, String email, int howManyBikes, List<String> names) {
         whenCreated = Instant.now();
         whenNotify = whenCreated.plus(Duration.ofMinutes(minutes));
         this.email = email;
@@ -70,14 +76,14 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
     }
 
     @Override
-    public long getDelay(TimeUnit unit) {
+    public long getDelay(@NotNull TimeUnit unit) {
         long delay = unit.convert(ChronoUnit.SECONDS.between(Instant.now(), whenNotify), TimeUnit.SECONDS);
         logger.info("For client" + this + "Delay is " + TimeUnit.SECONDS.convert(delay, TimeUnit.NANOSECONDS));
         return delay;
     }
 
     @Override
-    public int compareTo(Delayed o) {
+    public int compareTo(@NotNull Delayed o) {
         Client cl = (Client) o;
         long toLapse = ChronoUnit.SECONDS.between(whenNotify, cl.whenNotify);
         logger.info("To lapse is " + toLapse);
@@ -95,7 +101,7 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
 
         int sumOfBikes = atWhatStations.stream().
                 map(simpleStation -> m.get(simpleStation.name)).
-                mapToInt(snapshot -> snapshot.getBikes()).sum();
+                mapToInt(StationSnapshot::getBikes).sum();
 
         if (sumOfBikes >= howManyBikes) {
 

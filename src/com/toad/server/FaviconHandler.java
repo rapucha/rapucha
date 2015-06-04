@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.util.logging.Logger;
 
 /**
- * Created by toad on 5/28/15.
+ * Created by Seva Nechaev "Rapucha" on 5/28/15. All rights reserved ;)
  */
 class FaviconHandler implements HttpHandler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());

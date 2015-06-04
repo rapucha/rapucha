@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 24-May-15.
+ * Created by Seva Nechaev "Rapucha" on 24-May-15. All rights reserved ;)
  */
 public enum Processor {
     INSTANCE;

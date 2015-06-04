@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 /**
- * Created by Morta on 23-May-15.
+ * Created by Seva Nechaev "Rapucha" on 23-May-15. All rights reserved ;)
  */
 public enum StationCache {
 
@@ -19,7 +19,7 @@ public enum StationCache {
     private int totalBikesTemp;
     private final AtomicInteger totalBikes = new AtomicInteger();
     private static final Logger logger = Logger.getLogger(StationCache.class.getName());
-    private ConcurrentLinkedQueue<ClientListener> listeners = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<ClientListener> listeners = new ConcurrentLinkedQueue<>();
 
     public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
         StationSnapshot st = STATIONS.get(name);
@@ -112,10 +112,6 @@ public enum StationCache {
         BikesCrawler.INSTANCE.setUpdateTime(2 * 60);
     }
 
-    public void removeClientListener(ClientListener c) {
-        listeners.remove(c);
-    }
-
     public void notifyClientListeners() {
 
         if (listeners.isEmpty()) {
@@ -125,7 +121,7 @@ public enum StationCache {
 
         listeners.stream().forEach(clientListener -> logger.info("listener present " + clientListener));
         listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
-        listeners.removeIf(clientListener -> clientListener.isDone());
+        listeners.removeIf(ClientListener::isDone);
         listeners.stream().forEach(clientListener -> logger.info("listener remains " + clientListener));
 
 
