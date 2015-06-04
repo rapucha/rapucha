@@ -1,5 +1,8 @@
 package com.toad.crawlers;
 
+import com.toad.subscription.YMailer;
+
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -66,8 +69,10 @@ public abstract class ACrawler extends Observable {
      * @param i seconds
      */
     public void setUpdateTime(int i) {
-        scheduledFuture.cancel(true);
-        reportInfo("update time set to " + i);
+
+        reportInfo("Setting update time to " + i);
+        boolean res = scheduledFuture.cancel(true);
+        reportInfo("Scheduled future ended: " + res);
         delay = i;
         start();
     }
@@ -100,7 +105,7 @@ public abstract class ACrawler extends Observable {
                     crawl();
                 }
             } else {
-                logger.fine("Response 200 OK");
+                logger.fine("Response 200 OK from "+url.getHost());
             }
             processInput(is);
         }
@@ -122,6 +127,12 @@ public abstract class ACrawler extends Observable {
             } catch (Exception e) {
                 reportProblem(e);
                 e.printStackTrace();
+                try {
+                    YMailer.sendGenericMessage("rapucha@mail.ru","alarm@bikes.rapucha.ru", "Всё сломалось",e.getMessage());
+                } catch (MessagingException e1) {
+                    reportProblem(e1);
+                    e1.printStackTrace();
+                }
             }
         }, 0, getTime(), TimeUnit.SECONDS);
 

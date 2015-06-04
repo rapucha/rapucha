@@ -52,7 +52,7 @@ public enum CookieProvider {
 
     /*
      * this code may be a bottleneck if synchronized,
-     * so maybe we better send here just uuid's and check them in a map
+     * so maybe we better sendClientNotification here just uuid's and check them in a map
      */
     public static String cookieIsGood(String c) {
         StringBuilder sb = new StringBuilder(c);

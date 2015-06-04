@@ -130,6 +130,8 @@ public enum StationCache {
         listeners.parallelStream().forEach(clientListener -> clientListener.update(STATIONS));
         listeners.removeIf(clientListener -> clientListener.isDone());
         listeners.stream().forEach(clientListener -> logger.info("listener remains " + clientListener));
+
+
         if(listeners.isEmpty()) {
             logger.info("restoring normal polling time");
             BikesCrawler.INSTANCE.setUpdateTime(7 * 60);

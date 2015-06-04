@@ -23,7 +23,7 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
     private final Instant whenCreated, whenNotify;
     private final String email;
     private final int howManyBikes;
-    private final List<StationSnapshot> atWhatStations;
+    private final List<SimpleStation> atWhatStations;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     final ExecutorService executorService = Executors.newFixedThreadPool(1);
     private boolean done;
@@ -34,7 +34,7 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
         this.email = email;
         this.howManyBikes = howManyBikes;
         atWhatStations =
-                names.stream().map(s -> StationCache.STATION_CACHE.getStation(s)).collect(Collectors.toList());
+                names.stream().map(s -> new SimpleStation(StationCache.STATION_CACHE.getStation(s))).collect(Collectors.toList());
     }
 
     public Instant getWhenCreated() {
@@ -54,7 +54,7 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
     }
 
     public List<String> getAtWhatStations() {
-        return atWhatStations.stream().map(stationSnapshot -> stationSnapshot.getName()).collect(Collectors.toList());
+        return atWhatStations.stream().map(stationSnapshot -> stationSnapshot.name).collect(Collectors.toList());
 
     }
 
@@ -92,20 +92,21 @@ public final class Client implements Delayed, ClientListener {//TODO decompose, 
 
     @Override
     public void update(TreeMap<String, StationSnapshot> m) {
-        int sumOfBikes = 0;
-        for (StationSnapshot atWhatStation : atWhatStations) {
-            StationSnapshot st = m.get(atWhatStation.getName());
-            sumOfBikes = sumOfBikes + st.getBikes();
-        }
+
+        int sumOfBikes = atWhatStations.stream().
+                map(simpleStation -> m.get(simpleStation.name)).
+                mapToInt(snapshot -> snapshot.getBikes()).sum();
 
         if (sumOfBikes >= howManyBikes) {
-            YMailer mailer = new YMailer();//TODO make mailer static
+
             logger.info("Submitting mail. ");
-            executorService.submit(() -> mailer.send(getEmail(), atWhatStations,howManyBikes));
+            executorService.submit(() -> YMailer.sendClientNotification(getEmail(), atWhatStations, howManyBikes));
             setDone();
 
         }
     }
+
+
 
     @Override
     public boolean isDone() {

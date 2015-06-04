@@ -49,6 +49,7 @@ public class BikesCrawler extends ACrawler {
     @Override
     protected void reportProblem(Exception e) {
         logger.severe("Error in bike thread: " + e);
+
     }
 
 
