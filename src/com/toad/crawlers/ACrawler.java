@@ -89,7 +89,7 @@ public abstract class ACrawler extends Observable {
         int i = 0;
         try (InputStream is = uc.getInputStream()) {
             int status = uc.getResponseCode();
-            if (status != 200) {
+            if (status != HttpURLConnection.HTTP_OK) {
                 logger.severe("Response is not 200 OK for " + url.getHost());
                 Map<String, List<String>> map = uc.getHeaderFields();
                 for (Map.Entry<String, List<String>> entry : map.entrySet()) {

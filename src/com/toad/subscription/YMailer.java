@@ -32,7 +32,7 @@ public enum YMailer {
 
     }
 
-    private static void send(String toWhom, String from, String subject, String body) throws MessagingException {
+    public static void sendGenericMessage(String toWhom, String from, String subject, String body) throws MessagingException {
 
         Session session = Session.getInstance(INSTANCE.props,
                 new javax.mail.Authenticator() {
@@ -52,11 +52,7 @@ public enum YMailer {
 
     }
 
-    public static void sendGenericMessage(String toWhom, String from, String subject, String body) throws MessagingException {
-        send(toWhom, from, subject, body);
-    }
 
-    @Deprecated
     public static void sendClientNotification(String email, List<SimpleStation> stations, int desiredNumber) {
 
         String from = "info@bikes.rapucha.ru";

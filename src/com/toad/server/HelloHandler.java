@@ -32,7 +32,7 @@ class HelloHandler implements HttpHandler {
         StringBuilder sb = new StringBuilder("Hello visited from host ");
         sb.append(t.getRemoteAddress());
         for (String s : h.keySet()) {
-            sb.append("\nheader " + s + " : " + h.get(s));
+            sb.append("\nheader ").append(s).append(" : ").append(h.get(s));
         }
         logger.info(sb.toString());
 
@@ -61,7 +61,7 @@ class HelloHandler implements HttpHandler {
             response.append("Вы хотите узнать \n");
             response.append(verbalWhen);
             response.append(client.getAtWhatStations().size() > 1 ? ", когда на станциях \n" : ", когда на станции \n");
-            client.getAtWhatStations().stream().forEach(s -> response.append("\"" + s + "\"" + ", "));
+            client.getAtWhatStations().stream().forEach(s -> response.append("\"").append(s).append("\"").append(", "));
             response.append(" будет ");
             String bikes;
             switch (client.getHowManyBikes()) {

@@ -26,7 +26,7 @@ class FormHandler implements HttpHandler {
         StringBuilder sb = new StringBuilder("Main form visited from host ");
         sb.append(t.getRemoteAddress());
         for (String s : h.keySet()) {
-            sb.append("\nheader " + s + " : " + h.get(s));
+            sb.append("\nheader ").append(s).append(" : ").append(h.get(s));
         }
         logger.info(sb.toString());
 
@@ -35,10 +35,10 @@ class FormHandler implements HttpHandler {
         STATION_CACHE.getStationNames();
         for (int i = 0; i < STATION_CACHE.getStationNames().length; i++) {
             String station = STATION_CACHE.getStationNames()[i];
-            response.append("  <option value=" + STATION_CACHE.getStationNumber(station) + ">");
+            response.append("  <option value=").append(STATION_CACHE.getStationNumber(station)).append(">");
             response.append(station);
             response.append(" свободно: ");
-            response.append(STATION_CACHE.getFreeBikes(station) + "/" + STATION_CACHE.getLocks(station));
+            response.append(STATION_CACHE.getFreeBikes(station)).append("/").append(STATION_CACHE.getLocks(station));
             response.append("</option>\n");
         }
         response.append(part3);
