@@ -64,8 +64,8 @@ final class HtmlDocuments {
                     "select, input, button {\n" +
                     "   display: block;\n" +
                     "   margin-bottom: 1em;\n" +
-                    "   max-width: 100%;\n" +
-                    "   font-size: 220%;\n" +
+                    //"   max-width: 100%;\n" +
+                    "   font-size: 320%;\n" +
                     "}\n" +
                     "input[type=\"text\"] {\n" +
                     "height: 80px;\n" +
@@ -99,7 +99,12 @@ final class HtmlDocuments {
                     "    display: inline;\n" +
                     "}" +
                     "\t}" +
-
+                    "body {\n" +
+                    " background-image: url(http://3.bp.blogspot.com/-hhkEW0JeS08/TpIcJTbNKiI/AAAAAAAAAjQ/nNcf96rMgIY/s1600/Suzy%2BTrack%2BRace%2BBike.png);\n" +
+                    "    background-size: 200%;" +
+                    //"    background-repeat: no-repeat;"+
+                    //"opacity : 0.2;"+
+                    "}"+
                     "\t\t</style>";
     public static final String part1 = "<!DOCTYPE html>\n" +
             "<html>\n" +

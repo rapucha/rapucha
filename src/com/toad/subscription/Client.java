@@ -29,7 +29,7 @@ public final class Client implements Delayed, ClientListener {
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
     private boolean done;
 
-    public static Client creatRegularCleint(int delay, String email, int howmanyBikes, List<String> stationNames){
+    public static Client createRegularClient(int delay, String email, int howmanyBikes, List<String> stationNames){
 
         return new Client(delay,email,howmanyBikes,stationNames);
     }

@@ -53,7 +53,7 @@ class HelloHandler implements HttpHandler {
             }
 
             int minutes = convertToMinutes(params.get(HtmlDocuments.WHEN).get(0));
-            Client client = Client.creatRegularCleint(minutes, params.get(HtmlDocuments.EMAIL).get(0),
+            Client client = Client.createRegularClient(minutes, params.get(HtmlDocuments.EMAIL).get(0),
                     Integer.parseInt(params.get(HtmlDocuments.BIKES).get(0)),
                     params.get(HtmlDocuments.WHERE).stream().map(StationCache.STATION_CACHE::getStationName).collect(Collectors.toList()));
             Processor.INSTANCE.addClient(client);
