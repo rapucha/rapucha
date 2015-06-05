@@ -115,33 +115,35 @@ final class HtmlDocuments {
             "</head>\n" +
             "<body>\n" +
             "\n" +
-            "<h2>Хочу велик!!</h2>\n" +
+            "<h1>Хочу велик!!</h1>\n" +
             "\n" +
             "<form action=" + SettingsManager.host + "/hello method=\"post\" enctype=\"text/plain\">\n" +
-            "Где:<br>\n" +
-            "<select multiple size=\"4\" required name=" + WHERE + ">\n";
+            "<label for=stations>Где:</label><br>"+
+            "<select id=stations multiple size=\"4\" required name=" + WHERE + ">\n";
 
     public static final String part3 = "</select><br>\n" +
-            "Когда:<br>\n" +
-            "<select name=" + WHEN + ">\n" +
+            //"Когда:<br>\n" +
+            "<br><label for=time_when>Когда:</label><br>"+
+            "<select id=time_when name=" + WHEN + ">\n" +
             "  <option selected value=" + NOW + ">Сейчас</option>\n" +
             "  <option value=" + SOON + ">Через полчаса</option>\n" +
             "  <option value=" + LATER + ">Через час</option>\n" +
             "</select>  " +
-            "Сколько:\n" +
-            //"<label for=num>Скока</label>"+
+           // "Сколько:\n" +
+            "<label for=num>Сколько:</label>"+
             "  <input type=range name=" + BIKES + " value=1 id=num min=1 max=8 required oninput=\"outputUpdate(value)\">" +
-            "<output for=num id=volume>1</output>\n" +
+            "<output for=num id=volume>1</output><br>" +
             "<script>\n" +
             "function outputUpdate(nmb) {\n" +
             "document.getElementById('volume').value = nmb;\n" +
             "}\n" +
             "</script>" +
             "<br>" +
-            "Кому:<br>\n" +
-            "<input type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required><br>\n" +
+            //"Кому:<br>\n" +
+            "<br><label for=id_email>Кому:</label>"+
+            "<input id=id_email type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required><br>\n" +
             "<input type=\"submit\" value=\"Уведомить\" size=\"250\">\n" +
-            "<br><small>rapucha@yandex.ru</small>\n" +
+            "<br><br><small>rapucha@yandex.ru</small>\n" +
             "</form>\n" +
             "</body>\n" +
             "</html>";
