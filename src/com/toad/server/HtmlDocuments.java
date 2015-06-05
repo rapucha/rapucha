@@ -119,7 +119,8 @@ final class HtmlDocuments {
             "\n" +
             "<form action=" + SettingsManager.host + "/hello method=\"post\" enctype=\"text/plain\">\n" +
             "<label for=stations>Где:</label><br>"+
-            "<select id=stations multiple size=\"4\" required name=" + WHERE + ">\n";
+            "<select id=stations multiple size=\"4\" required name=" + WHERE + ">\n"+
+            "<option value=\"\" disabled selected>Выберите станцию</option>";
 
     public static final String part3 = "</select><br>\n" +
             //"Когда:<br>\n" +
