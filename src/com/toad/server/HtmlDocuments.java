@@ -113,11 +113,11 @@ final class HtmlDocuments {
             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
             CSS +
             "</head>\n" +
-            "<body>\n" +
+            "<body onload=\"loadEmail()\">\n" +
             "\n" +
             "<h1>Хочу велик!!</h1>\n" +
             "\n" +
-            "<form action=" + SettingsManager.host + "/hello method=\"post\" enctype=\"text/plain\">\n" +
+            "<form action=" + SettingsManager.host + "/hello method=\"post\" enctype=\"text/plain\" onsubmit=\"saveEmail()\">\n" +
             "<label for=stations>Где:</label><br>"+
             "<select id=stations multiple size=\"4\" required name=" + WHERE + ">\n"+
             "<option value=\"\" disabled selected>Выберите станцию</option>";
@@ -139,10 +139,18 @@ final class HtmlDocuments {
                 "function performRangeAction(n) {" +
                 "document.getElementById('volume').innerHTML = n"+
                 "}" +
+            "        function saveEmail(){\n" +
+            "            var inputEmail= document.getElementById(\"id_email\");\n" +
+            "            localStorage.setItem(\"userMail\", inputEmail.value);\n" +
+            "        }\n" +
+            "        function loadEmail(){\n" +
+            "            var inputEmail=localStorage.getItem(\"userMail\");\n" +
+            "            document.getElementById(\"id_email\").value = inputEmail;\n" +
+            "        }\n"+
             "</script>"+
             //"Кому:<br>\n" +
             "<br><label for=id_email>Кому:</label>"+
-            "<input id=\"id\"_email type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required><br>\n" +
+            "<input id=\"id_email\" type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required> <br>\n" +
             "<input type=\"submit\" value=\"Уведомить\" size=\"250\">\n" +
             "<br><br><small>rapucha@yandex.ru</small>\n" +
             "</form>\n" +
