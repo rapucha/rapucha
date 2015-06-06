@@ -29,18 +29,18 @@ public final class Client implements Delayed, ClientListener {
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
     private boolean done;
 
-    public static Client createRegularClient(int delay, String email, int howmanyBikes, List<String> stationNames){
-
-        return new Client(delay,email,howmanyBikes,stationNames);
-    }
-
-    private  Client(int minutes, String email, int howManyBikes, List<String> names) {
+    private Client(int minutes, String email, int howManyBikes, List<String> names) {
         whenCreated = Instant.now();
         whenNotify = whenCreated.plus(Duration.ofMinutes(minutes));
         this.email = email;
         this.howManyBikes = howManyBikes;
         atWhatStations =
                 names.stream().map(s -> new SimpleStation(StationCache.STATION_CACHE.getStation(s))).collect(Collectors.toList());
+    }
+
+    public static Client createRegularClient(int delay, String email, int howmanyBikes, List<String> stationNames) {
+
+        return new Client(delay, email, howmanyBikes, stationNames);
     }
 
     public Instant getWhenCreated() {

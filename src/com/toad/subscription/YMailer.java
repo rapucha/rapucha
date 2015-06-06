@@ -20,8 +20,8 @@ public enum YMailer {
 
     INSTANCE;
 
-    private final Properties props = new Properties();
     private static final Logger logger = Logger.getLogger(YMailer.class.getName());
+    private final Properties props = new Properties();
 
 
     YMailer() {

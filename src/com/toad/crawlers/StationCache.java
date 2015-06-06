@@ -16,29 +16,10 @@ public enum StationCache {
     STATION_CACHE;
 
     private static final TreeMap<String, StationSnapshot> STATIONS = new TreeMap<>();
-    private int totalBikesTemp;
-    private final AtomicInteger totalBikes = new AtomicInteger();
     private static final Logger logger = Logger.getLogger(StationCache.class.getName());
+    private final AtomicInteger totalBikes = new AtomicInteger();
     private final ConcurrentLinkedQueue<ClientListener> listeners = new ConcurrentLinkedQueue<>();
-
-    public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
-        StationSnapshot st = STATIONS.get(name);
-        if (null == st) {
-            st = new StationSnapshot(name, lat, lon, locks, bikes);
-            STATIONS.put(name, st);
-        }
-        st.setBikes(bikes);
-        totalBikesTemp = totalBikesTemp + total;
-    }
-
-    public StationSnapshot getStation(String name) {
-        return STATIONS.get(name);
-    }
-
-    public String[] getStationNames() {
-        return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
-    }
-
+    private int totalBikesTemp;
 
     public static int getStationNumber(String name) {
 
@@ -68,12 +49,28 @@ public enum StationCache {
         return 0;
     }
 
-
     public static int getLocks(String name) {
 
         return STATIONS.get(name).getLocks();
     }
 
+    public void updateCache(String name, double lat, double lon, int locks, int bikes, int total) {
+        StationSnapshot st = STATIONS.get(name);
+        if (null == st) {
+            st = new StationSnapshot(name, lat, lon, locks, bikes);
+            STATIONS.put(name, st);
+        }
+        st.setBikes(bikes);
+        totalBikesTemp = totalBikesTemp + total;
+    }
+
+    public StationSnapshot getStation(String name) {
+        return STATIONS.get(name);
+    }
+
+    public String[] getStationNames() {
+        return STATIONS.keySet().toArray(new String[STATIONS.keySet().size()]);
+    }
 
     synchronized public void dropCache() {
         totalBikesTemp = 0;

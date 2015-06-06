@@ -33,6 +33,18 @@ public class BikesKeeper implements Observer {
     private static final String TOTAL_BIKES_PER_STATION = "TotalAvailableBikes";
     private static final Logger logger = Logger.getLogger(BikesKeeper.class.getName());
 
+    public static int getNumber(String name) throws Exception {
+        Matcher m = numberPattern.matcher(name);
+        if (m.find()) {
+            String number = (m.group().replaceFirst("^0+(?!$)", "").replace(".", ""));//remove leading zeros and all dots
+
+            return Integer.parseInt(number);
+        } else {
+            logger.severe("No number found in station name " + name);
+            throw new Exception("No number found in station name " + name);
+        }
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
@@ -54,7 +66,6 @@ public class BikesKeeper implements Observer {
         }
         StationCache.STATION_CACHE.publishCache();
     }
-
 
     private void updateStationState(String name, double lat, double lon, int locks, int subTotal, Timestamp ts) {
         int id = -1;
@@ -113,19 +124,6 @@ public class BikesKeeper implements Observer {
         } catch (SQLException e) {
             logger.severe("Cannot close connection " + e);
             e.printStackTrace();
-        }
-    }
-
-
-    public static int getNumber(String name) throws Exception {
-        Matcher m = numberPattern.matcher(name);
-        if (m.find()) {
-            String number = (m.group().replaceFirst("^0+(?!$)", "").replace(".", ""));//remove leading zeros and all dots
-
-            return Integer.parseInt(number);
-        } else {
-            logger.severe("No number found in station name " + name);
-            throw new Exception("No number found in station name " + name);
         }
     }
 }

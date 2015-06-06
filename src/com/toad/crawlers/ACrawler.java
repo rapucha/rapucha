@@ -41,13 +41,12 @@ public abstract class ACrawler extends Observable {
             "[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36]",
             "[Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)]",
             "[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36]"};
-
-    private int delay;
     private final boolean beRandom;
     private final Random rnd = new Random();
-    private URL url;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private int delay;
+    private URL url;
     private ScheduledFuture scheduledFuture;
 
     /**

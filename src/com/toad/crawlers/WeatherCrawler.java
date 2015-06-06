@@ -13,9 +13,9 @@ import java.util.logging.Logger;
  * Created by Seva Nechaev "Rapucha" on 19-May-15. All rights reserved ;)
  */
 public class WeatherCrawler extends ACrawler {
+    public static final ACrawler INSTANCE = new WeatherCrawler();
     private static final String url = "http://api.wunderground.com/api/" + SettingsManager.WeatherAPIkey + "/conditions/q/59.935571,30.308397.json";
     private static final int REPEAT_SECONDS = 23 * 60;
-    public static final ACrawler INSTANCE = new WeatherCrawler();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 

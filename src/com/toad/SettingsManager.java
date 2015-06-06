@@ -11,6 +11,7 @@ import java.util.logging.Logger;
  * Created by Seva Nechaev "Rapucha" on 19-May-15. All rights reserved ;)
  */
 public class SettingsManager {
+    public static final SettingsManager INSTANCE = new SettingsManager();
     public static String WeatherAPIkey;
     public static String dburl;
     public static String dbschema;
@@ -22,7 +23,6 @@ public class SettingsManager {
     public static String traffic_url;
     public static String bikes_url;
     public static int port;
-    public static final SettingsManager INSTANCE = new SettingsManager();
     public static int cookeLife;
     public static String host;
     private final Properties prop = new Properties();

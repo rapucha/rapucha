@@ -23,6 +23,7 @@ public enum Server {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(port), backlog);
         httpServer.createContext("/", new FormHandler());
         httpServer.createContext("/favicon.ico", new FaviconHandler());
+        httpServer.createContext("/bg.png", new BGImageHandler());
         httpServer.createContext("/hello", new HelloHandler());
         httpServer.setExecutor(Executors.newCachedThreadPool());
         logger.info("HTTP com.toad.server created");

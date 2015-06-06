@@ -12,11 +12,9 @@ import java.util.logging.Logger;
  */
 public enum Processor {
     INSTANCE;
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
-
-
     final DelayQueue<Client> queue = new DelayQueue<>();
     final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 
 //http://stackoverflow.com/questions/21163108/custom-thread-pool-in-java-8-parallel-stream/22269778#22269778

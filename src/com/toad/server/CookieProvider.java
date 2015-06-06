@@ -28,15 +28,6 @@ public enum CookieProvider {
 
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
-    public void init() {
-        service.scheduleWithFixedDelay(() -> {
-            logger.info("Cookies map cleaned up");
-            cookiesMap.entrySet().stream()
-                    .filter(cookie -> cookie.getValue().until(Instant.now(), ChronoUnit.MINUTES) > cleanupTime)
-                    .forEach(cookie -> cookiesMap.remove(cookie.getKey()));
-        }, 0, cleanupTime, TimeUnit.MINUTES);
-    }
-
     // I am not sure if broken synch. will harm anything here.
     // If cookie lifespan is long enough, say 5 sec, it makes no difference which thread put it into map
     private static UUID getUUID() {
@@ -69,6 +60,15 @@ public enum CookieProvider {
         }
         logger.fine("cookie ok");
         return "ok";
+    }
+
+    public void init() {
+        service.scheduleWithFixedDelay(() -> {
+            logger.info("Cookies map cleaned up");
+            cookiesMap.entrySet().stream()
+                    .filter(cookie -> cookie.getValue().until(Instant.now(), ChronoUnit.MINUTES) > cleanupTime)
+                    .forEach(cookie -> cookiesMap.remove(cookie.getKey()));
+        }, 0, cleanupTime, TimeUnit.MINUTES);
     }
 
 }

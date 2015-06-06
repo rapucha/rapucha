@@ -14,10 +14,10 @@ import java.util.regex.Pattern;
  * Created by Seva Nechaev "Rapucha" on 19-May-15. All rights reserved ;)
  */
 public class BikesCrawler extends ACrawler {
+    public static final ACrawler INSTANCE = new BikesCrawler();
     private static final String NAME_PATTERN = "\\[([^\\]]+)];";
     private static final Pattern namePattern = Pattern.compile("var stationsData = " + NAME_PATTERN);
     private static final int REPEAT_SECONDS = 7 * 60;//TODO implement some centarl time scheduling
-    public static final ACrawler INSTANCE = new BikesCrawler();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private BikesCrawler() {
