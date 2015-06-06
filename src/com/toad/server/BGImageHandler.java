@@ -2,6 +2,7 @@ package com.toad.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import com.toad.SettingsManager;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -18,7 +19,7 @@ class BGImageHandler implements HttpHandler {
     private static BufferedImage bg;
     private static byte[] imageBytes;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private final String strInFile = "bluebike.png";
+    private final String strInFile = SettingsManager.bgimage;
 
     public BGImageHandler() {
         try {

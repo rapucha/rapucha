@@ -25,6 +25,7 @@ public class SettingsManager {
     public static int port;
     public static int cookeLife;
     public static String host;
+    public static String bgimage;
     private final Properties prop = new Properties();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -54,6 +55,7 @@ public class SettingsManager {
             bikes_url = prop.getProperty("bikes_url");
             cookeLife = Integer.parseInt(prop.getProperty("cookeLife"));
             host = prop.getProperty("host");
+            bgimage = prop.getProperty("bgimage");
 
         } catch (IOException | NumberFormatException e) {
             logger.log(Level.SEVERE, "Error initializing from properties");

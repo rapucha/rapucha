@@ -26,23 +26,28 @@ final class HtmlDocuments {
                     "}\n" +
                     "input[type=\"text\"] {\n" +
                     "height: 80px;\n" +
-                    "width: 380px;\n" +
+                    "min-width: 100%;\n" +
                     "}" +
                     "input[type=\"datetime-local\"] {\n" +
                     "height: 80px;\n" +
-                    "width: 380px;\n" +
+                    "min-width: 100%;\n" +
                     "}" +
                     "input[type=\"email\"] {\n" +
                     "height: 80px;\n" +
-                    "width: 380px;\n" +
+                    "min-width: 100%;\n" +
                     "}" +
                     "input[type=\"submit\"] {\n" +
                     "height: 80px;\n" +
-                    "width: 380px;\n" +
+                    "min-width: 100%;\n" +
                     "}" +
+                    "input[type=\"range\"] {\n" +
+                    "height: 80px;\n" +
+                    "min-width: 100%;\n" +
+                    "}" +
+
                     "input[type=\"reset\"] {\n" +
                     "height: 80px;\n" +
-                    "width: 380px;\n" +
+                    "min-width: 100%;\n" +
                     "}" +
 
                     "\n" +
@@ -50,6 +55,9 @@ final class HtmlDocuments {
                     "label {\n" +
                     "   font-size: 220%;\n" +
                     "}\n" +
+                    "    output {\n" +
+                    "        font-size: 220%;\n" +
+                    "    }\n"+
                     "\n" +
                     "/* Checkbox is still inline */\n" +
                     "input[type=checkbox] {\n" +
@@ -57,8 +65,8 @@ final class HtmlDocuments {
                     "}" +
                     "\t}" +
                     "body {\n" +
-                    " background-image: url(http://rapucha.ru/bg.png);\n" +
-                    "    background-size: 200%;" +
+                    " background-image: url(/bg.png);\n" +
+                    "    background-size: 250%;" +
                     //"    background-repeat: no-repeat;"+
                     //"opacity : 0.2;"+
                     "}" +
@@ -77,20 +85,19 @@ final class HtmlDocuments {
             "<form action=" + SettingsManager.host + "/hello method=\"post\" enctype=\"text/plain\" onsubmit=\"saveEmail()\">\n" +
             "<label for=stations>Где:</label><br>" +
             "<select id=stations multiple size=\"4\" required name=" + WHERE + ">\n" +
-            "<option value=\"\" disabled selected>Выберите станцию</option>";
-    public static final String part3 = "</select><br>\n" +
-            //"Когда:<br>\n" +
-            "<br><label for=time_when>Когда:</label><br>" +
+            "<option value=\"\" disabled>Выберите станцию</option>";
+    public static final String part3 = "</select>\n" +
+
+            "<label for=time_when>Когда:</label><br>" +
             "<select id=time_when name=" + WHEN + ">\n" +
             "  <option selected value=" + NOW + ">Сейчас</option>\n" +
             "  <option value=" + SOON + ">Через полчаса</option>\n" +
             "  <option value=" + LATER + ">Через час</option>\n" +
             "</select>  " +
-            // "Сколько:\n" +
-            "<label for=num>Сколько:</label>" +
+            "<label for=num>Сколько:</label> <output for=\"num\" id=\"volume\">1</output><br><br>" +
             "  <input type=\"range\" name=" + BIKES + " value=1 id=\"num\" min=1 max=8 required onchange=\"performRangeAction(value)\">" +
-            "<output for=\"num\" id=\"volume\">1</output><br>" +
-            "<br>" +
+
+
             "<script>" +
             "function performRangeAction(n) {" +
             "document.getElementById('volume').innerHTML = n" +
@@ -104,7 +111,7 @@ final class HtmlDocuments {
             "            document.getElementById(\"id_email\").value = inputEmail;\n" +
             "        }\n" +
             "</script>" +
-            //"Кому:<br>\n" +
+
             "<br><label for=id_email>Кому:</label>" +
             "<input id=\"id_email\" type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required> <br>\n" +
             "<input type=\"submit\" value=\"Уведомить\" size=\"250\">\n" +
