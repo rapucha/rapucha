@@ -132,17 +132,17 @@ final class HtmlDocuments {
             "</select>  " +
            // "Сколько:\n" +
             "<label for=num>Сколько:</label>"+
-            "  <input type=range name=" + BIKES + " value=1 id=num min=1 max=8 required oninput=\"outputUpdate(value)\">" +
-            "<output for=num id=volume>1</output><br>" +
-            "<script>\n" +
-            "function outputUpdate(nmb) {\n" +
-            "document.getElementById('volume').value = nmb;\n" +
-            "}\n" +
-            "</script>" +
+            "  <input type=\"range\" name=" + BIKES + " value=1 id=\"num\" min=1 max=8 required onchange=\"performRangeAction(value)\">" +
+            "<output for=\"num\" id=\"volume\">1</output><br>" +
             "<br>" +
+            "<script>" +
+                "function performRangeAction(n) {" +
+                "document.getElementById('volume').innerHTML = n"+
+                "}" +
+            "</script>"+
             //"Кому:<br>\n" +
             "<br><label for=id_email>Кому:</label>"+
-            "<input id=id_email type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required><br>\n" +
+            "<input id=\"id\"_email type=" + EMAIL + " name=" + EMAIL + " placeholder=Почта autocomplete=on required><br>\n" +
             "<input type=\"submit\" value=\"Уведомить\" size=\"250\">\n" +
             "<br><br><small>rapucha@yandex.ru</small>\n" +
             "</form>\n" +
