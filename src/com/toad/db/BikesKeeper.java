@@ -30,8 +30,11 @@ public class BikesKeeper implements Observer {
     private static final String LAT = "Latitude";
     private static final String LON = "Longitude";
     private static final String TOTAL_LOCKS_PER_STATION = "TotalLocks";
-    private static final String TOTAL_BIKES_PER_STATION = "TotalAvailableBikes";
+    private static final String BIKES_PER_STATION = "AvailableBikes";
     private static final Logger logger = Logger.getLogger(BikesKeeper.class.getName());
+    public static final String COUNT = "Count";
+    public static final String LOCKED_IN_EXTERNAL_LOCK_COUNT = "LockedInExternalLockCount";
+    public static final String LOCATIONS = "Locations";
 
     public static int getNumber(String name) throws Exception {
         Matcher m = numberPattern.matcher(name);
@@ -48,20 +51,28 @@ public class BikesKeeper implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
-        int total;
+        int total = 0;
 
         StationCache.STATION_CACHE.dropCache();
-        JSONArray jarr = new JSONArray((String) arg);
+        JSONObject jo = new JSONObject((String) arg);
+        JSONArray jarr = jo.getJSONArray(LOCATIONS);
         for (int i = 0; i < jarr.length(); i++) {
-            JSONObject jsonobject = jarr.getJSONObject(i);
-            String name = safeString(jsonobject, JSON_NAME);
-            double lat = safeDouble(jsonobject, LAT);
-            double lon = safeDouble(jsonobject, LON);
-            int locks = safeInt(jsonobject, TOTAL_LOCKS_PER_STATION);
-            int subTotal = safeInt(jsonobject, TOTAL_BIKES_PER_STATION);
-            total = +subTotal;
+            JSONObject jsonStation = jarr.getJSONObject(i);
+            String name = safeString(jsonStation, JSON_NAME);
+            double lat = safeDouble(jsonStation, LAT);
+            double lon = safeDouble(jsonStation, LON);
+            int locks = safeInt(jsonStation, TOTAL_LOCKS_PER_STATION);
+            int subTotal = 0;
+            JSONArray bikesDescr = jsonStation.getJSONArray(BIKES_PER_STATION);
+            if (bikesDescr.length() != 0) {
+                JSONObject jBikes = bikesDescr.getJSONObject(0);
+                subTotal = safeInt(jBikes, COUNT);
+                int external = jBikes.isNull(LOCKED_IN_EXTERNAL_LOCK_COUNT) ? 0 : safeInt(jBikes, LOCKED_IN_EXTERNAL_LOCK_COUNT);
+                total = +subTotal + external;
+            }
+
             StationCache.STATION_CACHE.updateCache(name, lat, lon, locks, subTotal, total);// TODO this double update should become DAO access one day
-            updateStationState(name, lat, lon, locks, subTotal, ts);//
+            updateStationState(name, lat, lon, locks, subTotal, ts);
 
         }
         StationCache.STATION_CACHE.publishCache();

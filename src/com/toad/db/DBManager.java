@@ -35,6 +35,9 @@ public enum DBManager {
         try {
             conn =
                     DriverManager.getConnection(SettingsManager.dburl + "/" + SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
+            //Statement stmt = conn.createStatement();
+            //ResultSet rs = stmt.executeQuery("SET NAMES UTF8");
+            //rs = stmt.executeQuery("SET CHARACTER SET UTF8");
         } catch (SQLException e) {
             logger.severe("Cannot get connection " + e);
             e.printStackTrace();

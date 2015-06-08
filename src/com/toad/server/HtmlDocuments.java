@@ -57,7 +57,7 @@ final class HtmlDocuments {
                     "}\n" +
                     "    output {\n" +
                     "        font-size: 220%;\n" +
-                    "    }\n"+
+                    "    }\n" +
                     "\n" +
                     "/* Checkbox is still inline */\n" +
                     "input[type=checkbox] {\n" +

@@ -1,13 +1,10 @@
 package com.toad.crawlers;
 
 import com.toad.SettingsManager;
+import com.toad.Util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -21,35 +18,20 @@ public class BikesCrawler extends ACrawler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private BikesCrawler() {
-        super(REPEAT_SECONDS, SettingsManager.bikes_url, true);
+        super(REPEAT_SECONDS, SettingsManager.bikes_url, false);
     }
 
 
     @Override
     protected void processInput(InputStream is) {
-
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(is))) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                Matcher m = namePattern.matcher(inputLine);
-                if (m.find()) {
-                    String s = ("[" + m.group(1) + "];");
-                    setChanged();
-                    notifyObservers(s);
-                    break;//abort reading to save some traffic
-                }
-            }
-        } catch (IOException e) {
-            logger.severe("cannot process input: " + e);
-            e.printStackTrace();
-        }
-
+        String s = Util.isToString(is);
+        setChanged();
+        notifyObservers(s.toString());
     }
 
     @Override
     protected void reportProblem(Exception e) {
         logger.severe("Error in bike thread: " + e);
-
     }
 
 
@@ -57,6 +39,5 @@ public class BikesCrawler extends ACrawler {
     protected void reportInfo(String s) {
         logger.info(s);
     }
-
 
 }

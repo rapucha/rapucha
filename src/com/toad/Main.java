@@ -1,6 +1,7 @@
 package com.toad;
 
 import com.toad.crawlers.BikesCrawler;
+import com.toad.crawlers.SSLCertificateValidation;
 import com.toad.crawlers.TrafficCrawler;
 import com.toad.crawlers.WeatherCrawler;
 import com.toad.db.BikesKeeper;
@@ -34,7 +35,7 @@ public class Main {
         BikesCrawler.INSTANCE.addObserver(bo);
         TrafficCrawler.INSTANCE.addObserver(to);
 
-
+        SSLCertificateValidation.disable();
         WeatherCrawler.INSTANCE.start();
         BikesCrawler.INSTANCE.start();
         TrafficCrawler.INSTANCE.start();

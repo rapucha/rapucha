@@ -19,7 +19,7 @@ public class Util {
             safe = jo.getInt(s);
         } catch (JSONException j) {
             try {
-                logger.info(j.getMessage() + " : " + jo.get(s));
+                logger.fine(j.getMessage() + " : " + jo.get(s));
             } catch (JSONException j2) {
                 logger.info(j.getMessage());
             }
@@ -34,7 +34,7 @@ public class Util {
             r = jo.getString(s);
         } catch (JSONException j) {
             try {
-                logger.info(j.getMessage() + " : " + jo.get(s));
+                logger.fine(j.getMessage() + " : " + jo.get(s));
             } catch (JSONException j2) {
                 logger.info(j.getMessage());
             }
@@ -49,7 +49,7 @@ public class Util {
             safe = jo.getDouble(s);
         } catch (JSONException j) {
             try {
-                logger.info(j.getMessage() + " : " + jo.get(s));
+                logger.fine(j.getMessage() + " : " + jo.get(s));
             } catch (JSONException j2) {
                 logger.info(j.getMessage());
             }

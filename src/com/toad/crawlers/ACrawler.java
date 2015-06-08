@@ -83,6 +83,8 @@ public abstract class ACrawler extends Observable {
         HttpURLConnection uc = (HttpURLConnection) url.openConnection();
         if (beRandom) {
             uc.setRequestProperty("User-Agent", getUserAgent());
+        } else {
+            uc.setRequestProperty("User-Agent", "");
         }
         int i = 0;
         try (InputStream is = uc.getInputStream()) {
