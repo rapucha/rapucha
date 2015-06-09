@@ -57,8 +57,8 @@ class HelloHandler implements HttpHandler {
                     Integer.parseInt(params.get(HtmlDocuments.BIKES).get(0)),
                     params.get(HtmlDocuments.WHERE).stream().map(StationCache.STATION_CACHE::getStationName).collect(Collectors.toList()));
             Processor.INSTANCE.addClient(client);
-            response.append("Вы хотите узнать \n");
-            response.append(verbalWhen);
+            response.append("Вы хотите знать \n");
+
             response.append(client.getAtWhatStations().size() > 1 ? ", когда на станциях \n" : ", когда на станции \n");
             client.getAtWhatStations().stream().forEach(s -> response.append("\"").append(s).append("\"").append(", "));
             response.append(" будет ");
@@ -94,9 +94,17 @@ class HelloHandler implements HttpHandler {
                     logger.severe("unexpected number of bikes in client " + client.getHowManyBikes());
             }
             response.append(bikes);
-            response.append(".\n<br>На почту ");
+            if (verbalWhen.intern() == "сразу") {
+                response.append(".\n<br>Когда ");
+            } else {
+                response.append(".\n<br>Через ");
+                response.append(verbalWhen);
+                response.append(" я начну проверять, как там дела. Как только ");
+            }
+            response.append((client.getHowManyBikes() == 1 ? "свободный велосипед появится" : "свободные велосипеды появятся"));
+            response.append(" , на почту ");
             response.append(client.getEmail());
-            response.append(" будет выслано письмо. \n<br> Удачи!<br>Кстати, во всём городе доступных велосипедов сейчас ");
+            response.append(" будет выслано письмо с оповещением. \n<br> Удачи!<br>Кстати, во всём городе доступных велосипедов сейчас ");
             response.append(StationCache.STATION_CACHE.getTotalBikes());
         } else {
             response.append(" я не смог выполнить ваш запрос. Внутренняя ошибка: ");
@@ -118,7 +126,7 @@ class HelloHandler implements HttpHandler {
             customMessage = "no cookie ";
             return false;
         }
-        if (!"POST".equalsIgnoreCase(t.getRequestMethod())) {
+        if ("POST" != t.getRequestMethod().intern()) {
             logger.fine("not a post request");
             customMessage = "not a post request";
             return false;
@@ -139,7 +147,7 @@ class HelloHandler implements HttpHandler {
             logger.info("Cookies size is >1 : " + result.size());
         }
         customMessage = CookieProvider.cookieIsGood(result.get(0));
-        return "ok".equals(customMessage);
+        return "ok" == customMessage.intern();
 
     }
 

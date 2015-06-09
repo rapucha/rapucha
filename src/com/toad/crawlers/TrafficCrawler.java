@@ -27,6 +27,11 @@ public class TrafficCrawler extends ACrawler {
     }
 
     @Override
+    protected String getCrawlerThreadName() {
+        return "TrafficThread";
+    }
+
+    @Override
     protected void processInput(InputStream is) {
 
         BufferedImage imageNoTraff, imageTraff;

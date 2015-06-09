@@ -25,7 +25,7 @@ public enum Server {
         httpServer.createContext("/favicon.ico", new FaviconHandler());
         httpServer.createContext("/bg.png", new BGImageHandler());
         httpServer.createContext("/hello", new HelloHandler());
-        httpServer.setExecutor(Executors.newCachedThreadPool());
+        httpServer.setExecutor(Executors.newCachedThreadPool(r -> new Thread(r, "HTTPServerThread")));
         logger.info("HTTP com.toad.server created");
         httpServer.start();
         logger.info("HTTP server started");

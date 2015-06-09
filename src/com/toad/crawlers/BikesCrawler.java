@@ -23,6 +23,11 @@ public class BikesCrawler extends ACrawler {
 
 
     @Override
+    protected String getCrawlerThreadName() {
+        return "BikesThread";
+    }
+
+    @Override
     protected void processInput(InputStream is) {
         String s = Util.isToString(is);
         setChanged();

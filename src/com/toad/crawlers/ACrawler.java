@@ -44,7 +44,10 @@ public abstract class ACrawler extends Observable {
     private final boolean beRandom;
     private final Random rnd = new Random();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, getCrawlerThreadName()));
+
+    protected abstract String getCrawlerThreadName();
+
     private int delay;
     private URL url;
     private ScheduledFuture scheduledFuture;
@@ -54,7 +57,7 @@ public abstract class ACrawler extends Observable {
      * @param address  where to go
      * @param beRandom add some jitter to requests ;)
      */
-    ACrawler(int time, String address, boolean beRandom) {
+    protected ACrawler(int time, String address, boolean beRandom) {
         delay = time;
         this.beRandom = beRandom;
         try {
@@ -72,7 +75,7 @@ public abstract class ACrawler extends Observable {
     public void setUpdateTime(int i) {
 
         reportInfo("Setting update time to " + i);
-        boolean res = scheduledFuture.cancel(true);
+        boolean res = scheduledFuture.cancel(false);
         reportInfo("Scheduled future ended: " + res);
         delay = i;
         start();
@@ -123,7 +126,7 @@ public abstract class ACrawler extends Observable {
 
     public void start() {
 
-        scheduledFuture = service.scheduleAtFixedRate(() -> {
+        scheduledFuture = service.scheduleWithFixedDelay(() -> {
 
             try {
                 crawl();

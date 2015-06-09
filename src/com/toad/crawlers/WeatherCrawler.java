@@ -24,6 +24,11 @@ public class WeatherCrawler extends ACrawler {
     }
 
     @Override
+    protected String getCrawlerThreadName() {
+        return "WeatherThread";
+    }
+
+    @Override
     protected void processInput(InputStream is) {
         String text = "";
         try (BufferedReader in = new BufferedReader(new InputStreamReader(is))) {
