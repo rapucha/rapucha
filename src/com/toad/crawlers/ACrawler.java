@@ -158,7 +158,7 @@ public abstract class ACrawler extends Observable {
     }
 
 
-    public int getJitter() {
+    private int getJitter() {
         int jitter = 0;
         if (beRandom) {
             jitter = rnd.nextInt(delay / 2);

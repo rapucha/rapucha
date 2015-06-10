@@ -22,6 +22,7 @@ public class SettingsManager {
     public static String email_smtp;
     public static String traffic_url;
     public static String bikes_url;
+    public static String bikes_api_url;
     public static int port;
     public static int cookeLife;
     public static String host;
@@ -56,6 +57,8 @@ public class SettingsManager {
             cookeLife = Integer.parseInt(prop.getProperty("cookeLife"));
             host = prop.getProperty("host");
             bgimage = prop.getProperty("bgimage");
+            bikes_api_url = prop.getProperty("bikes_api_url");
+
 
         } catch (IOException | NumberFormatException e) {
             logger.log(Level.SEVERE, "Error initializing from properties");

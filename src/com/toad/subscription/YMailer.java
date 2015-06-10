@@ -5,6 +5,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -58,23 +59,33 @@ public enum YMailer {
         String from = "info@bikes.rapucha.ru";
         String subj = (desiredNumber == 1) ? "Ваш велосипед -)" : "Ваши велосипеды -)";
         StringBuilder sb;
-        DateTimeFormatter formatter = //DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
-                DateTimeFormatter.ofPattern("d MMMM HH:mm", new Locale("ru")).withZone(TimeZone.getTimeZone("Europe/Moscow").toZoneId());
+        DateTimeFormatter hourFormatter = //DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
+                DateTimeFormatter.ofPattern("HH:mm", new Locale("ru")).withZone(TimeZone.getTimeZone("Europe/Moscow").toZoneId());
 
-        String now = formatter.format(Instant.now());
+        DateTimeFormatter dayFormatter = //DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
+                DateTimeFormatter.ofPattern("d MMMM", new Locale("ru")).withZone(TimeZone.getTimeZone("Europe/Moscow").toZoneId());
+
+        TemporalAccessor now = Instant.now();
+        String nowHour = hourFormatter.format(now);
+        String nowDay = hourFormatter.format(now);
 
         if (stations.size() == 1) {
             String name = stations.get(0).name;
             int bikes = stations.get(0).bikes;
             sb = new StringBuilder("На вашей станции №");
-            sb.append(name.substring(0, 1));
+            if (name.substring(0, 1).intern() == "0") {
+
+                sb.append(name.substring(1, 2));
+            } else {
+                sb.append(name.substring(0, 2));
+            }
             sb.append("\"");
             sb.append(name.substring(4));
-            sb.append("\"");
+            sb.append("\" ");
             if (bikes == 1) {
-                sb.append("\nПоявился велосипед!");
+                sb.append("\nпоявился велосипед!");
             } else {
-                sb.append("\nПоявились велосипеды.");
+                sb.append("\nпоявились велосипеды.");
             }
 
         } else {
@@ -83,7 +94,7 @@ public enum YMailer {
                     .forEach(station -> {
                         sb.append("\n  №");
 
-                        if (station.name.substring(0, 1).equalsIgnoreCase("0")) {
+                        if (station.name.substring(0, 1).intern() =="0") {
 
                             sb.append(station.name.substring(1, 2));
                         } else {
@@ -103,7 +114,7 @@ public enum YMailer {
                 stations.stream().filter(station -> station.bikes == 0)
                         .forEach(station -> {
                             sb.append("\n  №");
-                            if (station.name.substring(0, 1).equalsIgnoreCase("0")) {
+                            if (station.name.substring(0, 1).intern() == "0") {
                                 sb.append(station.name.substring(1, 2));
                             } else {
                                 sb.append(station.name.substring(0, 2));
@@ -116,8 +127,11 @@ public enum YMailer {
 
         }
         sb.append("\nЭто было в ");
-        sb.append(now);
+        sb.append(nowHour);
+        sb.append(", ");
+        sb.append(nowDay);
         sb.append(".");
+        sb.append("Если вы получили это письмо по ошибке, просто проигнорируйте его -- кто-то случайно ввел вашу почту, когда искал свободный велосипед в городском велопрокате. Если вам кажется, что ваш адрес указали специально -- дайте мне знать на rapucha@yandex.ru");
         String body = sb.toString();
         try {
             sendGenericMessage(email, from, subj, body);

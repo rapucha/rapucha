@@ -109,7 +109,7 @@ public enum StationCache {
         BikesCrawler.INSTANCE.setUpdateTime(2 * 60);
     }
 
-    public void notifyClientListeners() {
+    private void notifyClientListeners() {
 
         if (listeners.isEmpty()) {
             logger.info("No listeners");

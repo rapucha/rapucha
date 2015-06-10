@@ -32,9 +32,9 @@ public class BikesKeeper implements Observer {
     private static final String TOTAL_LOCKS_PER_STATION = "TotalLocks";
     private static final String BIKES_PER_STATION = "AvailableBikes";
     private static final Logger logger = Logger.getLogger(BikesKeeper.class.getName());
-    public static final String COUNT = "Count";
-    public static final String LOCKED_IN_EXTERNAL_LOCK_COUNT = "LockedInExternalLockCount";
-    public static final String LOCATIONS = "Locations";
+    private static final String COUNT = "Count";
+    private static final String LOCKED_IN_EXTERNAL_LOCK_COUNT = "LockedInExternalLockCount";
+    private static final String LOCATIONS = "Locations";
 
     public static int getNumber(String name) throws Exception {
         Matcher m = numberPattern.matcher(name);

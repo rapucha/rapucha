@@ -31,7 +31,7 @@ public class BikesCrawler extends ACrawler {
     protected void processInput(InputStream is) {
         String s = Util.isToString(is);
         setChanged();
-        notifyObservers(s.toString());
+        notifyObservers(s);
     }
 
     @Override
