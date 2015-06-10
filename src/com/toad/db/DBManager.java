@@ -16,7 +16,7 @@ public enum DBManager {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final Logger logger = Logger.getLogger(DBManager.class.getName());
-
+    private static final String UTF_MAGIC = "?useUnicode=true&characterEncoding=utf-8";
 
     public void initDBManager() {
 
@@ -34,10 +34,7 @@ public enum DBManager {
         Connection conn = null;
         try {
             conn =
-                    DriverManager.getConnection(SettingsManager.dburl + "/" + SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
-            //Statement stmt = conn.createStatement();
-            //ResultSet rs = stmt.executeQuery("SET NAMES UTF8");
-            //rs = stmt.executeQuery("SET CHARACTER SET UTF8");
+                    DriverManager.getConnection(SettingsManager.dburl + UTF_MAGIC + "/" + SettingsManager.dbschema, SettingsManager.dbuser, SettingsManager.dbpass);
         } catch (SQLException e) {
             logger.severe("Cannot get connection " + e);
             e.printStackTrace();
