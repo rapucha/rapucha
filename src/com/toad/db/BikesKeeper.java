@@ -23,7 +23,7 @@ public class BikesKeeper implements Observer {
     private static final Pattern numberPattern = Pattern.compile(NUMBER_PATTERN);
     private static final String STATIONS_TABLE = "stations";
     private static final String STATION_NUMBER = "station_number", NAME = "name", LOCATON = "location", LOCKS = "locks", BIKES = "bikes";
-    private static final String STATIONS_HISTORY_TABLE = "stations_history";
+    private static final String STATION_HISTORY_TABLE = "station_history";
     private static final String TIMESTAMP = "timestamp";
     private static final String BIKES_HISTORY = "bikes_history";
     private static final String JSON_NAME = "Name";
@@ -89,7 +89,7 @@ public class BikesKeeper implements Observer {
 
         Connection conn = DBManager.INSTANCE.getConn();
 
-        String selectStationById = "SELECT " + NAME + " FROM " + STATIONS_TABLE + " WHERE " + STATION_NUMBER + " = " + id;
+        String selectStationById = "SELECT " + NAME + ", X(" + LOCATON + "), Y(" + LOCATON + "), " + LOCKS + " " + " FROM " + STATIONS_TABLE + " WHERE " + STATION_NUMBER + " = " + id;
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(selectStationById)) {
             if (!rs.isBeforeFirst()) {
@@ -109,9 +109,36 @@ public class BikesKeeper implements Observer {
                             + " VALUES ( " + id + " , '" + name
                             + "' , GeomFromText( 'POINT(" + lat + " " + lon + ")' ), "
                             + locks + " )";
+
                     stmt.executeUpdate(createStation);
                 }
             } else {
+                logger.finest("Checking if station has changed");
+                while (!rs.isClosed() && rs.next()) {
+                    String oldName = rs.getString(NAME);
+                    double oldLocX = rs.getDouble("X(" + LOCATON + ")");
+                    double oldLocY = rs.getDouble("Y(" + LOCATON + ")");
+                    int oldLocks = rs.getInt(LOCKS);
+                    if (!name.equals(oldName) || locks != oldLocks ||
+                            Double.compare(lat, oldLocX) != 0 ||
+                            Double.compare(lon, oldLocY) != 0) {
+                        logger.info("updading history for " + name);
+                        conn.setAutoCommit(false);
+                        String updateStation = "UPDATE " + STATIONS_TABLE + " SET " + NAME + "='" + name + "'," +
+                                LOCKS + "=" + locks + "," + LOCATON + "=GeomFromText( 'POINT(" + lat + " " + lon + ")' ) WHERE " + STATION_NUMBER +
+                                "=" + id + ";\n";
+                        String udpateStationInHistory = "INSERT INTO " + STATION_HISTORY_TABLE
+                                + " ( " + STATION_NUMBER + " , " + NAME + " , " + LOCATON + "," + LOCKS + " , " + TIMESTAMP + " ) "
+                                + " VALUES ( " + id + " , '" + oldName
+                                + "' , GeomFromText( 'POINT(" + lat + " " + lon + ")' ), " + locks + " , '" + ts + "' );";
+
+
+                        stmt.executeUpdate(updateStation + udpateStationInHistory);
+                        conn.commit();
+                        conn.setAutoCommit(true);
+//https://dev.mysql.com/doc/refman/5.7/en/gis-point-property-functions.html#function_st-x
+                    }
+                }
                 logger.finest("Station " + name + " is already present, updating history");
                 String addHistoryBikes = "INSERT INTO " + BIKES_HISTORY
                         + " ( " + TIMESTAMP + " , " + STATION_NUMBER + " , " + BIKES + " ) "
