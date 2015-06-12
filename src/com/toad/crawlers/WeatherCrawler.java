@@ -20,7 +20,7 @@ public class WeatherCrawler extends ACrawler {
 
 
     private WeatherCrawler() {
-        super(REPEAT_SECONDS, url, false);
+        super(REPEAT_SECONDS, 10, url, false);
     }
 
     @Override

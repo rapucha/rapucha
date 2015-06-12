@@ -48,7 +48,8 @@ public abstract class ACrawler extends Observable {
 
     protected abstract String getCrawlerThreadName();
 
-    private int delay;
+
+    private int time, delay;
     private URL url;
     private ScheduledFuture scheduledFuture;
 
@@ -57,8 +58,9 @@ public abstract class ACrawler extends Observable {
      * @param address  where to go
      * @param beRandom add some jitter to requests ;)
      */
-    protected ACrawler(int time, String address, boolean beRandom) {
-        delay = time;
+    protected ACrawler(int time, int delay, String address, boolean beRandom) {
+        this.time = time;
+        this.delay = delay;
         this.beRandom = beRandom;
         try {
             url = new URL(address);
@@ -77,7 +79,7 @@ public abstract class ACrawler extends Observable {
         reportInfo("Setting update time to " + i);
         boolean res = scheduledFuture.cancel(false);
         reportInfo("Scheduled future ended: " + res);
-        delay = i;
+        time = i;
         start();
     }
 
@@ -124,7 +126,7 @@ public abstract class ACrawler extends Observable {
 
     protected abstract void reportInfo(String s);
 
-    public void start() {
+    public ScheduledFuture start() {
 
         scheduledFuture = service.scheduleWithFixedDelay(() -> {
 
@@ -141,12 +143,13 @@ public abstract class ACrawler extends Observable {
                     e1.printStackTrace();
                 }
             }
-        }, 0, getTime(), TimeUnit.SECONDS);
+        }, delay, getTime(), TimeUnit.SECONDS);
 
+        return scheduledFuture;
     }
 
     private long getTime() {
-        long time = delay + getJitter();
+        long time = this.time + getJitter();
         reportInfo("Time to next start is " + time);
         return time;
     }
@@ -161,7 +164,7 @@ public abstract class ACrawler extends Observable {
     private int getJitter() {
         int jitter = 0;
         if (beRandom) {
-            jitter = rnd.nextInt(delay / 2);
+            jitter = rnd.nextInt(time / 2);
             reportInfo("jitter set to " + jitter);
         }
         return jitter;

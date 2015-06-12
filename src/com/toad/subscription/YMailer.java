@@ -67,7 +67,7 @@ public enum YMailer {
 
         TemporalAccessor now = Instant.now();
         String nowHour = hourFormatter.format(now);
-        String nowDay = hourFormatter.format(now);
+        String nowDay = dayFormatter.format(now);
 
         if (stations.size() == 1) {
             String name = stations.get(0).name;
@@ -131,7 +131,7 @@ public enum YMailer {
         sb.append(", ");
         sb.append(nowDay);
         sb.append(".");
-        sb.append("Если вы получили это письмо по ошибке, просто проигнорируйте его -- кто-то случайно ввел вашу почту, когда искал свободный велосипед в городском велопрокате. Если  вы никогда не хотите получать от меня письмо -- дайте мне знать на rapucha@yandex.ru");
+        sb.append("Если вы получили это письмо по ошибке, просто проигнорируйте его -- кто-то случайно ввел вашу почту, когда искал свободный велосипед в городском велопрокате. Если  вы никогда не хотите получать такое письмо -- дайте мне знать на rapucha@yandex.ru");
         String body = sb.toString();
         try {
             sendGenericMessage(email, from, subj, body);

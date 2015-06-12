@@ -119,9 +119,7 @@ public class BikesKeeper implements Observer {
                     double oldLocX = rs.getDouble("X(" + LOCATON + ")");
                     double oldLocY = rs.getDouble("Y(" + LOCATON + ")");
                     int oldLocks = rs.getInt(LOCKS);
-                    if (!name.equals(oldName) || locks != oldLocks ||
-                            Double.compare(lat, oldLocX) != 0 ||
-                            Double.compare(lon, oldLocY) != 0) {
+                    if (wasStationUpdated(name, lat, lon, locks, oldName, oldLocX, oldLocY, oldLocks)) {
                         logger.info("updading history for " + name);
                         conn.setAutoCommit(false);
                         String updateStation = "UPDATE " + STATIONS_TABLE + " SET " + NAME + "='" + name + "'," +
@@ -130,7 +128,7 @@ public class BikesKeeper implements Observer {
                         String udpateStationInHistory = "INSERT INTO " + STATION_HISTORY_TABLE
                                 + " ( " + STATION_NUMBER + " , " + NAME + " , " + LOCATON + "," + LOCKS + " , " + TIMESTAMP + " ) "
                                 + " VALUES ( " + id + " , '" + oldName
-                                + "' , GeomFromText( 'POINT(" + lat + " " + lon + ")' ), " + locks + " , '" + ts + "' );";
+                                + "' , GeomFromText( 'POINT(" + oldLocX + " " + oldLocY + ")' ), " + oldLocks + " , '" + ts + "' );";
 
 
                         stmt.executeUpdate(updateStation + udpateStationInHistory);
@@ -163,5 +161,27 @@ public class BikesKeeper implements Observer {
             logger.severe("Cannot close connection " + e);
             e.printStackTrace();
         }
+    }
+
+    private boolean wasStationUpdated(String name, double lat, double lon, int locks, String oldName, double oldLocX, double oldLocY, int oldLocks) {
+        if (!name.equals(oldName)) {
+            logger.info("updating station due to" + name + "!= " + oldName);
+            return true;
+        }
+        if (locks != oldLocks) {
+            logger.info("updating station due to" + locks + "!= " + oldLocks);
+            return true;
+        }
+
+        if (Double.compare(lat, oldLocX) != 0) {
+            logger.info("updating station due to" + lat + "!= " + oldLocX);
+            return true;
+        }
+        if (Double.compare(lon, oldLocY) != 0) {
+            logger.info("updating station due to" + lon + "!= " + oldLocY);
+            return true;
+        }
+
+        return false;
     }
 }

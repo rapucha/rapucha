@@ -18,7 +18,7 @@ public class BikesCrawler extends ACrawler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private BikesCrawler() {
-        super(REPEAT_SECONDS, SettingsManager.bikes_url, false);
+        super(REPEAT_SECONDS, 0, SettingsManager.bikes_url, false);
     }
 
 

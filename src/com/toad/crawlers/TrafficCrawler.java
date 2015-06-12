@@ -23,7 +23,7 @@ public class TrafficCrawler extends ACrawler {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private TrafficCrawler(int time, String traffic_url) {
-        super(time, traffic_url, true);
+        super(time, 15, traffic_url, true);
     }
 
     @Override

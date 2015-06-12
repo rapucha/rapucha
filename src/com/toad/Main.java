@@ -31,13 +31,18 @@ public class Main {
         BikesKeeper bo = new BikesKeeper();
         TrafficKeeper to = new TrafficKeeper();
 
-        WeatherCrawler.INSTANCE.addObserver(wo);
         BikesCrawler.INSTANCE.addObserver(bo);
+        WeatherCrawler.INSTANCE.addObserver(wo);
         TrafficCrawler.INSTANCE.addObserver(to);
 
         SSLCertificateValidation.disable();
+        long time = System.currentTimeMillis();
+        while (BikesCrawler.INSTANCE.start().isDone()) {
+            System.out.print("Waiting for bikes thread to populate the base" + (System.currentTimeMillis() - time));
+        }
+
         WeatherCrawler.INSTANCE.start();
-        BikesCrawler.INSTANCE.start();
+
         TrafficCrawler.INSTANCE.start();
 
         CookieProvider.INSTANCE.init();
